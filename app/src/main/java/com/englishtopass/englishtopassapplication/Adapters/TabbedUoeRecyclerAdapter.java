@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Package.UseOfEnglishPackage;
 import com.englishtopass.englishtopassapplication.R;
-import com.englishtopass.englishtopassapplication.UoeExampleFragment;
+import com.englishtopass.englishtopassapplication.ExampleFragment.ExampleMainScreen.MainExampleFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -95,7 +95,7 @@ public class TabbedUoeRecyclerAdapter extends RecyclerView.Adapter<TabbedUoeRecy
         FragmentTransaction transaction = activity.getSupportFragmentManager()
                 .beginTransaction();
 
-        transaction.add(R.id.questionFragmentHolder, UoeExampleFragment.newInstance(1), "uoeExampleFragment")
+        transaction.add(R.id.questionFragmentHolder, MainExampleFragment.newInstance(1), "uoeExampleFragment")
                 .addToBackStack("uoeExampleFragment")
                 .commit();
 

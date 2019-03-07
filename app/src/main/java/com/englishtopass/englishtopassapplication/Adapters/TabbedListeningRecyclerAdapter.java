@@ -1,7 +1,6 @@
 package com.englishtopass.englishtopassapplication.Adapters;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,14 +9,13 @@ import android.widget.TextView;
 
 import com.englishtopass.englishtopassapplication.Model.Listening.Package.ListeningPackage;
 import com.englishtopass.englishtopassapplication.R;
-import com.englishtopass.englishtopassapplication.UoeExampleFragment;
+import com.englishtopass.englishtopassapplication.ExampleFragment.ExampleMainScreen.MainExampleFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -120,7 +118,7 @@ public class TabbedListeningRecyclerAdapter extends RecyclerView.Adapter<TabbedL
                 FragmentTransaction transaction = appCompatActivity.getSupportFragmentManager()
                         .beginTransaction();
 
-                transaction.add(R.id.questionFragmentHolder, UoeExampleFragment.newInstance(2), "listeningExampleFragment")
+                transaction.add(R.id.questionFragmentHolder, MainExampleFragment.newInstance(2), "listeningExampleFragment")
                         .addToBackStack("listeningExampleFragment")
                         .commit();
 
