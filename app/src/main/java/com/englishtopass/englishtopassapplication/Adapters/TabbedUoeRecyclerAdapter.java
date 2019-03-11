@@ -96,6 +96,7 @@ public class TabbedUoeRecyclerAdapter extends RecyclerView.Adapter<TabbedUoeRecy
                 .beginTransaction();
 
         transaction.add(R.id.questionFragmentHolder, MainExampleFragment.newInstance(1), "uoeExampleFragment")
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .addToBackStack("uoeExampleFragment")
                 .commit();
 

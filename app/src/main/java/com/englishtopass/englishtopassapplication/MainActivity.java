@@ -4,10 +4,15 @@ import com.englishtopass.englishtopassapplication.Adapters.SectionsPagerAdapter;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+
+
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.viewpager.widget.ViewPager;
+
 
 import android.os.Bundle;
 import android.util.Log;
@@ -15,12 +20,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+
+
 // TODO: 05/02/2019 allow back up true -
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements OnBackPressedCallback {
     private static final String TAG = "MainActivity";
 
+    private CoordinatorLayout coordinatorLayout;
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +39,8 @@ public class MainActivity extends AppCompatActivity {
 
         // Initializing the toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
+
+        coordinatorLayout = findViewById(R.id.main_content);
 
         // Setting it as the action bar -
         setSupportActionBar(toolbar);
@@ -48,9 +60,6 @@ public class MainActivity extends AppCompatActivity {
         // Not sure what these do yet -
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
-
-
-
 
         // FLOATING ACTION BUTTON -
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -95,9 +104,12 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onBackPressed() {
 
-        super.onBackPressed();
+    @Override
+    public boolean handleOnBackPressed() {
+
+        Log.d(TAG, "handleOnBackPressed: main activity");
+
+        return true;
     }
 }
