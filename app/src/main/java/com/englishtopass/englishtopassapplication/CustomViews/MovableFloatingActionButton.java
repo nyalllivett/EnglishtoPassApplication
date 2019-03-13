@@ -1,4 +1,4 @@
-package com.englishtopass.englishtopassapplication;
+package com.englishtopass.englishtopassapplication.CustomViews;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -6,7 +6,6 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewParent;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -34,9 +33,6 @@ public class MovableFloatingActionButton extends FloatingActionButton implements
 
     private void init() {
         setOnTouchListener(this);
-
-
-
     }
 
     @Override
@@ -105,6 +101,7 @@ public class MovableFloatingActionButton extends FloatingActionButton implements
                 return true; // Consumed
 
             case MotionEvent.ACTION_UP:
+                Log.d(TAG, "onTouch: UP");
                 float upRawX = event.getRawX();
                 float upRawY = event.getRawY();
 
@@ -112,6 +109,7 @@ public class MovableFloatingActionButton extends FloatingActionButton implements
                 float upDY = upRawY - downRawY;
 
                 if (Math.abs(upDX) < CLICK_DRAG_TOLERANCE && Math.abs(upDY) < CLICK_DRAG_TOLERANCE) { // A click
+                    Log.d(TAG, "onTouch: perform click ");
                     return performClick();
                 }
                 else { // A drag

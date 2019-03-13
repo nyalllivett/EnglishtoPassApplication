@@ -1,13 +1,22 @@
 package com.englishtopass.englishtopassapplication.ExampleFragment.ExampleMainScreen;
 
 
-
-import android.animation.Animator;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.TextView;
+
+import com.englishtopass.englishtopassapplication.ExampleFragment.ExampleQuestions.UoeExampleQuestion;
+import com.englishtopass.englishtopassapplication.R;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.fragment.app.Fragment;
@@ -17,30 +26,7 @@ import androidx.transition.ChangeBounds;
 import androidx.transition.Fade;
 import androidx.transition.Transition;
 import androidx.transition.TransitionManager;
-import io.reactivex.Completable;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.observers.DisposableCompletableObserver;
-import io.reactivex.schedulers.Schedulers;
-
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.Button;
-import android.widget.FrameLayout;
-import android.widget.TextView;
-
-import com.englishtopass.englishtopassapplication.ExampleFragment.ExampleQuestions.UoeExampleQuestion;
-import com.englishtopass.englishtopassapplication.R;
-import com.englishtopass.englishtopassapplication.TabbedFragments.UoETabbedFragment;
-
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.RunnableFuture;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
+import androidx.transition.TransitionSet;
 
 
 public class MainExampleFragment extends Fragment implements View.OnClickListener, OnBackPressedCallback{
@@ -50,9 +36,8 @@ public class MainExampleFragment extends Fragment implements View.OnClickListene
 
     private Button seeExampleButton;
     private Button startTestButton;
-    private TextView exampleTitleTextView;
     private TextView exampleDescriptionTextView;
-    private TextView examplePartNumber;
+    private TextView examplePartType;
     private ViewGroup rootConstraintLayout;
     private boolean layoutChanged = false;
 
@@ -63,10 +48,13 @@ public class MainExampleFragment extends Fragment implements View.OnClickListene
 
     private FrameLayout frameLayout;
 
-    private String titleFromResources;
+    private String testType;
     private String descriptionFromResources;
+    private androidx.appcompat.widget.Toolbar toolbar;
+
 
     private FragmentManager fragmentManager;
+    private String testPartName;
 
     public MainExampleFragment() {
         // Required empty public constructor
@@ -121,8 +109,8 @@ public class MainExampleFragment extends Fragment implements View.OnClickListene
         // Setting this to false so when the back is pressed it acts as normal -
         exampleQuestionOpen = false;
 
-        // Switch statement on which test is being run to then populate the text view accordingly -
-        populateTextViews();
+        // Switch statement on which morph_example_button is being run to then populate the text view accordingly -
+        settingForTextViews();
 
     }
 
@@ -132,6 +120,12 @@ public class MainExampleFragment extends Fragment implements View.OnClickListene
 
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.example_fragment, container, false);
+
+        // Setting the toolbar -
+        toolbar = view.findViewById(R.id.exampleToolbar);
+
+        // Setting attributes for toolbar -
+        setActionBar();
 
         // Constraint layout
 
@@ -146,17 +140,13 @@ public class MainExampleFragment extends Fragment implements View.OnClickListene
 
         // The text views
 
-        exampleTitleTextView = view.findViewById(R.id.testTitleAndTime);
-
-        exampleTitleTextView.setText(titleFromResources);
-
         exampleDescriptionTextView = view.findViewById(R.id.testPartDescription);
 
         exampleDescriptionTextView.setText(descriptionFromResources);
 
-        examplePartNumber = view.findViewById(R.id.testPartNumber);
+        examplePartType = view.findViewById(R.id.testPartName);
 
-        examplePartNumber.setText("Part - 1");
+        examplePartType.setText(testPartName);
 
         // The buttons
 
@@ -171,7 +161,16 @@ public class MainExampleFragment extends Fragment implements View.OnClickListene
         return view;
     }
 
-    private void populateTextViews() {
+    private void setActionBar() {
+
+        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setHomeButtonEnabled(true);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setSubtitle(testType);
+
+    }
+
+    private void settingForTextViews() {
 
         String packageName = getContext().getPackageName();
 
@@ -179,7 +178,9 @@ public class MainExampleFragment extends Fragment implements View.OnClickListene
 
             case 1:
 
-                titleFromResources = (String) getResources().getText(getResources().getIdentifier("uoe_test_title", "string", packageName));
+                testType = (String) getResources().getText(getResources().getIdentifier("uoe_test_title", "string", packageName));
+
+                testPartName = (String) getResources().getText(getResources().getIdentifier("part_number_one", "string", packageName));
 
                 descriptionFromResources = (String) getResources().getText(getResources().getIdentifier("uoe_part_one_description", "string", packageName));
 
@@ -187,7 +188,9 @@ public class MainExampleFragment extends Fragment implements View.OnClickListene
 
             case 2:
 
-                titleFromResources = (String) getResources().getText(getResources().getIdentifier("listening_test_title", "string", packageName));
+                testType = (String) getResources().getText(getResources().getIdentifier("listening_test_title", "string", packageName));
+
+                testPartName = (String) getResources().getText(getResources().getIdentifier("part_number_two", "string", packageName));
 
                 descriptionFromResources = (String) getResources().getText(getResources().getIdentifier("listening_part_one_description", "string", packageName));
 
@@ -213,57 +216,22 @@ public class MainExampleFragment extends Fragment implements View.OnClickListene
     @Override
     public void onClick(View v) {
 
+        seeExampleButton.setClickable(false);
 
-        // Initializing the Constraint set for the new set of constraints -
-        constraintSetAfterExample = new ConstraintSet();
 
-        // Cloning the new set -
-        constraintSetAfterExample.clone(getContext(), R.layout.example_fragment_sub_set);
+        if (constraintSetAfterExample == null) {
 
-        // Creating a new transition to attach to animation
-        Transition transition = new ChangeBounds();
+            // Initializing the Constraint set for the new set of constraints -
+            constraintSetAfterExample = new ConstraintSet();
 
-        // Setting the= length of transition -
-        transition.setDuration(300);
+            // Cloning the new set -
+            constraintSetAfterExample.clone(getContext(), R.layout.example_fragment_sub_set);
 
-        transition.addListener(new Transition.TransitionListener() {
-            @Override
-            public void onTransitionStart(@NonNull Transition transition) {
-
-            }
-
-            @Override
-            public void onTransitionEnd(@NonNull Transition transition) {
-
-                if (layoutChanged) {
-
-                    addExampleQuestionFragment();
-
-                }
-
-            }
-
-            @Override
-            public void onTransitionCancel(@NonNull Transition transition) {
-
-            }
-
-            @Override
-            public void onTransitionPause(@NonNull Transition transition) {
-
-            }
-
-            @Override
-            public void onTransitionResume(@NonNull Transition transition) {
-
-            }
-        });
-
-        // This is setting a transition ready for the animation, other wise it would change the constraints straight away with no animation  -
-        TransitionManager.beginDelayedTransition(rootConstraintLayout, transition);
-
+        }
 
         switch (v.getId()) {
+
+
 
             case R.id.uoeSeeExampleButton:
 
@@ -283,7 +251,7 @@ public class MainExampleFragment extends Fragment implements View.OnClickListene
 
             case R.id.uoeStartTestButton:
 
-                Log.d(TAG, "onClick: take test");
+                Log.d(TAG, "onClick: take morph_example_button");
 
                 break;
 
@@ -294,10 +262,53 @@ public class MainExampleFragment extends Fragment implements View.OnClickListene
     private void changeBackExamplePageLayout() {
 
         // Button cant be clicked until the the layout change has taken place -
-        seeExampleButton.setClickable(false);
+        Log.d(TAG, "changeBackExamplePageLayout: clicked");
+
+        TransitionManager.beginDelayedTransition(rootConstraintLayout,
+                new TransitionSet().setOrdering(TransitionSet.ORDERING_SEQUENTIAL)
+                        .setStartDelay(200)
+                        .addTransition(new ChangeBounds().setDuration(150))
+                        .addTransition(new Fade().setDuration(150))
+                        .setDuration(300)
+                        .addListener(new Transition.TransitionListener() {
+                            @Override
+                            public void onTransitionStart(@NonNull Transition transition) {
+
+                            }
+
+                            @Override
+                            public void onTransitionEnd(@NonNull Transition transition) {
+                                if (layoutChanged) {
+
+                                    addExampleQuestionFragment();
+
+                                }
+
+                                // Allowing the back to be clicked to revert back the layout -
+                                seeExampleButton.setClickable(true);
+                            }
+
+                            @Override
+                            public void onTransitionCancel(@NonNull Transition transition) {
+
+                            }
+
+                            @Override
+                            public void onTransitionPause(@NonNull Transition transition) {
+
+                            }
+
+                            @Override
+                            public void onTransitionResume(@NonNull Transition transition) {
+
+                            }
+                        })
+        );
+
+
 
         // Changing the text to Back so the user knows the button will now revert the layout back to its original layout -
-        seeExampleButton.setText("see example");
+        seeExampleButton.setText(R.string.see_example);
 
         // Remove the example question fragment -
         fragmentManager.popBackStack();
@@ -312,19 +323,52 @@ public class MainExampleFragment extends Fragment implements View.OnClickListene
         layoutChanged = false;
         exampleQuestionOpen = false;
 
-        // Allowing the back to be clicked to revert back the layout -
-        seeExampleButton.setClickable(true);
 
 
     }
 
     private void changeToExamplePageLayout() {
 
+        TransitionManager.beginDelayedTransition(rootConstraintLayout,
+                new TransitionSet().setOrdering(TransitionSet.ORDERING_SEQUENTIAL)
+                        .addTransition(new Fade().setDuration(150))
+                        .addTransition(new ChangeBounds().setDuration(150))
+                        .setDuration(300)
+                        .addListener(new Transition.TransitionListener() {
+                            @Override
+                            public void onTransitionStart(@NonNull Transition transition) {
+
+                            }
+
+                            @Override
+                            public void onTransitionEnd(@NonNull Transition transition) {
+                                if (layoutChanged) {
+
+                                    addExampleQuestionFragment();
+
+                                }
+                            }
+
+                            @Override
+                            public void onTransitionCancel(@NonNull Transition transition) {
+
+                            }
+
+                            @Override
+                            public void onTransitionPause(@NonNull Transition transition) {
+
+                            }
+
+                            @Override
+                            public void onTransitionResume(@NonNull Transition transition) {
+
+                            }
+                        })
+        );
+
+
         // Now false when the back button is clicked this will trigger the revert of layout -
         layoutChanged = true;
-
-        // Button cant be clicked until the the layout change has taken place -
-        seeExampleButton.setClickable(false);
 
         // Changing the text to Back so the user knows the button will now revert the layout back to its original layout -
         seeExampleButton.setText("back");
@@ -357,8 +401,6 @@ public class MainExampleFragment extends Fragment implements View.OnClickListene
         // Applying the new constraint again to account for the new constraints -
         constraintSetAfterExample.applyTo((ConstraintLayout) rootConstraintLayout);
 
-        // Allowing the back to be clicked to revert back the layout -
-        seeExampleButton.setClickable(true);
 
         /**
          *
@@ -381,6 +423,10 @@ public class MainExampleFragment extends Fragment implements View.OnClickListene
                 .commit();
 
         exampleQuestionOpen = true;
+
+
+        // Allowing the back to be clicked to revert back the layout -
+        seeExampleButton.setClickable(true);
 
     }
 

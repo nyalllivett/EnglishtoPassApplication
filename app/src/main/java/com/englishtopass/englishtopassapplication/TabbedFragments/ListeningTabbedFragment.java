@@ -9,16 +9,12 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.room.Database;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.englishtopass.englishtopassapplication.Adapters.TabbedListeningRecyclerAdapter;
-import com.englishtopass.englishtopassapplication.Dao.ListeningDao;
-import com.englishtopass.englishtopassapplication.Database.QuestionDatabase;
 import com.englishtopass.englishtopassapplication.MainActivityViewModel;
 import com.englishtopass.englishtopassapplication.Model.Listening.Package.ListeningPackage;
 import com.englishtopass.englishtopassapplication.R;

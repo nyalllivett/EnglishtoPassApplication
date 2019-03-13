@@ -7,9 +7,9 @@
     <string name="section_format">Hello World from section: %1$d</string>
 
 
-    <string name="uoe_test_title">READING AND USE OF ENGLISH \n (1 hour and 15 minutes)</string>
-    <string name="listening_test_title">LISTENING\n(40 minutes)</string>
-    <string name="writing_test_title">WRITING \n (1 hour and 20 minutes)</string>
+    <string name="uoe_test_title">Use Of English and Reading)</string>
+    <string name="listening_test_title">Listening</string>
+    <string name="writing_test_title">Writing</string>
 
 
     <string name="uoe_part_one_description">For questions 1 – 8, read the text below and decide which answer (A, B, C or D) best fits each gap.</string>
@@ -26,12 +26,19 @@
     <string name="writing_part_two_description">Write an answer to one of the question below in this part 140 – 190 words in an appropriate style</string>
 
 
-    <string name="see_example_suggestion">If this is your first time on the app we strongly suggest you click See Example first.</string>
-    <string name="part_number_one">Part-1</string>
-    <string name="part_number_two">Part-2</string>
-    <string name="part_number_three">Part-3</string>
-    <string name="part_number_four">Part-4</string>
+    <string name="see_example_suggestion">If this is your first time on the app we strongly suggest you click \'See Example\' first.</string>
+    <string name="part_number_one">Multiple Choice Cloze</string>
+    <string name="part_number_two">Open Cloze</string>
+    <string name="part_number_three">Keyword Transformation</string>
+    <string name="part_number_four">Word Formation</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="multiple_choice_cloze_example_body">In 1884, a small engineering firm was ______ in a part of Manchester. \n\n Its owner had completed only two years
+    in formal education yet was still successfully running a business.
+    \n\n In 103, he bought his first family car but it did meet his high expectations and, being an engineering, he could not try having a go at at improving it.</string>
+
+    <string name="multiple_choice_cloze_example_title">A New Partnership</string>
+    <string name="multiple_choice_cloze_example_answer_group"> settled#established#installed#found</string>
+    <string name="multiple_choice_cloze_example_answer"> established</string>
+    <string name="multiple_choice_cloze">Multiple Choice Cloze</string>
+    <string name="see_example">see example</string>
 </resources>

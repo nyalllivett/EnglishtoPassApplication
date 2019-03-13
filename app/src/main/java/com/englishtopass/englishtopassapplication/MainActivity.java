@@ -1,24 +1,20 @@
 package com.englishtopass.englishtopassapplication;
 
-import com.englishtopass.englishtopassapplication.Adapters.SectionsPagerAdapter;
-import com.google.android.material.tabs.TabLayout;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-
-
-import androidx.activity.OnBackPressedCallback;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.viewpager.widget.ViewPager;
-
-
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+
+import com.englishtopass.englishtopassapplication.Adapters.SectionsPagerAdapter;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.tabs.TabLayout;
+
+import androidx.activity.OnBackPressedCallback;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.viewpager.widget.ViewPager;
 
 
 
@@ -26,7 +22,6 @@ import android.view.View;
 public class MainActivity extends AppCompatActivity implements OnBackPressedCallback {
     private static final String TAG = "MainActivity";
 
-    private CoordinatorLayout coordinatorLayout;
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
 
@@ -39,8 +34,6 @@ public class MainActivity extends AppCompatActivity implements OnBackPressedCall
 
         // Initializing the toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
-
-        coordinatorLayout = findViewById(R.id.main_content);
 
         // Setting it as the action bar -
         setSupportActionBar(toolbar);
@@ -55,14 +48,14 @@ public class MainActivity extends AppCompatActivity implements OnBackPressedCall
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
         // Initializing the tabLayout -
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        TabLayout tabLayout = findViewById(R.id.tabs);
 
         // Not sure what these do yet -
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
 
         // FLOATING ACTION BUTTON -
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

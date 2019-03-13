@@ -8,9 +8,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.englishtopass.englishtopassapplication.ExampleFragment.ExampleMainScreen.MainExampleFragment;
 import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Package.UseOfEnglishPackage;
 import com.englishtopass.englishtopassapplication.R;
-import com.englishtopass.englishtopassapplication.ExampleFragment.ExampleMainScreen.MainExampleFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,7 +56,7 @@ public class TabbedUoeRecyclerAdapter extends RecyclerView.Adapter<TabbedUoeRecy
 
             holder.uoeTestNumberTextView.setText(String.format("Test Number %s", useOfEnglishPackage.getId()));
 
-            holder.multipleChoiceClozeTitle.setText(String.format("• %s", useOfEnglishPackage.getMultipleChoiceClozeQuestion().getQuestionTitle()));
+            holder.multipleChoiceClozeTitle.setText(String.format("• %s", useOfEnglishPackage.getMultipleChoiceClozeQuestion().getTitle()));
 
             holder.openClozeTitle.setText(String.format("• %s", useOfEnglishPackage.getOpenClozeQuestion().getQuestionTitle()));
 
