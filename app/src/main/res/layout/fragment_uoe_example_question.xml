@@ -5,10 +5,11 @@
     android:id="@+id/testing"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ExampleFragment.ExampleQuestions.UoeExampleQuestion">
+    tools:context=".ExampleFragment.ExampleQuestions.UoeQuestion">
 
 
     <com.englishtopass.englishtopassapplication.CustomViews.MovableFloatingActionButton
+        android:id="@+id/movableFab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
@@ -35,16 +36,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView9" />
 
-    <TextView
-        android:id="@+id/uoe_example_timer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:text="0:00"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="@+id/textView9"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textView9" />
 
     <TextView
         android:id="@+id/textView3"
@@ -85,6 +76,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:text="EXAMPLE"
+        android:textColor="#000"
         android:textAlignment="center"
         android:textSize="18sp"
         android:textStyle="bold"
@@ -92,6 +84,18 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Chronometer
+        android:id="@+id/chronometer"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/textView9"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textView9"
+        tools:text="00:00" />
 
     <TextView
         android:id="@+id/uoe_example_title"

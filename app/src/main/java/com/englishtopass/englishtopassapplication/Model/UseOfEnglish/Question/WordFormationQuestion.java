@@ -1,26 +1,20 @@
 package com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question;
 
+import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question.Parent.ModelUoeParent;
+
 import androidx.annotation.NonNull;
 
-public class WordFormationQuestion {
-
-    @NonNull
-    private String questionTitle;
+public class WordFormationQuestion extends ModelUoeParent {
 
     @NonNull
     private String questionBody;
 
     private boolean complete;
 
-    public WordFormationQuestion(@NonNull String questionTitle, @NonNull String questionBody) {
-        this.questionTitle = questionTitle;
+    public WordFormationQuestion(@NonNull String title, @NonNull String questionBody) {
+        super(title);
         this.questionBody = questionBody;
         this.complete = false;
-    }
-
-    @NonNull
-    public String getQuestionTitle() {
-        return questionTitle;
     }
 
     @NonNull

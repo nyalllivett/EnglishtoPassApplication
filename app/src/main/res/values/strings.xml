@@ -7,7 +7,7 @@
     <string name="section_format">Hello World from section: %1$d</string>
 
 
-    <string name="uoe_test_title">Use Of English and Reading)</string>
+    <string name="uoe_test_title">Use Of English</string>
     <string name="listening_test_title">Listening</string>
     <string name="writing_test_title">Writing</string>
 
@@ -32,7 +32,7 @@
     <string name="part_number_three">Keyword Transformation</string>
     <string name="part_number_four">Word Formation</string>
 
-    <string name="multiple_choice_cloze_example_body">In 1884, a small engineering firm was ______ in a part of Manchester. \n\n Its owner had completed only two years
+    <string name="multiple_choice_cloze_example_body">In 1884, a small engineering firm was ______ in a part of Manchester. \n\n Its ______ had completed only two years
     in formal education yet was still successfully running a business.
     \n\n In 103, he bought his first family car but it did meet his high expectations and, being an engineering, he could not try having a go at at improving it.</string>
 
@@ -41,4 +41,7 @@
     <string name="multiple_choice_cloze_example_answer"> established</string>
     <string name="multiple_choice_cloze">Multiple Choice Cloze</string>
     <string name="see_example">see example</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

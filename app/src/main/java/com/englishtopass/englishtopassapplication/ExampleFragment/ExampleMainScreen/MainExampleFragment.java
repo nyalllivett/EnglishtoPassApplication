@@ -1,17 +1,27 @@
 package com.englishtopass.englishtopassapplication.ExampleFragment.ExampleMainScreen;
 
 
+import android.annotation.SuppressLint;
+import android.graphics.drawable.TransitionDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import com.englishtopass.englishtopassapplication.ExampleFragment.ExampleQuestions.UoeExampleQuestion;
+import com.englishtopass.englishtopassapplication.Adapters.ExamplePageRecyclerViewAdapter;
+import com.englishtopass.englishtopassapplication.ExampleFragment.ExampleQuestions.UoeQuestion;
+import com.englishtopass.englishtopassapplication.MainActivityViewModel;
+import com.englishtopass.englishtopassapplication.Model.Listening.Package.ListeningPackage;
+import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Package.UseOfEnglishPackage;
 import com.englishtopass.englishtopassapplication.R;
+import com.google.android.flexbox.FlexDirection;
+import com.google.android.flexbox.FlexboxLayoutManager;
+import com.google.android.flexbox.JustifyContent;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
@@ -23,13 +33,18 @@ import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.transition.ChangeBounds;
 import androidx.transition.Fade;
 import androidx.transition.Transition;
 import androidx.transition.TransitionManager;
 import androidx.transition.TransitionSet;
 
-
+// TODO: 16/03/2019 Sort all this animation rubbish out ABSOLUTE WANK!
 public class MainExampleFragment extends Fragment implements View.OnClickListener, OnBackPressedCallback{
     private static final String TAG = "MainExampleFragment";
 
@@ -41,8 +56,9 @@ public class MainExampleFragment extends Fragment implements View.OnClickListene
 
     private ViewGroup rootConstraintLayout;
 
-    private boolean layoutChanged = false, exampleQuestionOpen = false, transitionRunning, prematureFinish, toTransitionRunning = false;
-    ;
+    private boolean layoutChanged = false, exampleQuestionOpen = false, transitionRunning, toTransitionRunning = false;
+
+    private TransitionDrawable transitionDrawable;
 
     private TransitionSet toTransitionSet, backTransitionSet;
 
@@ -55,6 +71,8 @@ public class MainExampleFragment extends Fragment implements View.OnClickListene
     private androidx.appcompat.widget.Toolbar toolbar;
 
     private FragmentManager fragmentManager;
+    private int UOE_PACKAGE_ID;
+    private int QUESTION_CHILDREN;
 
 
     public MainExampleFragment() {
@@ -63,13 +81,16 @@ public class MainExampleFragment extends Fragment implements View.OnClickListene
 
     // Setting the arguments into the bundle
 
-    public static MainExampleFragment newInstance(int i) {
+    public static MainExampleFragment newInstance(int questionType, int packageID, int packageChildren) {
 
         MainExampleFragment fragment = new MainExampleFragment();
 
         Bundle bundle = new Bundle();
 
-        bundle.putInt("QUESTION_TYPE", i);
+        bundle.putInt("QUESTION_TYPE", questionType);
+        bundle.putInt("UOE_PACKAGE_ID", packageID);
+        bundle.putInt("QUESTION_CHILDREN", packageChildren);
+
 
         fragment.setArguments(bundle);
 
@@ -94,6 +115,8 @@ public class MainExampleFragment extends Fragment implements View.OnClickListene
         if (getArguments() != null) {
 
             QUESTION_TYPE = getArguments().getInt("QUESTION_TYPE");
+            UOE_PACKAGE_ID = getArguments().getInt("UOE_PACKAGE_ID");
+            QUESTION_CHILDREN = getArguments().getInt("QUESTION_CHILDREN");
 
         }
 
@@ -114,6 +137,59 @@ public class MainExampleFragment extends Fragment implements View.OnClickListene
 
         // Setting attributes for toolbar -
         setActionBar();
+
+        RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
+
+        final ExamplePageRecyclerViewAdapter adapter = new ExamplePageRecyclerViewAdapter(getContext());
+
+        FlexboxLayoutManager flexboxLayoutManager = new FlexboxLayoutManager(getContext());
+
+        flexboxLayoutManager.setFlexDirection(FlexDirection.COLUMN);
+
+        flexboxLayoutManager.setJustifyContent(JustifyContent.CENTER);
+
+        recyclerView.setAdapter(adapter);
+
+        recyclerView.setLayoutManager(flexboxLayoutManager);
+
+        MainActivityViewModel viewModel = ViewModelProviders.of(this).get(MainActivityViewModel.class);
+
+        switch(QUESTION_TYPE) {
+
+            case 1:
+
+                viewModel.getSingleUseOfEnglishPackage(UOE_PACKAGE_ID).observe(this, new Observer<UseOfEnglishPackage>() {
+                    @Override
+                    public void onChanged(UseOfEnglishPackage useOfEnglishPackage) {
+
+                        adapter.setAdapter(useOfEnglishPackage);
+
+                    }
+                });
+
+                break;
+
+            case 2:
+
+               viewModel.getSingleListeningPackage(UOE_PACKAGE_ID).observe(this, new Observer<ListeningPackage>() {
+                   @Override
+                   public void onChanged(ListeningPackage listeningPackage) {
+
+                   }
+               });
+
+
+        }
+
+        viewModel.getSingleUseOfEnglishPackage(UOE_PACKAGE_ID).observe(this, new Observer<UseOfEnglishPackage>() {
+            @Override
+            public void onChanged(UseOfEnglishPackage useOfEnglishPackage) {
+
+                adapter.setAdapter(useOfEnglishPackage);
+
+            }
+        });
+
 
         // Constraint layout
 
@@ -174,11 +250,28 @@ public class MainExampleFragment extends Fragment implements View.OnClickListene
 
             actionBar.setHomeButtonEnabled(true);
 
+            setHasOptionsMenu(true);
+
             actionBar.setDisplayHomeAsUpEnabled(true);
 
             actionBar.setSubtitle(testType);
         }
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        Log.d(TAG, "onOptionsItemSelected: here");
+        switch (item.getItemId()) {
+
+            case android.R.id.home:
+
+                getActivity().getSupportFragmentManager().popBackStack();
+
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     private void settingForTextViews() {
@@ -227,10 +320,16 @@ public class MainExampleFragment extends Fragment implements View.OnClickListene
     @Override
     public void onClick(View v) {
 
-        // TODO: 15/03/2019 change
         seeExampleButton.setClickable(false);
 
         switch (v.getId()) {
+
+            case android.R.id.home:
+
+                Log.d(TAG, "onClick: home");
+
+                break;
+
 
             case R.id.uoeSeeExampleButton:
 
@@ -259,9 +358,12 @@ public class MainExampleFragment extends Fragment implements View.OnClickListene
 
 
 
-
-
     private void changeToExamplePageLayout() {
+
+
+        transitionDrawable = (TransitionDrawable) seeExampleButton.getBackground();
+        transitionDrawable.startTransition(300);
+
 
         /**
          * setting up the animations
@@ -277,13 +379,13 @@ public class MainExampleFragment extends Fragment implements View.OnClickListene
 
                         transitionRunning = true;
                         toTransitionRunning = true;
+
                     }
 
                     @Override
                     public void onTransitionEnd(@NonNull Transition transition) {
 
                         if (layoutChanged && transitionRunning) {
-
 
                             addExampleQuestionFragment();
 
@@ -320,12 +422,15 @@ public class MainExampleFragment extends Fragment implements View.OnClickListene
 
         layoutChanged = true;
 
-        // Changing the text to Back so the user knows the button will now revert the layout back to its original layout -
         seeExampleButton.setText("back");
 
-        /**
-         * Creating the new frame layout to house the fragment
-         */
+        addFrameLayout();
+
+        constraintSetAfterExample.applyTo((ConstraintLayout) rootConstraintLayout);
+
+    }
+
+    private void addFrameLayout() {
 
         // Creating the frame layout for the new example fragment to appear in -
         frameLayout = new FrameLayout(getContext());
@@ -348,19 +453,15 @@ public class MainExampleFragment extends Fragment implements View.OnClickListene
         constraintSetAfterExample.connect(frameLayout.getId(), ConstraintSet.RIGHT, ConstraintSet.PARENT_ID, ConstraintSet.RIGHT);
         constraintSetAfterExample.connect(frameLayout.getId(), ConstraintSet.BOTTOM, R.id.uoeSeeExampleButton, ConstraintSet.TOP, 32);
 
-
-        // Applying the new constraint again to account for the new constraints -
-        constraintSetAfterExample.applyTo((ConstraintLayout) rootConstraintLayout);
-
-
-
-        /**
-         * once the frame layout transition has complete, the fragment is creating in the on complete method in the transition set
-         */
-
     }
 
     private void changeBackExamplePageLayout() {
+
+        if (transitionDrawable != null ) {
+
+            transitionDrawable.reverseTransition(300);
+
+        }
 
         // Button cant be clicked until the the layout change has taken place -
         backTransitionSet = new TransitionSet().setOrdering(TransitionSet.ORDERING_SEQUENTIAL)
@@ -441,7 +542,7 @@ public class MainExampleFragment extends Fragment implements View.OnClickListene
         transaction
                 .addToBackStack("uoe_example_question")
                 .setCustomAnimations(R.anim.slide_in_from_right, R.anim.slide_out_from_right, R.anim.slide_in_from_right, R.anim.slide_out_from_right)
-                .add(frameLayout.getId(), new UoeExampleQuestion(), "uoe_example_question")
+                .add(frameLayout.getId(), UoeQuestion.newInstance(QUESTION_TYPE), "uoe_example_question")
                 .commit();
 
 
@@ -449,7 +550,8 @@ public class MainExampleFragment extends Fragment implements View.OnClickListene
 
         transitionRunning = false;
 
-        prematureFinish = false;
+        toTransitionRunning = false;
+
         // Allowing the back to be clicked to revert back the layout -
         seeExampleButton.setClickable(true);
 
@@ -458,17 +560,22 @@ public class MainExampleFragment extends Fragment implements View.OnClickListene
     @Override
     public boolean handleOnBackPressed() {
 
-        if (layoutChanged && exampleQuestionOpen || transitionRunning) {
+        if (layoutChanged && exampleQuestionOpen || toTransitionRunning) {
 
+            Log.d(TAG, "handleOnBackPressed: hello");
             seeExampleButton.callOnClick();
 
             return true;
 
         }
 
+        Log.d(TAG, "handleOnBackPressed: bye");
+
         return false;
 
     }
+
+
 
     @Override
     public void onDestroy() {
@@ -479,24 +586,26 @@ public class MainExampleFragment extends Fragment implements View.OnClickListene
 
     }
 
+    @SuppressLint("RestrictedApi")
     @Override
     public void onResume() {
 
-        if (!transitionRunning && prematureFinish) {
+        if (toTransitionRunning) {
 
-            addExampleQuestionFragment();
+            toTransitionSet.resume(rootConstraintLayout);
 
         }
 
         super.onResume();
     }
 
+    @SuppressLint("RestrictedApi")
     @Override
     public void onPause() {
-        if (transitionRunning && toTransitionRunning) {
 
-            transitionRunning = false;
-            prematureFinish = true;
+        if (toTransitionRunning) {
+
+            toTransitionSet.pause(rootConstraintLayout);
 
         }
 
@@ -504,4 +613,5 @@ public class MainExampleFragment extends Fragment implements View.OnClickListene
     }
 
 }
+
 

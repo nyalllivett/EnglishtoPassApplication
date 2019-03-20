@@ -1,10 +1,10 @@
 package com.englishtopass.englishtopassapplication.Model.Listening.Questions;
 
+import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question.Parent.ModelUoeParent;
+
 import androidx.annotation.NonNull;
 
-public class ListeningOneSituationQuestion {
-    @NonNull
-    private String questionTitle;
+public class ListeningOneSituationQuestion extends ModelUoeParent {
 
     @NonNull
     private String questionBody;
@@ -12,20 +12,12 @@ public class ListeningOneSituationQuestion {
     @NonNull
     private boolean complete;
 
-    public ListeningOneSituationQuestion(@NonNull String questionTitle, @NonNull String questionBody) {
-        this.questionTitle = questionTitle;
+    public ListeningOneSituationQuestion(@NonNull String title, @NonNull String questionBody) {
+        super(title);
         this.questionBody = questionBody;
         this.complete = false;
     }
 
-    @NonNull
-    public String getQuestionTitle() {
-        return questionTitle;
-    }
-
-    public void setQuestionTitle(@NonNull String questionTitle) {
-        this.questionTitle = questionTitle;
-    }
 
     @NonNull
     public String getQuestionBody() {

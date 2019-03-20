@@ -16,6 +16,9 @@ public interface UseOfEnglishDao {
     @Query("SELECT * FROM use_of_english_questions_table")
     LiveData<List<UseOfEnglishPackage>> getAllUseOfEnglishPackages();
 
+    @Query("SELECT * FROM use_of_english_questions_table WHERE id = :id_entry")
+    LiveData<UseOfEnglishPackage> getSingleUseOfEnglishPackage(int id_entry);
+
     @Query("SELECT COUNT(*) FROM use_of_english_questions_table")
     int count();
 

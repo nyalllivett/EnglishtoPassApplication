@@ -109,7 +109,6 @@ public class MovableFloatingActionButton extends FloatingActionButton implements
                 float upDY = upRawY - downRawY;
 
                 if (Math.abs(upDX) < CLICK_DRAG_TOLERANCE && Math.abs(upDY) < CLICK_DRAG_TOLERANCE) { // A click
-                    Log.d(TAG, "onTouch: perform click ");
                     return performClick();
                 }
                 else { // A drag

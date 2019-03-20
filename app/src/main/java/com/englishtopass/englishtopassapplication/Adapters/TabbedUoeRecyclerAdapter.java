@@ -58,11 +58,11 @@ public class TabbedUoeRecyclerAdapter extends RecyclerView.Adapter<TabbedUoeRecy
 
             holder.multipleChoiceClozeTitle.setText(String.format("• %s", useOfEnglishPackage.getMultipleChoiceClozeQuestion().getTitle()));
 
-            holder.openClozeTitle.setText(String.format("• %s", useOfEnglishPackage.getOpenClozeQuestion().getQuestionTitle()));
+            holder.openClozeTitle.setText(String.format("• %s", useOfEnglishPackage.getOpenClozeQuestion().getTitle()));
 
-            holder.keywordTransformationTitle.setText(String.format("• %s", useOfEnglishPackage.getKeywordTransformationQuestion().getQuestionTitle()));
+            holder.keywordTransformationTitle.setText(String.format("• %s", useOfEnglishPackage.getKeywordTransformationQuestion().getTitle()));
 
-            holder.wordFormationTitle.setText(String.format("• %s", useOfEnglishPackage.getWordFormationQuestion().getQuestionTitle()));
+            holder.wordFormationTitle.setText(String.format("• %s", useOfEnglishPackage.getWordFormationQuestion().getTitle()));
 
 
         } else {
@@ -95,7 +95,7 @@ public class TabbedUoeRecyclerAdapter extends RecyclerView.Adapter<TabbedUoeRecy
         FragmentTransaction transaction = activity.getSupportFragmentManager()
                 .beginTransaction();
 
-        transaction.add(R.id.questionFragmentHolder, MainExampleFragment.newInstance(1), "uoeExampleFragment")
+        transaction.add(R.id.questionFragmentHolder, MainExampleFragment.newInstance(1, (Integer) v.getTag(), 4), "uoeExampleFragment")
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .addToBackStack("uoeExampleFragment")
                 .commit();
@@ -123,6 +123,7 @@ public class TabbedUoeRecyclerAdapter extends RecyclerView.Adapter<TabbedUoeRecy
             openClozeTitle = itemView.findViewById(R.id.openClozeTitleTextView);
             keywordTransformationTitle = itemView.findViewById(R.id.keywordTransformationTitleTextView);
             wordFormationTitle = itemView.findViewById(R.id.wordFormationTitleTextView);
+
 
         }
 

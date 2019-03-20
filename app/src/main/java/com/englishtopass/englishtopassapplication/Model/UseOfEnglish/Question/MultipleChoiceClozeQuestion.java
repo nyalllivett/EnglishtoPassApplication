@@ -1,12 +1,13 @@
 package com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question;
 
+import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question.Parent.ModelUoeParent;
+
 import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
 
-public class MultipleChoiceClozeQuestion {
+public class MultipleChoiceClozeQuestion extends ModelUoeParent {
 
-    private String title;
     private String body;
     private long timeElapsed;
     private ArrayList<String> answerGroupOne;
@@ -28,7 +29,9 @@ public class MultipleChoiceClozeQuestion {
                                        @NonNull ArrayList<String> answerGroupSix,@NonNull ArrayList<String> answerGroupSeven,
                                        @NonNull ArrayList<String> answerGroupEight,@NonNull ArrayList<String> correctAnswerGroup
                                        ) {
-        this.title = title;
+
+
+        super(title);
         this.body = body;
         this.timeElapsed = 0L;
         this.answerGroupOne = answerGroupOne;
@@ -49,7 +52,7 @@ public class MultipleChoiceClozeQuestion {
     public MultipleChoiceClozeQuestion(@NonNull String title, @NonNull String body,
                                        @NonNull ArrayList<String> answerGroupOne,
                                        @NonNull String exampleAnswer) {
-        this.title = title;
+        super(title);
         this.body = body;
         this.answerGroupOne = answerGroupOne;
         this.exampleAnswer = exampleAnswer;
@@ -57,17 +60,8 @@ public class MultipleChoiceClozeQuestion {
     }
 
     public MultipleChoiceClozeQuestion(@NonNull String title, @NonNull String body) {
-        this.title = title;
+        super(title);
         this.body = body;
-    }
-
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
     }
 
     public String getBody() {
