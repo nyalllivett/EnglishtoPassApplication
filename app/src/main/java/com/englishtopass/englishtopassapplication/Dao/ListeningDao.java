@@ -1,6 +1,7 @@
 package com.englishtopass.englishtopassapplication.Dao;
 
 import com.englishtopass.englishtopassapplication.Model.Listening.Package.ListeningPackage;
+import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Package.UseOfEnglishPackage;
 
 import java.util.List;
 
@@ -15,6 +16,9 @@ public interface ListeningDao {
 
     @Query("SELECT * FROM listening_questions_table")
     LiveData<List<ListeningPackage>> getAllListeningPackages();
+
+    @Query("SELECT * FROM listening_questions_table WHERE id = :id_entry")
+    LiveData<ListeningPackage> getSingleListeningPackage(int id_entry);
 
     @Query("SELECT COUNT(*) FROM listening_questions_table")
     int count();

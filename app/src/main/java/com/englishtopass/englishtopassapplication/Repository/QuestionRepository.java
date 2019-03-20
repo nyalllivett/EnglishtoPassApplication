@@ -18,7 +18,10 @@ public class QuestionRepository {
     private ListeningDao listeningDao;
 
     private LiveData<List<UseOfEnglishPackage>> useOfEnglishLivePackages;
+    private LiveData<UseOfEnglishPackage> singleUseOfEnglishPackage;
+
     private LiveData<List<ListeningPackage>> listeningPackages;
+    private LiveData<ListeningPackage> singleListeningPackage;
 
 
     // INIT
@@ -50,13 +53,27 @@ public class QuestionRepository {
      */
 
 
-    public LiveData<List<UseOfEnglishPackage>> getAllUseOfEnglishPackages(){
+    public LiveData<List<UseOfEnglishPackage>> getAllUseOfEnglishPackages() {
 
         return useOfEnglishLivePackages;
+
+    }
+
+    public LiveData<UseOfEnglishPackage> getSingleUseOfEnglishPackages(int i) {
+
+        return useOfEnglishDao.getSingleUseOfEnglishPackage(i);
 
     }
 
     public LiveData<List<ListeningPackage>> getAllListeningPackages() {
         return listeningPackages;
     }
+
+
+    public LiveData<ListeningPackage> getSingleListeningPackages(int i) {
+
+        return listeningDao.getSingleListeningPackage(i);
+
+    }
+
 }

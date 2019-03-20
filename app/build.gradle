@@ -28,7 +28,6 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     testImplementation 'junit:junit:4.12'
 
-
     /**
      * Room dependencies
      */
@@ -56,4 +55,8 @@ dependencies {
      */
     implementation 'com.google.code.gson:gson:2.8.5'
 
+    /**
+     * Flexbox manager for recycler view
+     */
+    implementation 'com.google.android:flexbox:1.1.0'
 }

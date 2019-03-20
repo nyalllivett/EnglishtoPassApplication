@@ -1,28 +1,28 @@
 package com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question;
 
 
+import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question.Parent.ModelUoeParent;
+
 import androidx.annotation.NonNull;
 
-public class KeywordTransformationQuestion {
-
-    @NonNull
-    private String questionTitle;
+public class KeywordTransformationQuestion extends ModelUoeParent {
 
     @NonNull
     private String questionBody;
 
+
     private boolean complete;
 
 
-    public KeywordTransformationQuestion(@NonNull String questionTitle,@NonNull String questionBody) {
-        this.questionTitle = questionTitle;
+    public KeywordTransformationQuestion(@NonNull String title,@NonNull String questionBody) {
+        super(title);
         this.questionBody = questionBody;
         this.complete = false;
     }
 
     @NonNull
     public String getQuestionTitle() {
-        return questionTitle;
+        return title;
     }
 
     @NonNull

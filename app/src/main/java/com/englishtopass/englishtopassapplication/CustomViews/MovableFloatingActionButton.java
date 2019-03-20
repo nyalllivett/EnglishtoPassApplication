@@ -38,7 +38,7 @@ public class MovableFloatingActionButton extends FloatingActionButton implements
     @Override
     public boolean onTouch(View v, MotionEvent event) {
 
-        ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams)v.getLayoutParams();
+        ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) v.getLayoutParams();
 
 
         switch (event.getAction()) {
@@ -55,7 +55,7 @@ public class MovableFloatingActionButton extends FloatingActionButton implements
                  *
                  * getY() is the position of the view inside its parent
                  * rawY() is the postion on the whole screen so i we dont take away the difference it will try to set the
-                 * position of the button off screen and it would start Yaxis from the top of its parent.
+                 * position of the button off screen and it would start Y axis from the top of its parent.
                  *
                  */
 
@@ -109,7 +109,6 @@ public class MovableFloatingActionButton extends FloatingActionButton implements
                 float upDY = upRawY - downRawY;
 
                 if (Math.abs(upDX) < CLICK_DRAG_TOLERANCE && Math.abs(upDY) < CLICK_DRAG_TOLERANCE) { // A click
-                    Log.d(TAG, "onTouch: perform click ");
                     return performClick();
                 }
                 else { // A drag

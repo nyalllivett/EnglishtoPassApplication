@@ -56,13 +56,13 @@ public class TabbedListeningRecyclerAdapter extends RecyclerView.Adapter<TabbedL
 
             holder.listeningTestNumberTextView.setText(String.format("Test Number %s", listeningPackage.getId()));
 
-            holder.listeningMultipleSituationTitle.setText(String.format("• %s", listeningPackage.getListeningMultipleSituationsQuestion().getQuestionTitle()));
+            holder.listeningMultipleSituationTitle.setText(String.format("• %s", listeningPackage.getListeningMultipleSituationsQuestion().getTitle()));
 
-            holder.blankFillingTitle.setText(String.format("• %s", listeningPackage.getBlankFillingQuestion().getQuestionTitle()));
+            holder.blankFillingTitle.setText(String.format("• %s", listeningPackage.getBlankFillingQuestion().getTitle()));
 
-            holder.matchSpeakersTitle.setText(String.format("• %s", listeningPackage.getMatchSpeakersQuestion().getQuestionTitle()));
+            holder.matchSpeakersTitle.setText(String.format("• %s", listeningPackage.getMatchSpeakersQuestion().getTitle()));
 
-            holder.listeningOneSituationTitle.setText(String.format("• %s", listeningPackage.getListeningOneSituationQuestion().getQuestionTitle()));
+            holder.listeningOneSituationTitle.setText(String.format("• %s", listeningPackage.getListeningOneSituationQuestion().getTitle()));
 
 
         } else {
@@ -118,7 +118,8 @@ public class TabbedListeningRecyclerAdapter extends RecyclerView.Adapter<TabbedL
                 FragmentTransaction transaction = appCompatActivity.getSupportFragmentManager()
                         .beginTransaction();
 
-                transaction.add(R.id.questionFragmentHolder, MainExampleFragment.newInstance(2), "listeningExampleFragment")
+                transaction.add(R.id.questionFragmentHolder, MainExampleFragment.newInstance(2, (Integer) v.getTag(), 4), "listeningExampleFragment")
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                         .addToBackStack("listeningExampleFragment")
                         .commit();
 

@@ -1,27 +1,22 @@
 package com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question;
 
+import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question.Parent.ModelUoeParent;
+
 import androidx.annotation.NonNull;
 
-public class OpenClozeQuestion {
+public class OpenClozeQuestion extends ModelUoeParent {
 
-
-    @NonNull
-    private String questionTitle;
 
     @NonNull
     private String questionBody;
 
     private boolean complete;
 
-    public OpenClozeQuestion(@NonNull String questionTitle, @NonNull String questionBody) {
-        this.questionTitle = questionTitle;
+    public OpenClozeQuestion(@NonNull String title, @NonNull String questionBody) {
+        super(title);
+
         this.questionBody = questionBody;
         this.complete = false;
-    }
-
-    @NonNull
-    public String getQuestionTitle() {
-        return questionTitle;
     }
 
     @NonNull

@@ -2,43 +2,65 @@ package com.englishtopass.englishtopassapplication.ExampleFragment.ExampleQuesti
 
 
 import android.os.Bundle;
-import android.util.Log;
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.englishtopass.englishtopassapplication.CustomViews.MovableFloatingActionButton;
+import com.englishtopass.englishtopassapplication.ExampleFragment.ExampleQuestions.GrandParent.BaseQuestion;
 import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question.MultipleChoiceClozeQuestion;
 import com.englishtopass.englishtopassapplication.R;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 
-public class UoeExampleQuestion extends Fragment implements OnBackPressedCallback {
+public class UoeQuestion extends BaseQuestion implements OnBackPressedCallback, View.OnClickListener {
     private static final String TAG = "UoeExampleQuestion";
 
+
+    /**
+     *
+     *  QUESTION TYPE
+     *  1 multiple cloze
+     *  2 open cloze
+     *  3 keyword transformation
+     *  4 word formation
+     *
+     */
+
     private MultipleChoiceClozeQuestion multipleChoiceClozeQuestion;
+    private MovableFloatingActionButton movableFloatingActionButton;
 
-
-    public UoeExampleQuestion() {
+    public UoeQuestion() {
         // Required empty public constructor
     }
 
-    public static UoeExampleQuestion newInstance() {
-        return new UoeExampleQuestion();
+    public static UoeQuestion newInstance(int QUESTION_TYPE) {
+
+        Bundle bundle = new Bundle();
+
+        bundle.putInt("type", QUESTION_TYPE);
+
+        UoeQuestion uoeExampleQuestion = new UoeQuestion();
+
+        uoeExampleQuestion.setArguments(bundle);
+
+        return uoeExampleQuestion;
+
     }
 
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        Log.d(TAG, "onActivityCreated: hello");
 
         getActivity().addOnBackPressedCallback(getViewLifecycleOwner(), this);
+
+        startTimer();
 
         super.onActivityCreated(savedInstanceState);
 
@@ -47,7 +69,8 @@ public class UoeExampleQuestion extends Fragment implements OnBackPressedCallbac
     @Override
     public void onDestroy() {
 
-        Log.d(TAG, "onDestroy: destroyed callback");
+        endTimer();
+
         getActivity().removeOnBackPressedCallback(this);
 
         super.onDestroy();
@@ -57,14 +80,21 @@ public class UoeExampleQuestion extends Fragment implements OnBackPressedCallbac
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        List<String> exampleGroup = new ArrayList<>(Arrays.asList(String.valueOf(R.string.multiple_choice_cloze_example_answer_group).trim().split("#")));
+        if (getArguments() != null) {
 
+            questionType = getArguments().getInt("QUESTION_TYPE");
+
+        }
+
+
+
+        ArrayList<String> exampleGroup = new ArrayList<>(Arrays.asList(String.valueOf(R.string.multiple_choice_cloze_example_answer_group).trim().split("#")));
 
         multipleChoiceClozeQuestion =
                 new MultipleChoiceClozeQuestion(
                         String.valueOf(getString(R.string.multiple_choice_cloze_example_title)),
                         String.valueOf(getString(R.string.multiple_choice_cloze_example_body)),
-                        (ArrayList<String>) exampleGroup,
+                        exampleGroup,
                         String.valueOf(getString(R.string.multiple_choice_cloze_example_answer))
                 );
 
@@ -84,13 +114,36 @@ public class UoeExampleQuestion extends Fragment implements OnBackPressedCallbac
 
         exampleTitle.setText(multipleChoiceClozeQuestion.getTitle());
 
+        chronometer = view.findViewById(R.id.chronometer);
+
+        // Setting the FAB
+
+        movableFloatingActionButton = view.findViewById(R.id.movableFab);
+
+        movableFloatingActionButton.setOnClickListener(this);
+
+
+        // Setting the spans
+
+        exampleBody.setText(searchAndSetSpans(multipleChoiceClozeQuestion.getBody()));
+
+        exampleBody.setMovementMethod(LinkMovementMethod.getInstance());
+
         return view;
+
     }
 
     @Override
     public boolean handleOnBackPressed() {
 
         return false;
+
     }
 
+    @Override
+    public void onClick(View v) {
+
+        super.onClick(v);
+
+    }
 }

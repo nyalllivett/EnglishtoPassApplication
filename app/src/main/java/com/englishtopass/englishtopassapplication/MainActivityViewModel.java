@@ -16,7 +16,10 @@ public class MainActivityViewModel extends AndroidViewModel {
 
     private QuestionRepository questionRepository;
     private LiveData<List<UseOfEnglishPackage>> useOfEnglishPackageLiveData;
+    private LiveData<UseOfEnglishPackage> sinlgeUseOfEnglishPackageLiveData;
+
     private LiveData<List<ListeningPackage>> listeningPackageLiveData;
+    private LiveData<ListeningPackage> singleListeningPackageLiveData;
 
 
     public MainActivityViewModel(@NonNull Application application) {
@@ -37,5 +40,14 @@ public class MainActivityViewModel extends AndroidViewModel {
     public LiveData<List<ListeningPackage>> getListeningPackageLiveData() {
         return listeningPackageLiveData;
     }
+
+    public LiveData<UseOfEnglishPackage> getSingleUseOfEnglishPackage(int id) {
+        return sinlgeUseOfEnglishPackageLiveData = questionRepository.getSingleUseOfEnglishPackages(id);
+    }
+
+    public LiveData<ListeningPackage> getSingleListeningPackage(int id) {
+        return singleListeningPackageLiveData = questionRepository.getSingleListeningPackages(id);
+    }
+
 
 }
