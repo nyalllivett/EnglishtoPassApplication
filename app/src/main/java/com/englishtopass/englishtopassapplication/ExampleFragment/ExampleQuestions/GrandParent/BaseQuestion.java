@@ -83,7 +83,7 @@ public class BaseQuestion extends Fragment implements View.OnClickListener {
 
                 }
 
-            }, startingIndex, keyword.length(), Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
+            }, startingIndex, startingIndex + 6, Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
 
             startingIndex = bodyOfText.indexOf(keyword, startingIndex + keyword.length());
 

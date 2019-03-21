@@ -1,39 +1,46 @@
 package com.englishtopass.englishtopassapplication.Adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.englishtopass.englishtopassapplication.Model.Listening.Package.ListeningPackage;
-import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Package.UseOfEnglishPackage;
 import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question.Parent.ModelUoeParent;
 import com.englishtopass.englishtopassapplication.R;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class ExamplePageRecyclerViewAdapter extends RecyclerView.Adapter<ExamplePageRecyclerViewAdapter.ExampleItemViewHolder> {
-
-    private Context context;
-    private UseOfEnglishPackage useOfEnglishPackage;
-    private ListeningPackage listeningPackage;
-    private List<ModelUoeParent> parts;
+public class ExamplePageRecyclerViewAdapter extends ListAdapter<ModelUoeParent,ExamplePageRecyclerViewAdapter.ExampleItemViewHolder> {
+    private static final String TAG = "ExamplePageRecyclerView";
     private LayoutInflater layoutInflater;
 
-
     public ExamplePageRecyclerViewAdapter(Context context) {
-        this.context = context;
+        super(DIFF_CALLBACK);
+        Log.d(TAG, "ExamplePageRecyclerViewAdapter: here");
         this.layoutInflater = LayoutInflater.from(context);
 
-        parts = new ArrayList<>();
-
     }
+
+    public static final DiffUtil.ItemCallback<ModelUoeParent> DIFF_CALLBACK = new DiffUtil.ItemCallback<ModelUoeParent>() {
+        @Override
+        public boolean areItemsTheSame(@NonNull ModelUoeParent oldItem, @NonNull ModelUoeParent newItem) {
+            return false;
+
+        }
+
+        @Override
+        public boolean areContentsTheSame(@NonNull ModelUoeParent oldItem, @NonNull ModelUoeParent newItem) {
+
+             return oldItem.getTimeElapsed() == (newItem.getTimeElapsed());
+
+        }
+    };
 
     @NonNull
     @Override
@@ -47,15 +54,10 @@ public class ExamplePageRecyclerViewAdapter extends RecyclerView.Adapter<Example
     @Override
     public void onBindViewHolder(@NonNull ExampleItemViewHolder holder, int position) {
 
-        holder.partTitle.setText(parts.get(position).getTitle());
-        holder.testTime.setText("--:--");
+        holder.partTitle.setText(getItem(position).getTitle());
+        holder.testTime.setText(String.valueOf(getItem(position).getTimeElapsed()));
         holder.partType.setText("Mulitple");
 
-    }
-
-    @Override
-    public int getItemCount() {
-        return parts.size();
     }
 
     class ExampleItemViewHolder extends RecyclerView.ViewHolder {
@@ -75,41 +77,5 @@ public class ExamplePageRecyclerViewAdapter extends RecyclerView.Adapter<Example
 
         }
     }
-
-    public void setAdapter(UseOfEnglishPackage useOfEnglishPackage) {
-
-        clearParts();
-
-        this.useOfEnglishPackage = useOfEnglishPackage;
-
-        parts.add(useOfEnglishPackage.getMultipleChoiceClozeQuestion());
-        parts.add(useOfEnglishPackage.getOpenClozeQuestion());
-        parts.add(useOfEnglishPackage.getKeywordTransformationQuestion());
-        parts.add(useOfEnglishPackage.getWordFormationQuestion());
-
-        notifyDataSetChanged();
-
-    }
-
-
-    public void setAdapter(ListeningPackage listeningPackage) {
-
-        this.listeningPackage = listeningPackage;
-
-        parts.add(listeningPackage.getListeningMultipleSituationsQuestion());
-        parts.add(listeningPackage.getBlankFillingQuestion());
-        parts.add(listeningPackage.getMatchSpeakersQuestion());
-        parts.add(listeningPackage.getListeningOneSituationQuestion());
-
-        notifyDataSetChanged();
-
-    }
-
-    private void clearParts() {
-
-        parts.clear();
-
-    }
-
 
 }

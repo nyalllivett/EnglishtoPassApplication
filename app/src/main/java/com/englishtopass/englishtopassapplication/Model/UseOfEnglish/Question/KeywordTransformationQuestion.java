@@ -10,14 +10,14 @@ public class KeywordTransformationQuestion extends ModelUoeParent {
     @NonNull
     private String questionBody;
 
-
     private boolean complete;
 
 
     public KeywordTransformationQuestion(@NonNull String title,@NonNull String questionBody) {
         super(title);
         this.questionBody = questionBody;
-        this.complete = false;
+        this.timeElapsed = 0;
+
     }
 
     @NonNull

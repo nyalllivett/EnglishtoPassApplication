@@ -9,7 +9,6 @@ import androidx.annotation.NonNull;
 public class MultipleChoiceClozeQuestion extends ModelUoeParent {
 
     private String body;
-    private long timeElapsed;
     private ArrayList<String> answerGroupOne;
     private ArrayList<String> answerGroupTwo;
     private ArrayList<String> answerGroupThree;
@@ -33,7 +32,6 @@ public class MultipleChoiceClozeQuestion extends ModelUoeParent {
 
         super(title);
         this.body = body;
-        this.timeElapsed = 0L;
         this.answerGroupOne = answerGroupOne;
         this.answerGroupTwo = answerGroupTwo;
         this.answerGroupThree = answerGroupThree;
@@ -59,9 +57,12 @@ public class MultipleChoiceClozeQuestion extends ModelUoeParent {
 
     }
 
+
+
     public MultipleChoiceClozeQuestion(@NonNull String title, @NonNull String body) {
         super(title);
         this.body = body;
+        this.timeElapsed = 0;
     }
 
     public String getBody() {
@@ -70,14 +71,6 @@ public class MultipleChoiceClozeQuestion extends ModelUoeParent {
 
     public void setBody(String body) {
         this.body = body;
-    }
-
-    public long getTimeElapsed() {
-        return timeElapsed;
-    }
-
-    public void setTimeElapsed(int timeElapsed) {
-        this.timeElapsed = timeElapsed;
     }
 
     public ArrayList<String> getAnswerGroupOne() {

@@ -1,42 +1,18 @@
 package com.englishtopass.englishtopassapplication.ExampleFragment.ExampleMainScreen;
 
 
-import android.annotation.SuppressLint;
+
 import android.graphics.drawable.TransitionDrawable;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.FrameLayout;
-import android.widget.TextView;
-
-import com.englishtopass.englishtopassapplication.Adapters.ExamplePageRecyclerViewAdapter;
-import com.englishtopass.englishtopassapplication.ExampleFragment.ExampleQuestions.UoeQuestion;
-import com.englishtopass.englishtopassapplication.MainActivityViewModel;
-import com.englishtopass.englishtopassapplication.Model.Listening.Package.ListeningPackage;
-import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Package.UseOfEnglishPackage;
-import com.englishtopass.englishtopassapplication.R;
-import com.google.android.flexbox.FlexDirection;
-import com.google.android.flexbox.FlexboxLayoutManager;
-import com.google.android.flexbox.JustifyContent;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.constraintlayout.widget.ConstraintSet;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
+
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.transition.ChangeBounds;
 import androidx.transition.Fade;
@@ -44,53 +20,43 @@ import androidx.transition.Transition;
 import androidx.transition.TransitionManager;
 import androidx.transition.TransitionSet;
 
-// TODO: 16/03/2019 Sort all this animation rubbish out ABSOLUTE WANK!
-public class MainExampleFragment extends Fragment implements View.OnClickListener, OnBackPressedCallback{
-    private static final String TAG = "MainExampleFragment";
-
-    private int QUESTION_TYPE;
-
-    private Button seeExampleButton, startTestButton;
-
-    private TextView exampleDescriptionTextView, examplePartType;
-
-    private ViewGroup rootConstraintLayout;
-
-    private boolean layoutChanged = false, exampleQuestionOpen = false, transitionRunning, toTransitionRunning = false;
-
-    private TransitionDrawable transitionDrawable;
-
-    private TransitionSet toTransitionSet, backTransitionSet;
-
-    private ConstraintSet constraintSetBeforeExample, constraintSetAfterExample;
-
-    private FrameLayout frameLayout;
-
-    private String testType, descriptionFromResources, partFromResources;
-
-    private androidx.appcompat.widget.Toolbar toolbar;
-
-    private FragmentManager fragmentManager;
-    private int UOE_PACKAGE_ID;
-    private int QUESTION_CHILDREN;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 
 
-    public MainExampleFragment() {
+import com.englishtopass.englishtopassapplication.Adapters.ExamplePageRecyclerViewAdapter;
+import com.englishtopass.englishtopassapplication.ExampleFragment.ExampleMainScreen.Parent.ExamplePageParent;
+import com.englishtopass.englishtopassapplication.ExampleFragment.ExampleQuestions.UoeQuestion;
+import com.englishtopass.englishtopassapplication.MainActivityViewModel;
+import com.englishtopass.englishtopassapplication.Model.Listening.Package.ListeningPackage;
+
+import com.englishtopass.englishtopassapplication.QuestionType;
+import com.englishtopass.englishtopassapplication.R;
+import com.google.android.flexbox.FlexDirection;
+import com.google.android.flexbox.FlexboxLayoutManager;
+import com.google.android.flexbox.JustifyContent;
+
+
+public class ListeningExampleFragment extends ExamplePageParent implements OnBackPressedCallback, View.OnClickListener {
+    private static final String TAG = "ListeningExampleFragmen";
+
+
+    public ListeningExampleFragment() {
         // Required empty public constructor
     }
 
-    // Setting the arguments into the bundle
+    public static ListeningExampleFragment newInstance(QuestionType questionType, int packageID, int packageChildren) {
 
-    public static MainExampleFragment newInstance(int questionType, int packageID, int packageChildren) {
-
-        MainExampleFragment fragment = new MainExampleFragment();
+        ListeningExampleFragment fragment = new ListeningExampleFragment();
 
         Bundle bundle = new Bundle();
 
-        bundle.putInt("QUESTION_TYPE", questionType);
+        bundle.putSerializable("QUESTION_TYPE", questionType);
         bundle.putInt("UOE_PACKAGE_ID", packageID);
         bundle.putInt("QUESTION_CHILDREN", packageChildren);
-
 
         fragment.setArguments(bundle);
 
@@ -114,13 +80,12 @@ public class MainExampleFragment extends Fragment implements View.OnClickListene
 
         if (getArguments() != null) {
 
-            QUESTION_TYPE = getArguments().getInt("QUESTION_TYPE");
+            QUESTION_TYPE = (QuestionType) getArguments().getSerializable("QUESTION_TYPE");
             UOE_PACKAGE_ID = getArguments().getInt("UOE_PACKAGE_ID");
             QUESTION_CHILDREN = getArguments().getInt("QUESTION_CHILDREN");
 
         }
 
-        // Switch statement on which morph_example_button is being run to then populate the text view accordingly -
         settingForTextViews();
 
     }
@@ -132,11 +97,13 @@ public class MainExampleFragment extends Fragment implements View.OnClickListene
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.example_fragment, container, false);
 
-        // Setting the toolbar -
+        // Toolbar
+
         toolbar = view.findViewById(R.id.exampleToolbar);
 
-        // Setting attributes for toolbar -
         setActionBar();
+
+        // Recycler View -
 
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
 
@@ -154,46 +121,19 @@ public class MainExampleFragment extends Fragment implements View.OnClickListene
 
         MainActivityViewModel viewModel = ViewModelProviders.of(this).get(MainActivityViewModel.class);
 
-        switch(QUESTION_TYPE) {
-
-            case 1:
-
-                viewModel.getSingleUseOfEnglishPackage(UOE_PACKAGE_ID).observe(this, new Observer<UseOfEnglishPackage>() {
-                    @Override
-                    public void onChanged(UseOfEnglishPackage useOfEnglishPackage) {
-
-                        adapter.setAdapter(useOfEnglishPackage);
-
-                    }
-                });
-
-                break;
-
-            case 2:
-
-               viewModel.getSingleListeningPackage(UOE_PACKAGE_ID).observe(this, new Observer<ListeningPackage>() {
-                   @Override
-                   public void onChanged(ListeningPackage listeningPackage) {
-
-                   }
-               });
-
-
-        }
-
-        viewModel.getSingleUseOfEnglishPackage(UOE_PACKAGE_ID).observe(this, new Observer<UseOfEnglishPackage>() {
+        viewModel.getSingleListeningPackage(UOE_PACKAGE_ID).observe(this, new Observer<ListeningPackage>() {
             @Override
-            public void onChanged(UseOfEnglishPackage useOfEnglishPackage) {
+            public void onChanged(ListeningPackage listeningPackage) {
 
-                adapter.setAdapter(useOfEnglishPackage);
+//                adapter.setAdapterList(listeningPackage);
 
             }
+
         });
 
 
-        // Constraint layout
+        // Constraint layout-
 
-        // Setting the root layout -
         rootConstraintLayout = view.findViewById(R.id.rootConstraintLayout);
 
         setConstraintLayouts();
@@ -221,44 +161,6 @@ public class MainExampleFragment extends Fragment implements View.OnClickListene
         return view;
     }
 
-    private void setConstraintLayouts() {
-
-        // Initializing the Constraint set of the root set -
-        constraintSetBeforeExample = new ConstraintSet();
-
-        // Cloning the root set -
-        constraintSetBeforeExample.clone((ConstraintLayout) rootConstraintLayout);
-
-        // Initializing the Constraint set for the new set of constraints -
-        constraintSetAfterExample = new ConstraintSet();
-
-        // Cloning the new set -
-        constraintSetAfterExample.clone(getContext(), R.layout.example_fragment_sub_set);
-
-
-    }
-
-    private void setActionBar() {
-
-        AppCompatActivity appCompatActivity = (AppCompatActivity)getActivity();
-
-        if (appCompatActivity != null) {
-
-            appCompatActivity.setSupportActionBar(toolbar);
-
-            ActionBar actionBar = appCompatActivity.getSupportActionBar();
-
-            actionBar.setHomeButtonEnabled(true);
-
-            setHasOptionsMenu(true);
-
-            actionBar.setDisplayHomeAsUpEnabled(true);
-
-            actionBar.setSubtitle(testType);
-        }
-
-    }
-
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
@@ -278,41 +180,13 @@ public class MainExampleFragment extends Fragment implements View.OnClickListene
 
         String packageName = getContext().getPackageName();
 
-        switch (QUESTION_TYPE) {
 
-            case 1:
+        testType = (String) getResources().getText(getResources().getIdentifier("listening_test_title", "string", packageName));
 
-                testType = (String) getResources().getText(getResources().getIdentifier("uoe_test_title", "string", packageName));
+        partFromResources = (String) getResources().getText(getResources().getIdentifier("listening_part_one_title", "string", packageName));
 
-                partFromResources = (String) getResources().getText(getResources().getIdentifier("part_number_one", "string", packageName));
+        descriptionFromResources = (String) getResources().getText(getResources().getIdentifier("listening_part_one_description", "string", packageName));
 
-                descriptionFromResources = (String) getResources().getText(getResources().getIdentifier("uoe_part_one_description", "string", packageName));
-
-                break;
-
-            case 2:
-
-                testType = (String) getResources().getText(getResources().getIdentifier("listening_test_title", "string", packageName));
-
-                partFromResources = (String) getResources().getText(getResources().getIdentifier("part_number_two", "string", packageName));
-
-                descriptionFromResources = (String) getResources().getText(getResources().getIdentifier("listening_part_one_description", "string", packageName));
-
-                break;
-
-            case 3:
-
-                break;
-
-            case 4:
-
-                break;
-
-            default:
-
-                break;
-
-        }
 
     }
 
@@ -422,7 +296,7 @@ public class MainExampleFragment extends Fragment implements View.OnClickListene
 
         layoutChanged = true;
 
-        seeExampleButton.setText("back");
+        seeExampleButton.setText(R.string.back);
 
         addFrameLayout();
 
@@ -430,30 +304,7 @@ public class MainExampleFragment extends Fragment implements View.OnClickListene
 
     }
 
-    private void addFrameLayout() {
 
-        // Creating the frame layout for the new example fragment to appear in -
-        frameLayout = new FrameLayout(getContext());
-
-        // Generating a view id for the frame layout so i can reference it -
-        int frameLayoutId = View.generateViewId();
-
-        // Setting the frame layouts id -
-        frameLayout.setId(frameLayoutId);
-
-        // Setting the layout params, its working without these. Im not sure if the there are constraints it automatically sets to MATCH CONSTRAINTS -
-        frameLayout.setLayoutParams(new FrameLayout.LayoutParams(0,0));
-
-        // Adding in the new view to the constraint layout -
-        rootConstraintLayout.addView(frameLayout);
-
-        // Setting the new constraints for the new frame layout -
-        constraintSetAfterExample.connect(frameLayout.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, 32);
-        constraintSetAfterExample.connect(frameLayout.getId(), ConstraintSet.LEFT, ConstraintSet.PARENT_ID, ConstraintSet.LEFT);
-        constraintSetAfterExample.connect(frameLayout.getId(), ConstraintSet.RIGHT, ConstraintSet.PARENT_ID, ConstraintSet.RIGHT);
-        constraintSetAfterExample.connect(frameLayout.getId(), ConstraintSet.BOTTOM, R.id.uoeSeeExampleButton, ConstraintSet.TOP, 32);
-
-    }
 
     private void changeBackExamplePageLayout() {
 
@@ -556,62 +407,11 @@ public class MainExampleFragment extends Fragment implements View.OnClickListene
         seeExampleButton.setClickable(true);
 
     }
-
-    @Override
-    public boolean handleOnBackPressed() {
-
-        if (layoutChanged && exampleQuestionOpen || toTransitionRunning) {
-
-            Log.d(TAG, "handleOnBackPressed: hello");
-            seeExampleButton.callOnClick();
-
-            return true;
-
-        }
-
-        Log.d(TAG, "handleOnBackPressed: bye");
-
-        return false;
-
-    }
-
-
-
-    @Override
-    public void onDestroy() {
-
-        getActivity().removeOnBackPressedCallback(this);
-
-        super.onDestroy();
-
-    }
-
-    @SuppressLint("RestrictedApi")
-    @Override
-    public void onResume() {
-
-        if (toTransitionRunning) {
-
-            toTransitionSet.resume(rootConstraintLayout);
-
-        }
-
-        super.onResume();
-    }
-
-    @SuppressLint("RestrictedApi")
-    @Override
-    public void onPause() {
-
-        if (toTransitionRunning) {
-
-            toTransitionSet.pause(rootConstraintLayout);
-
-        }
-
-        super.onPause();
-    }
+//
 
 }
+
+
+
 
 

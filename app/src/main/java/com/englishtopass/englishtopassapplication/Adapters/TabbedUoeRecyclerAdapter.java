@@ -8,8 +8,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.englishtopass.englishtopassapplication.ExampleFragment.ExampleMainScreen.MainExampleFragment;
+import com.englishtopass.englishtopassapplication.ExampleFragment.ExampleMainScreen.UoeExampleFragment;
 import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Package.UseOfEnglishPackage;
+import com.englishtopass.englishtopassapplication.QuestionType;
 import com.englishtopass.englishtopassapplication.R;
 
 import java.util.ArrayList;
@@ -95,7 +96,7 @@ public class TabbedUoeRecyclerAdapter extends RecyclerView.Adapter<TabbedUoeRecy
         FragmentTransaction transaction = activity.getSupportFragmentManager()
                 .beginTransaction();
 
-        transaction.add(R.id.questionFragmentHolder, MainExampleFragment.newInstance(1, (Integer) v.getTag(), 4), "uoeExampleFragment")
+        transaction.add(R.id.questionFragmentHolder, UoeExampleFragment.newInstance(QuestionType.USE_OF_ENGLISH, (Integer) v.getTag(), 4), "uoeExampleFragment")
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .addToBackStack("uoeExampleFragment")
                 .commit();

@@ -16,7 +16,7 @@
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/appbar_padding_top"
         android:theme="@style/AppTheme.AppBarOverlay"
-        app:layout_constraintBottom_toTopOf="@+id/testPartName"
+        app:layout_constraintBottom_toTopOf="@+id/greenView"
         >
 
         <androidx.appcompat.widget.Toolbar
@@ -35,7 +35,7 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <TextView
-        android:id="@+id/testPartName"
+        android:id="@+id/greenView"
         android:layout_width="0dp"
         android:layout_height="180dp"
         android:background="@color/colorPrimary"
@@ -60,11 +60,11 @@
         android:layout_marginTop="52dp"
         android:layout_marginEnd="30dp"
         android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="@+id/testPartName"
+        app:layout_constraintBottom_toBottomOf="@+id/greenView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/testPartName">
+        app:layout_constraintTop_toBottomOf="@+id/greenView">
 
 
         <TextView
@@ -98,19 +98,43 @@
         app:layout_constraintTop_toBottomOf="@+id/descriptionCardView">
 
 
-        <TextView
-            android:id="@+id/textView12"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:visibility="invisible"
-            android:alpha="0.6"
-            android:text="@string/see_example_suggestion"
-            android:textAlignment="center" />
 
     </androidx.cardview.widget.CardView>
 
+    <TextView
+        android:id="@+id/textView12"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="8dp"
+        android:alpha="0.6"
+        android:visibility="invisible"
+        android:text="@string/see_example_suggestion"
+        android:textAlignment="center"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toTopOf="@+id/uoeSeeExampleButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent" />
 
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:visibility="invisible"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/descriptionCardView"
+        tools:listitem="@layout/example_question_item">
+
+
+    </androidx.recyclerview.widget.RecyclerView>
 
     <Button
         android:id="@+id/uoeSeeExampleButton"
@@ -144,5 +168,6 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/uoeSeeExampleButton"
         app:layout_constraintTop_toTopOf="@+id/uoeSeeExampleButton" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
