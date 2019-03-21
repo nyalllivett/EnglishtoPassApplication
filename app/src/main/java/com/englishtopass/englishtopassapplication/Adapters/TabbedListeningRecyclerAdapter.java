@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.englishtopass.englishtopassapplication.ExampleFragment.ExampleMainScreen.MainExampleFragment;
+import com.englishtopass.englishtopassapplication.ExampleFragment.ExampleMainScreen.ListeningExampleFragment;
 import com.englishtopass.englishtopassapplication.Model.Listening.Package.ListeningPackage;
 import com.englishtopass.englishtopassapplication.R;
 
@@ -18,6 +18,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
+
+import static com.englishtopass.englishtopassapplication.QuestionType.LISTENING;
 
 public class TabbedListeningRecyclerAdapter extends RecyclerView.Adapter<TabbedListeningRecyclerAdapter.ListeningViewHolder> implements View.OnClickListener {
     private static final String TAG = "TabbedListeningRecycler";
@@ -118,7 +120,7 @@ public class TabbedListeningRecyclerAdapter extends RecyclerView.Adapter<TabbedL
                 FragmentTransaction transaction = appCompatActivity.getSupportFragmentManager()
                         .beginTransaction();
 
-                transaction.add(R.id.questionFragmentHolder, MainExampleFragment.newInstance(2, (Integer) v.getTag(), 4), "listeningExampleFragment")
+                transaction.add(R.id.questionFragmentHolder, ListeningExampleFragment.newInstance(LISTENING, (Integer) v.getTag(), 4), "listeningExampleFragment")
                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                         .addToBackStack("listeningExampleFragment")
                         .commit();

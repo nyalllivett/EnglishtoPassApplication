@@ -8,29 +8,36 @@
 
 
     <string name="uoe_test_title">Use Of English</string>
-    <string name="listening_test_title">Listening</string>
-    <string name="writing_test_title">Writing</string>
-
 
     <string name="uoe_part_one_description">For questions 1 – 8, read the text below and decide which answer (A, B, C or D) best fits each gap.</string>
     <string name="uoe_part_two_description">For questions 9 = 16, read the text below and think of the word that best fits the gap. Use only one word in each gap.</string>
 
+    <string name="uoe_part_one_title">Multiple Choice Cloze</string>
+    <string name="uoe_part_two_title">Open Cloze</string>
+    <string name="uoe_part_three_title">Keyword Transformation</string>
+    <string name="uoe_part_four_title">Word Formation</string>
+
+
+    <string name="listening_test_title">Listening</string>
 
     <string name="listening_part_one_description">You will hear people taking in different situations. For question 1 – 8, choose the best answer (A, B or C).</string>
     <string name="listening_part_two_description">You will hear a woman called Grace Connolly talking about her travel experiences in New Zealand. For questions 9 – 18, complete the sentences with a word of a short phrase.</string>
     <string name="listening_part_three_description">You will hear five short extracts in which people are talking about a radio station, For questions 19 – 23, choose from the list (A-H) what each person says about it. Use the letters only once. There are three extra letters which you do not need to use.</string>
     <string name="listening_part_four_description">You will hear an interview with a woman called Penny Greer, who works as a photographer. For questions 24 – 30, choose the best answer (A, B or C)</string>
 
+    <string name="listening_part_one_title">Listening Part 1</string>
+    <string name="listening_part_two_title">Listening Part 2</string>
+    <string name="listening_part_three_title">Listening Part 3</string>
+    <string name="listening_part_four_title">Listening Part 4</string>
+
+
+    <string name="writing_test_title">Writing</string>
 
     <string name="writing_part_one_description">You must answer this. Write your answer in 140 – 190 words in an appropriate style</string>
     <string name="writing_part_two_description">Write an answer to one of the question below in this part 140 – 190 words in an appropriate style</string>
 
 
     <string name="see_example_suggestion">If this is your first time on the app we strongly suggest you click \'See Example\' first.</string>
-    <string name="part_number_one">Multiple Choice Cloze</string>
-    <string name="part_number_two">Open Cloze</string>
-    <string name="part_number_three">Keyword Transformation</string>
-    <string name="part_number_four">Word Formation</string>
 
     <string name="multiple_choice_cloze_example_body">In 1884, a small engineering firm was ______ in a part of Manchester. \n\n Its ______ had completed only two years
     in formal education yet was still successfully running a business.
@@ -42,6 +49,9 @@
     <string name="multiple_choice_cloze">Multiple Choice Cloze</string>
     <string name="see_example">see example</string>
 
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="back">back</string>
+
 </resources>

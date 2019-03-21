@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.englishtopass.englishtopassapplication.CustomViews.MovableFloatingActionButton;
 import com.englishtopass.englishtopassapplication.ExampleFragment.ExampleQuestions.GrandParent.BaseQuestion;
 import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question.MultipleChoiceClozeQuestion;
+import com.englishtopass.englishtopassapplication.QuestionType;
 import com.englishtopass.englishtopassapplication.R;
 
 import java.util.ArrayList;
@@ -21,6 +22,8 @@ import androidx.annotation.Nullable;
 
 public class UoeQuestion extends BaseQuestion implements OnBackPressedCallback, View.OnClickListener {
     private static final String TAG = "UoeExampleQuestion";
+
+    QuestionType QUESTION_TYPE;
 
 
     /**
@@ -40,17 +43,42 @@ public class UoeQuestion extends BaseQuestion implements OnBackPressedCallback, 
         // Required empty public constructor
     }
 
-    public static UoeQuestion newInstance(int QUESTION_TYPE) {
+    public static UoeQuestion newInstance(QuestionType QUESTION_TYPE) {
 
         Bundle bundle = new Bundle();
 
-        bundle.putInt("type", QUESTION_TYPE);
+//        bundle.putInt("QUESTION_TYPE", Integer.valueOf(String.valueOf(QUESTION_TYPE)));
 
         UoeQuestion uoeExampleQuestion = new UoeQuestion();
 
         uoeExampleQuestion.setArguments(bundle);
 
         return uoeExampleQuestion;
+
+    }
+
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        if (getArguments() != null) {
+
+            QUESTION_TYPE = QuestionType.values()[getArguments().getInt("QUESTION_TYPE")];
+
+        }
+
+
+
+        ArrayList<String> exampleGroup = new ArrayList<>(Arrays.asList(String.valueOf(R.string.multiple_choice_cloze_example_answer_group).trim().split("#")));
+
+        multipleChoiceClozeQuestion =
+                new MultipleChoiceClozeQuestion(
+                        String.valueOf(getString(R.string.multiple_choice_cloze_example_title)),
+                        String.valueOf(getString(R.string.multiple_choice_cloze_example_body)),
+                        exampleGroup,
+                        String.valueOf(getString(R.string.multiple_choice_cloze_example_answer))
+                );
 
     }
 
@@ -76,29 +104,6 @@ public class UoeQuestion extends BaseQuestion implements OnBackPressedCallback, 
         super.onDestroy();
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        if (getArguments() != null) {
-
-            questionType = getArguments().getInt("QUESTION_TYPE");
-
-        }
-
-
-
-        ArrayList<String> exampleGroup = new ArrayList<>(Arrays.asList(String.valueOf(R.string.multiple_choice_cloze_example_answer_group).trim().split("#")));
-
-        multipleChoiceClozeQuestion =
-                new MultipleChoiceClozeQuestion(
-                        String.valueOf(getString(R.string.multiple_choice_cloze_example_title)),
-                        String.valueOf(getString(R.string.multiple_choice_cloze_example_body)),
-                        exampleGroup,
-                        String.valueOf(getString(R.string.multiple_choice_cloze_example_answer))
-                );
-
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

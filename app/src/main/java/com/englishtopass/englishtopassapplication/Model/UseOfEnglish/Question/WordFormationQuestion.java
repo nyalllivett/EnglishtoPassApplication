@@ -15,6 +15,8 @@ public class WordFormationQuestion extends ModelUoeParent {
         super(title);
         this.questionBody = questionBody;
         this.complete = false;
+        this.timeElapsed = 0;
+
     }
 
     @NonNull

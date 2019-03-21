@@ -44,27 +44,37 @@
             android:background="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|enterAlways"
             app:popupTheme="@style/AppTheme.PopupOverlay"
-            app:subtitle="Use Of English and Reading"
+            app:subtitle="Use Of English"
             app:title="@string/app_name">
 
         </androidx.appcompat.widget.Toolbar>
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <TextView
-        android:id="@+id/testPartName"
+    <View
+        android:id="@+id/greenView"
         android:layout_width="0dp"
         android:layout_height="160dp"
         android:background="@color/colorPrimary"
         android:fontFamily="sans-serif-smallcaps"
         android:paddingTop="20dp"
-        android:text="@string/multiple_choice_cloze"
-        android:textAlignment="center"
-        android:textColor="@color/white"
-        android:textSize="28sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/appbar" />
+
+
+    <TextView
+        android:id="@+id/testPartName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        tools:text="@string/multiple_choice_cloze"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="28sp"
+        app:layout_constraintBottom_toTopOf="@+id/descriptionCardView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/descriptionCardView"
@@ -73,11 +83,11 @@
         android:layout_marginStart="32dp"
         android:layout_marginTop="52dp"
         android:layout_marginEnd="32dp"
-        app:layout_constraintBottom_toBottomOf="@+id/testPartName"
+        app:layout_constraintBottom_toBottomOf="@+id/greenView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/testPartName"
+        app:layout_constraintTop_toBottomOf="@+id/greenView"
         app:layout_constraintVertical_bias="0.476">
 
 
@@ -103,7 +113,7 @@
                 android:layout_below="@id/textView2"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="8dp"
-                android:text="@string/uoe_part_one_description"
+                tools:text="@string/uoe_part_one_description"
                 android:textAlignment="center"
                 android:textColor="#9e9e9e"
                 android:textSize="18sp" />

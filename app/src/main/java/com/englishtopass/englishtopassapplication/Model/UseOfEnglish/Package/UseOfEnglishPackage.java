@@ -6,14 +6,18 @@ import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question.Op
 import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question.WordFormationQuestion;
 
 import androidx.annotation.NonNull;
+import androidx.room.Embedded;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
+
 
 @Entity(tableName = "use_of_english_questions_table")
 public class UseOfEnglishPackage {
 
     @PrimaryKey(autoGenerate = true)
     private int id;
+
+    private UoeCompletion uoeCompletion;
 
     @NonNull
     private MultipleChoiceClozeQuestion multipleChoiceClozeQuestion;
@@ -32,6 +36,7 @@ public class UseOfEnglishPackage {
                                @NonNull KeywordTransformationQuestion keywordTransformationQuestion,
                                @NonNull WordFormationQuestion wordFormationQuestion) {
 
+        this.uoeCompletion = UoeCompletion.FIRST_COMPLETE;
         this.multipleChoiceClozeQuestion = multipleChoiceClozeQuestion;
         this.openClozeQuestion = openClozeQuestion;
         this.keywordTransformationQuestion = keywordTransformationQuestion;
@@ -44,6 +49,14 @@ public class UseOfEnglishPackage {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public UoeCompletion getUoeCompletion() {
+        return uoeCompletion;
+    }
+
+    public void setUoeCompletion(UoeCompletion uoeCompletion) {
+        this.uoeCompletion = uoeCompletion;
     }
 
     @NonNull
@@ -81,4 +94,7 @@ public class UseOfEnglishPackage {
     public void setWordFormationQuestion(@NonNull WordFormationQuestion wordFormationQuestion) {
         this.wordFormationQuestion = wordFormationQuestion;
     }
+
+
+
 }

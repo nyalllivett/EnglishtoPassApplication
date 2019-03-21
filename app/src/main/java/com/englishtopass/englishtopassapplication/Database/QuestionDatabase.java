@@ -11,6 +11,7 @@ import com.englishtopass.englishtopassapplication.Converters.ListeningConverters
 import com.englishtopass.englishtopassapplication.Converters.UseOfEnglishConverters.KeywordTransformationConverter;
 import com.englishtopass.englishtopassapplication.Converters.UseOfEnglishConverters.MultipleChoiceClozeConverter;
 import com.englishtopass.englishtopassapplication.Converters.UseOfEnglishConverters.OpenClozeConverter;
+import com.englishtopass.englishtopassapplication.Converters.UseOfEnglishConverters.UoeEnumConverter;
 import com.englishtopass.englishtopassapplication.Converters.UseOfEnglishConverters.WordFormationConverter;
 import com.englishtopass.englishtopassapplication.Dao.ListeningDao;
 import com.englishtopass.englishtopassapplication.Dao.UseOfEnglishDao;
@@ -42,7 +43,8 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
         BlankFillingConverter.class,
         ListeningMultipleSituationsConverter.class,
         ListeningOneSituationConverter.class,
-        MatchSpeakersConverter.class
+        MatchSpeakersConverter.class,
+        UoeEnumConverter.class
 
 })
 
