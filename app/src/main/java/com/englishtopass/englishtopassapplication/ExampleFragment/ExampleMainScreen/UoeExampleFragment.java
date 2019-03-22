@@ -146,10 +146,10 @@ public class UoeExampleFragment extends ExamplePageParent implements View.OnClic
 
                         ArrayList<ModelUoeParent> arrayList = new ArrayList<>();
 
-                        arrayList.add(useOfEnglishPackage.getWordFormationQuestion());
-                        arrayList.add(useOfEnglishPackage.getMultipleChoiceClozeQuestion());
-                        arrayList.add(useOfEnglishPackage.getKeywordTransformationQuestion());
-                        arrayList.add(useOfEnglishPackage.getOpenClozeQuestion());
+//                        arrayList.add(useOfEnglishPackage.getWordFormationQuestion());
+//                        arrayList.add(useOfEnglishPackage.getMultipleChoiceClozeQuestion());
+//                        arrayList.add(useOfEnglishPackage.getKeywordTransformationQuestion());
+//                        arrayList.add(useOfEnglishPackage.getOpenClozeQuestion());
 
 
 

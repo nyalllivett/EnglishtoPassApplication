@@ -1,7 +1,10 @@
 package com.englishtopass.englishtopassapplication.Dao;
 
 import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Package.UseOfEnglishPackage;
-import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question.Parent.ModelUoeParent;
+import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question.KeywordTransformationQuestion;
+import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question.MultipleChoiceClozeQuestion;
+import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question.OpenClozeQuestion;
+import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question.WordFormationQuestion;
 
 import java.util.List;
 
@@ -10,7 +13,6 @@ import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
-import androidx.room.Update;
 
 @Dao
 public interface UseOfEnglishDao {
@@ -28,7 +30,7 @@ public interface UseOfEnglishDao {
     int count();
 
     @Insert
-    void insert(UseOfEnglishPackage useOfEnglishPackage);
+    long insert(UseOfEnglishPackage useOfEnglishPackage);
 
     @Insert
     void insertAll(UseOfEnglishPackage... useOfEnglishPackage);
@@ -39,5 +41,15 @@ public interface UseOfEnglishDao {
     @Query("DELETE FROM use_of_english_questions_table")
     void deleteAll();
 
+    @Insert
+    void insert(MultipleChoiceClozeQuestion multipleChoiceClozeQuestion);
 
+    @Insert
+    void insert(OpenClozeQuestion openClozeQuestion);
+
+    @Insert
+    void insert(KeywordTransformationQuestion keywordTransformationQuestion);
+
+    @Insert
+    void insert(WordFormationQuestion wordFormationQuestion);
 }

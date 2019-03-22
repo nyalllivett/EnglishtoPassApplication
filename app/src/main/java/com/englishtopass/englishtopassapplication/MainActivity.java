@@ -26,7 +26,6 @@ public class MainActivity extends AppCompatActivity implements OnBackPressedCall
     private ViewPager mViewPager;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

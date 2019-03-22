@@ -57,13 +57,13 @@ public class TabbedUoeRecyclerAdapter extends RecyclerView.Adapter<TabbedUoeRecy
 
             holder.uoeTestNumberTextView.setText(String.format("Test Number %s", useOfEnglishPackage.getId()));
 
-            holder.multipleChoiceClozeTitle.setText(String.format("• %s", useOfEnglishPackage.getMultipleChoiceClozeQuestion().getTitle()));
-
-            holder.openClozeTitle.setText(String.format("• %s", useOfEnglishPackage.getOpenClozeQuestion().getTitle()));
-
-            holder.keywordTransformationTitle.setText(String.format("• %s", useOfEnglishPackage.getKeywordTransformationQuestion().getTitle()));
-
-            holder.wordFormationTitle.setText(String.format("• %s", useOfEnglishPackage.getWordFormationQuestion().getTitle()));
+//            holder.multipleChoiceClozeTitle.setText(String.format("• %s", useOfEnglishPackage.getMultipleChoiceClozeQuestion().getTitle()));
+//
+//            holder.openClozeTitle.setText(String.format("• %s", useOfEnglishPackage.getOpenClozeQuestion().getTitle()));
+//
+//            holder.keywordTransformationTitle.setText(String.format("• %s", useOfEnglishPackage.getKeywordTransformationQuestion().getTitle()));
+//
+//            holder.wordFormationTitle.setText(String.format("• %s", useOfEnglishPackage.getWordFormationQuestion().getTitle()));
 
 
         } else {

@@ -1,12 +1,26 @@
 package com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question;
 
+import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Package.UseOfEnglishPackage;
 import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question.Parent.ModelUoeParent;
 
 import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.ForeignKey;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
 
+@Entity(tableName = "multiple_choice_cloze_table", foreignKeys =
+@ForeignKey(onDelete = ForeignKey.CASCADE, entity = UseOfEnglishPackage.class, parentColumns = "id", childColumns = "uoe_id"))
 public class MultipleChoiceClozeQuestion extends ModelUoeParent {
+
+    @PrimaryKey(autoGenerate = true)
+    private int idd;
+
+    @ColumnInfo(name = "uoe_id", index = true)
+    private int uoeId;
 
     private String body;
     private ArrayList<String> answerGroupOne;
@@ -22,15 +36,17 @@ public class MultipleChoiceClozeQuestion extends ModelUoeParent {
     private boolean complete;
 
 
-    public MultipleChoiceClozeQuestion(@NonNull String title,@NonNull String body,@NonNull ArrayList<String> answerGroupOne,
-                                       @NonNull ArrayList<String> answerGroupTwo,@NonNull ArrayList<String> answerGroupThree,
-                                       @NonNull ArrayList<String> answerGroupFour,@NonNull ArrayList<String> answerGroupFive,
-                                       @NonNull ArrayList<String> answerGroupSix,@NonNull ArrayList<String> answerGroupSeven,
-                                       @NonNull ArrayList<String> answerGroupEight,@NonNull ArrayList<String> correctAnswerGroup
-                                       ) {
+    @Ignore
+    public MultipleChoiceClozeQuestion(@NonNull String title, int uoeId, @NonNull String body, @NonNull ArrayList<String> answerGroupOne,
+                                       @NonNull ArrayList<String> answerGroupTwo, @NonNull ArrayList<String> answerGroupThree,
+                                       @NonNull ArrayList<String> answerGroupFour, @NonNull ArrayList<String> answerGroupFive,
+                                       @NonNull ArrayList<String> answerGroupSix, @NonNull ArrayList<String> answerGroupSeven,
+                                       @NonNull ArrayList<String> answerGroupEight, @NonNull ArrayList<String> correctAnswerGroup
+    ) {
 
 
         super(title);
+        this.uoeId = uoeId;
         this.body = body;
         this.answerGroupOne = answerGroupOne;
         this.answerGroupTwo = answerGroupTwo;
@@ -46,7 +62,7 @@ public class MultipleChoiceClozeQuestion extends ModelUoeParent {
     }
 
 
-
+    @Ignore
     public MultipleChoiceClozeQuestion(@NonNull String title, @NonNull String body,
                                        @NonNull ArrayList<String> answerGroupOne,
                                        @NonNull String exampleAnswer) {
@@ -59,10 +75,12 @@ public class MultipleChoiceClozeQuestion extends ModelUoeParent {
 
 
 
-    public MultipleChoiceClozeQuestion(@NonNull String title, @NonNull String body) {
+    public MultipleChoiceClozeQuestion(@NonNull String title, int uoeId, @NonNull String body) {
         super(title);
+        this.uoeId = uoeId;
         this.body = body;
         this.timeElapsed = 0;
+
     }
 
     public String getBody() {
@@ -160,4 +178,18 @@ public class MultipleChoiceClozeQuestion extends ModelUoeParent {
     public void setExampleAnswer(String exampleAnswer) {
         this.exampleAnswer = exampleAnswer;
     }
+
+    public int getIdd() {
+        return idd;
+    }
+
+    public void setIdd(int id) {
+        this.idd = id;
+    }
+
+    public int getUoeId() {
+        return uoeId;
+    }
+
+
 }
