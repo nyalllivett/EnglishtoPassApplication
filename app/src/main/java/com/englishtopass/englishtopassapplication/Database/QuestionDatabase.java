@@ -14,9 +14,12 @@ import com.englishtopass.englishtopassapplication.Converters.UseOfEnglishConvert
 import com.englishtopass.englishtopassapplication.Converters.UseOfEnglishConverters.OpenClozeConverter;
 import com.englishtopass.englishtopassapplication.Converters.UseOfEnglishConverters.UoeEnumConverter;
 import com.englishtopass.englishtopassapplication.Converters.UseOfEnglishConverters.WordFormationConverter;
+import com.englishtopass.englishtopassapplication.Dao.KeywordTransformationDao;
 import com.englishtopass.englishtopassapplication.Dao.ListeningDao;
 import com.englishtopass.englishtopassapplication.Dao.MultipleChoiceClozeDao;
+import com.englishtopass.englishtopassapplication.Dao.OpenClozeDao;
 import com.englishtopass.englishtopassapplication.Dao.UseOfEnglishDao;
+import com.englishtopass.englishtopassapplication.Dao.WordFormationDao;
 import com.englishtopass.englishtopassapplication.Model.Listening.Package.ListeningPackage;
 import com.englishtopass.englishtopassapplication.Model.Listening.Questions.BlankFillingQuestion;
 import com.englishtopass.englishtopassapplication.Model.Listening.Questions.ListeningMultipleSituationsQuestion;
@@ -78,6 +81,12 @@ public abstract class QuestionDatabase extends RoomDatabase {
 
     abstract public ListeningDao listeningDao();
 
+    abstract public OpenClozeDao openClozeDao();
+
+    abstract public KeywordTransformationDao keywordTransformationDao();
+
+    abstract public WordFormationDao wordFormationDao();
+
     /**
      * RETRIEVING DATABASE
      * returning a singleton instance of the database
@@ -129,11 +138,13 @@ public abstract class QuestionDatabase extends RoomDatabase {
 
             Log.d(TAG, "doInBackground: im populating");
 
-            UseOfEnglishPackage useOfEnglishPackage = new UseOfEnglishPackage();
+            UseOfEnglishPackage useOfEnglishPackage = new UseOfEnglishPackage(
+                    "Who Wants to Be a Millionaire",
+                    "The New Year",
+                    "Greenland - The biggest Island in the World",
+                    "Deep Sleep");
 
             long check = mUoeDao.insert(useOfEnglishPackage);
-
-            Log.d(TAG, "doInBackground: " + String.valueOf(check));
 
             multipleChoiceClozeDao.insert(new MultipleChoiceClozeQuestion("Who Wants to Be a Millionaire", (int)check, "body"));
 

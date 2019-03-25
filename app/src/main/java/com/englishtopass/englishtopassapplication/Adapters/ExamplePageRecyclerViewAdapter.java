@@ -1,7 +1,6 @@
 package com.englishtopass.englishtopassapplication.Adapters;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,12 +21,11 @@ public class ExamplePageRecyclerViewAdapter extends ListAdapter<ModelUoeParent,E
 
     public ExamplePageRecyclerViewAdapter(Context context) {
         super(DIFF_CALLBACK);
-        Log.d(TAG, "ExamplePageRecyclerViewAdapter: here");
         this.layoutInflater = LayoutInflater.from(context);
 
     }
 
-    public static final DiffUtil.ItemCallback<ModelUoeParent> DIFF_CALLBACK = new DiffUtil.ItemCallback<ModelUoeParent>() {
+    private static final DiffUtil.ItemCallback<ModelUoeParent> DIFF_CALLBACK = new DiffUtil.ItemCallback<ModelUoeParent>() {
         @Override
         public boolean areItemsTheSame(@NonNull ModelUoeParent oldItem, @NonNull ModelUoeParent newItem) {
             return false;

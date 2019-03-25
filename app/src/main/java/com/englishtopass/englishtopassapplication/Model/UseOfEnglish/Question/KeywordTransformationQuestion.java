@@ -11,19 +11,18 @@ import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "keyword_transformations", foreignKeys =
-@ForeignKey(onDelete = ForeignKey.CASCADE, entity = UseOfEnglishPackage.class, parentColumns = "id", childColumns = "uoeId"))
+@ForeignKey(onDelete = ForeignKey.CASCADE, entity = UseOfEnglishPackage.class, parentColumns = "id", childColumns = "uoe_id"))
 public class KeywordTransformationQuestion extends ModelUoeParent {
 
     @PrimaryKey(autoGenerate = true)
     private int id;
 
     @NonNull
-    @ColumnInfo(index = true)
+    @ColumnInfo(name = "uoe_id", index = true)
     private final int uoeId;
 
     @NonNull
     private String questionBody;
-
     private boolean complete;
 
 
@@ -32,6 +31,7 @@ public class KeywordTransformationQuestion extends ModelUoeParent {
         this.uoeId = uoeId;
         this.questionBody = questionBody;
         this.timeElapsed = 0;
+        this.complete = false;
 
     }
 

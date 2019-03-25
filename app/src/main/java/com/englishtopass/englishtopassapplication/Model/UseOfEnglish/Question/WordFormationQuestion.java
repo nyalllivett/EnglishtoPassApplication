@@ -8,10 +8,9 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
-import androidx.room.util.TableInfo;
 
 @Entity(tableName = "word_formation_table", foreignKeys =
-@ForeignKey(onDelete = ForeignKey.CASCADE, entity = UseOfEnglishPackage.class, parentColumns = "id", childColumns = "uoeId"))
+@ForeignKey(onDelete = ForeignKey.CASCADE, entity = UseOfEnglishPackage.class, parentColumns = "id", childColumns = "uoe_id"))
 public class WordFormationQuestion extends ModelUoeParent {
 
 
@@ -19,7 +18,7 @@ public class WordFormationQuestion extends ModelUoeParent {
     private int id;
 
     @NonNull
-    @ColumnInfo(index = true)
+    @ColumnInfo(name = "uoe_id", index = true)
     private final int uoeId;
 
     @NonNull

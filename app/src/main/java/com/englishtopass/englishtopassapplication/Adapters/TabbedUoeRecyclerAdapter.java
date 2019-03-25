@@ -13,25 +13,38 @@ import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Package.Use
 import com.englishtopass.englishtopassapplication.QuestionType;
 import com.englishtopass.englishtopassapplication.R;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class TabbedUoeRecyclerAdapter extends RecyclerView.Adapter<TabbedUoeRecyclerAdapter.UseOfEnglishViewHolder> implements View.OnClickListener {
+public class TabbedUoeRecyclerAdapter extends ListAdapter<UseOfEnglishPackage, TabbedUoeRecyclerAdapter.UseOfEnglishViewHolder> implements View.OnClickListener {
     private static final String TAG = "TabbedUoeAdapter";
 
-    private List<UseOfEnglishPackage> useOfEnglishPackages = new ArrayList<>();
     private LayoutInflater mInflater;
     private AppCompatActivity activity;
 
+
+
     public TabbedUoeRecyclerAdapter(Context context, Activity activity) {
-        mInflater = LayoutInflater.from(context);
+        super(diffUtil);
+        this.mInflater = LayoutInflater.from(context);
         this.activity = (AppCompatActivity) activity;
     }
+
+    public static final DiffUtil.ItemCallback<UseOfEnglishPackage> diffUtil = new DiffUtil.ItemCallback<UseOfEnglishPackage>() {
+        @Override
+        public boolean areItemsTheSame(@NonNull UseOfEnglishPackage oldItem, @NonNull UseOfEnglishPackage newItem) {
+            return oldItem.getId() == newItem.getId();
+        }
+
+        @Override
+        public boolean areContentsTheSame(@NonNull UseOfEnglishPackage oldItem, @NonNull UseOfEnglishPackage newItem) {
+            return oldItem.getUoeCompletion() == newItem.getUoeCompletion();
+        }
+    };
 
 
     @NonNull
@@ -47,51 +60,30 @@ public class TabbedUoeRecyclerAdapter extends RecyclerView.Adapter<TabbedUoeRecy
     @Override
     public void onBindViewHolder(@NonNull UseOfEnglishViewHolder holder, int position) {
 
-        if (useOfEnglishPackages != null) {
-
-            UseOfEnglishPackage useOfEnglishPackage = useOfEnglishPackages.get(position);
+            UseOfEnglishPackage useOfEnglishPackage = getItem(position);
 
             holder.startUoeQuestionButton.setOnClickListener(this);
 
             holder.startUoeQuestionButton.setTag(useOfEnglishPackage.getId());
 
-            holder.uoeTestNumberTextView.setText(String.format("Test Number %s", useOfEnglishPackage.getId()));
+            holder.uoeTestNumberTextView.setText(String.format("Test Number %s", getItem(position).getId()));
 
-//            holder.multipleChoiceClozeTitle.setText(String.format("• %s", useOfEnglishPackage.getMultipleChoiceClozeQuestion().getTitle()));
-//
-//            holder.openClozeTitle.setText(String.format("• %s", useOfEnglishPackage.getOpenClozeQuestion().getTitle()));
-//
-//            holder.keywordTransformationTitle.setText(String.format("• %s", useOfEnglishPackage.getKeywordTransformationQuestion().getTitle()));
-//
-//            holder.wordFormationTitle.setText(String.format("• %s", useOfEnglishPackage.getWordFormationQuestion().getTitle()));
+            holder.multipleChoiceClozeTitle.setText(String.format("• %s", useOfEnglishPackage.getMultipleChoiceClozeTitle()));
+
+            holder.openClozeTitle.setText(String.format("• %s", useOfEnglishPackage.getOpenClozeTitle()));
+
+            holder.keywordTransformationTitle.setText(String.format("• %s", useOfEnglishPackage.getKeywordTransformationTitle()));
+
+            holder.wordFormationTitle.setText(String.format("• %s", useOfEnglishPackage.getWordFormationTitle()));
 
 
-        } else {
 
-            // Setting the text views to loading if the database transaction hasn't completed,
-            // Once it has it will trigger the observer and set the text views
-
-            holder.uoeTestNumberTextView.setText("Loading");
-
-            holder.multipleChoiceClozeTitle.setText("Loading");
-
-            holder.openClozeTitle.setText("Loading");
-
-            holder.keywordTransformationTitle.setText("Loading");
-
-            holder.wordFormationTitle.setText("Loading");
-
-        }
-
-    }
-
-    @Override
-    public int getItemCount() {
-        return useOfEnglishPackages.size();
     }
 
     @Override
     public void onClick(View v) {
+
+
 
         FragmentTransaction transaction = activity.getSupportFragmentManager()
                 .beginTransaction();
@@ -100,6 +92,8 @@ public class TabbedUoeRecyclerAdapter extends RecyclerView.Adapter<TabbedUoeRecy
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .addToBackStack("uoeExampleFragment")
                 .commit();
+
+
 
     }
 
@@ -130,15 +124,5 @@ public class TabbedUoeRecyclerAdapter extends RecyclerView.Adapter<TabbedUoeRecy
 
     }
 
-    /**
-     * Resetting the live data when it changes
-     */
-    public void setTabbedList(List<UseOfEnglishPackage> useOfEnglishPackages){
-
-        this.useOfEnglishPackages = useOfEnglishPackages;
-
-        notifyDataSetChanged();
-
-    }
 
 }

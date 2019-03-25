@@ -8,7 +8,6 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,8 +49,6 @@ public class UoETabbedFragment extends Fragment {
 
         recyclerView = view.findViewById(R.id.uoeTabbedRecyclerView);
 
-        recyclerView.setHasFixedSize(true);
-
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         final TabbedUoeRecyclerAdapter adapter = new TabbedUoeRecyclerAdapter(getContext(), getActivity());
@@ -63,16 +60,14 @@ public class UoETabbedFragment extends Fragment {
         mWordViewModel.getUseOfEnglishPackageLiveData().observe(this, new Observer<List<UseOfEnglishPackage>>() {
             @Override
             public void onChanged(List<UseOfEnglishPackage> useOfEnglishPackages) {
-
-
-                adapter.setTabbedList(useOfEnglishPackages);
-
+                adapter.submitList(useOfEnglishPackages);
             }
-
         });
 
         return view;
 
     }
+
+
 
 }

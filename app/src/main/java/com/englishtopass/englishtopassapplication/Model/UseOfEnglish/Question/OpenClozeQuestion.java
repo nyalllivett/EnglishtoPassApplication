@@ -10,13 +10,13 @@ import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "open_cloze_table", foreignKeys =
-@ForeignKey(onDelete = ForeignKey.CASCADE, entity = UseOfEnglishPackage.class, parentColumns = "id", childColumns = "uoeId"))
+@ForeignKey(onDelete = ForeignKey.CASCADE, entity = UseOfEnglishPackage.class, parentColumns = "id", childColumns = "uoe_id"))
 public class OpenClozeQuestion extends ModelUoeParent {
 
     @PrimaryKey(autoGenerate = true)
     private int id;
 
-    @ColumnInfo(index = true)
+    @ColumnInfo(name = "uoe_id", index = true)
     private int uoeId;
 
     @NonNull
@@ -27,7 +27,6 @@ public class OpenClozeQuestion extends ModelUoeParent {
     public OpenClozeQuestion(@NonNull String title, int uoeId, @NonNull String questionBody) {
         super(title);
         this.uoeId = uoeId;
-
         this.questionBody = questionBody;
         this.complete = false;
         this.timeElapsed = 0;
