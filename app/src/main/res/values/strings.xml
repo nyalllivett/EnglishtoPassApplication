@@ -9,8 +9,11 @@
 
     <string name="uoe_test_title">Use Of English</string>
 
-    <string name="uoe_part_one_description">For questions 1 – 8, read the text below and decide which answer (A, B, C or D) best fits each gap.</string>
-    <string name="uoe_part_two_description">For questions 9 = 16, read the text below and think of the word that best fits the gap. Use only one word in each gap.</string>
+    <string name="uoe_part_one_description">For Questions 1 – 8, read the text below and decide which answer (A, B, C or D) best fits each gap.</string>
+    <string name="uoe_part_two_description">For Questions 9 = 16, read the text below and think of the word that best fits the gap. Use only one word in each gap.</string>
+    <string name="uoe_part_three_description">For Questions 21–30, complete the second sentence so that it has a similar meaning to the first sentence, using the word given. Do not change the word given. You must use between two and five words, including the word given. </string>
+    <string name="uoe_part_four_description">For questions 31 – 40 read the text below. Use the word given in capitals at the end of each line to form a word that fits in the same line.</string>
+
 
     <string name="uoe_part_one_title">Multiple Choice Cloze</string>
     <string name="uoe_part_two_title">Open Cloze</string>
@@ -30,6 +33,15 @@
     <string name="listening_part_three_title">Listening Part 3</string>
     <string name="listening_part_four_title">Listening Part 4</string>
 
+    <string name="reading_test_title">Reading</string>
+
+    <string name="reading_part_one_description">You are going to read a news paper article about a young mother whose house was burgled. (2 points for each question). For questions 1 – 7, choose the correct answer from A, B, C or <D></D></string>
+    <string name="reading_part_two_description">You are going to read a magazine article. Six sentences have been removed from the article. Choose from the sentences A – H the one that fits the best (8 – 14). There is one extra sentence which you do not to use. (2 points for each question) </string>
+    <string name="reading_part_three_description">You are going to read an article about student accommodation in which four college students talk about the place they live. For questions 15–26, choose from the people (A-D). The people may be chosen more than once.</string>
+
+    <string name="reading_part_one_title">Reading Part 1</string>
+    <string name="reading_part_two_title">Reading Part 2</string>
+    <string name="reading_part_three_title">Reading Part 3</string>
 
     <string name="writing_test_title">Writing</string>
 
@@ -50,7 +62,6 @@
     <string name="see_example">see example</string>
 
 
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="back">back</string>
 

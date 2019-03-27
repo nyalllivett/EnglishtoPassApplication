@@ -1,12 +1,11 @@
 package com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question.Parent;
 
-public class ModelUoeParent {
-
+public class UoeParent {
 
     protected String title;
-    protected int timeElapsed;
+    protected int testTimeElapsed;
 
-    public ModelUoeParent(String title) {
+    public UoeParent(String title) {
         this.title = title;
     }
 
@@ -18,11 +17,11 @@ public class ModelUoeParent {
         this.title = title;
     }
 
-    public int getTimeElapsed() {
-        return timeElapsed;
+    public int getTestTimeElapsed() {
+        return testTimeElapsed;
     }
 
-    public void setTimeElapsed(int timeElapsed) {
-        this.timeElapsed = timeElapsed;
+    public void setTestTimeElapsed(int testTimeElapsed) {
+        this.testTimeElapsed = testTimeElapsed;
     }
 }

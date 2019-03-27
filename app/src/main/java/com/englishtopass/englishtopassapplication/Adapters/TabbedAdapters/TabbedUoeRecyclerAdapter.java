@@ -1,4 +1,4 @@
-package com.englishtopass.englishtopassapplication.Adapters;
+package com.englishtopass.englishtopassapplication.Adapters.TabbedAdapters;
 
 import android.app.Activity;
 import android.content.Context;
@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.englishtopass.englishtopassapplication.ExampleFragment.ExampleMainScreen.UoeExampleFragment;
 import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Package.UseOfEnglishPackage;
-import com.englishtopass.englishtopassapplication.QuestionType;
+import com.englishtopass.englishtopassapplication.Enums.QuestionType;
 import com.englishtopass.englishtopassapplication.R;
 
 import androidx.annotation.NonNull;
@@ -42,7 +42,7 @@ public class TabbedUoeRecyclerAdapter extends ListAdapter<UseOfEnglishPackage, T
 
         @Override
         public boolean areContentsTheSame(@NonNull UseOfEnglishPackage oldItem, @NonNull UseOfEnglishPackage newItem) {
-            return oldItem.getUoeCompletion() == newItem.getUoeCompletion();
+            return oldItem.getTestCompletion() == newItem.getTestCompletion();
         }
     };
 
@@ -88,7 +88,7 @@ public class TabbedUoeRecyclerAdapter extends ListAdapter<UseOfEnglishPackage, T
         FragmentTransaction transaction = activity.getSupportFragmentManager()
                 .beginTransaction();
 
-        transaction.add(R.id.questionFragmentHolder, UoeExampleFragment.newInstance(QuestionType.USE_OF_ENGLISH, (Integer) v.getTag(), 4), "uoeExampleFragment")
+        transaction.add(R.id.questionFragmentHolder, UoeExampleFragment.newInstance(QuestionType.USE_OF_ENGLISH, (Integer) v.getTag()), "uoeExampleFragment")
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .addToBackStack("uoeExampleFragment")
                 .commit();

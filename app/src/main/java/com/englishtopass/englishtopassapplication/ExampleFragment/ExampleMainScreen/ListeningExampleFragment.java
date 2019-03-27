@@ -30,10 +30,10 @@ import android.view.ViewGroup;
 import com.englishtopass.englishtopassapplication.Adapters.ExamplePageRecyclerViewAdapter;
 import com.englishtopass.englishtopassapplication.ExampleFragment.ExampleMainScreen.Parent.ExamplePageParent;
 import com.englishtopass.englishtopassapplication.ExampleFragment.ExampleQuestions.UoeQuestion;
-import com.englishtopass.englishtopassapplication.MainActivityViewModel;
+import com.englishtopass.englishtopassapplication.ViewModels.MainActivityViewModel;
 import com.englishtopass.englishtopassapplication.Model.Listening.Package.ListeningPackage;
 
-import com.englishtopass.englishtopassapplication.QuestionType;
+import com.englishtopass.englishtopassapplication.Enums.QuestionType;
 import com.englishtopass.englishtopassapplication.R;
 import com.google.android.flexbox.FlexDirection;
 import com.google.android.flexbox.FlexboxLayoutManager;
@@ -48,7 +48,7 @@ public class ListeningExampleFragment extends ExamplePageParent implements OnBac
         // Required empty public constructor
     }
 
-    public static ListeningExampleFragment newInstance(QuestionType questionType, int packageID, int packageChildren) {
+    public static ListeningExampleFragment newInstance(QuestionType questionType, int packageID) {
 
         ListeningExampleFragment fragment = new ListeningExampleFragment();
 
@@ -56,7 +56,6 @@ public class ListeningExampleFragment extends ExamplePageParent implements OnBac
 
         bundle.putSerializable("QUESTION_TYPE", questionType);
         bundle.putInt("UOE_PACKAGE_ID", packageID);
-        bundle.putInt("QUESTION_CHILDREN", packageChildren);
 
         fragment.setArguments(bundle);
 
@@ -121,15 +120,6 @@ public class ListeningExampleFragment extends ExamplePageParent implements OnBac
 
         MainActivityViewModel viewModel = ViewModelProviders.of(this).get(MainActivityViewModel.class);
 
-        viewModel.getSingleListeningPackage(UOE_PACKAGE_ID).observe(this, new Observer<ListeningPackage>() {
-            @Override
-            public void onChanged(ListeningPackage listeningPackage) {
-
-//                adapter.setAdapterList(listeningPackage);
-
-            }
-
-        });
 
 
         // Constraint layout-

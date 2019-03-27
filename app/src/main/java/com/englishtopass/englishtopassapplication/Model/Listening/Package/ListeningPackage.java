@@ -1,5 +1,6 @@
 package com.englishtopass.englishtopassapplication.Model.Listening.Package;
 
+import com.englishtopass.englishtopassapplication.Enums.TestCompletion;
 import com.englishtopass.englishtopassapplication.Model.Listening.Questions.BlankFillingQuestion;
 import com.englishtopass.englishtopassapplication.Model.Listening.Questions.ListeningMultipleSituationsQuestion;
 import com.englishtopass.englishtopassapplication.Model.Listening.Questions.ListeningOneSituationQuestion;
@@ -9,37 +10,36 @@ import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "listening_questions_table")
+@Entity(tableName = "listening_package_table")
 public class ListeningPackage {
 
     @PrimaryKey(autoGenerate = true)
     private int id;
 
-    @NonNull
-    private ListeningMultipleSituationsQuestion listeningMultipleSituationsQuestion;
+    private String listeningMultipleSituationsTitle;
 
-    @NonNull
-    private BlankFillingQuestion blankFillingQuestion;
+    private String blankFillingTitle;
 
-    @NonNull
-    private MatchSpeakersQuestion matchSpeakersQuestion;
+    private String matchSpeakersTitle;
 
-    @NonNull
-    private ListeningOneSituationQuestion listeningOneSituationQuestion;
+    private String listeningOneSituationTitle;
 
-    private boolean complete;
+    private long testTimeElapsed;
 
-    public ListeningPackage(@NonNull ListeningMultipleSituationsQuestion listeningMultipleSituationsQuestion,
-                            @NonNull BlankFillingQuestion blankFillingQuestion,
-                            @NonNull MatchSpeakersQuestion matchSpeakersQuestion,
-                            @NonNull ListeningOneSituationQuestion listeningOneSituationQuestion) {
+    private TestCompletion testCompletion;
 
-        this.id = id;
-        this.listeningMultipleSituationsQuestion = listeningMultipleSituationsQuestion;
-        this.blankFillingQuestion = blankFillingQuestion;
-        this.matchSpeakersQuestion = matchSpeakersQuestion;
-        this.listeningOneSituationQuestion = listeningOneSituationQuestion;
-        this.complete = false;
+    public ListeningPackage(String listeningMultipleSituationsTitle,
+                            String blankFillingTitle,
+                            String matchSpeakersTitle,
+                            String listeningOneSituationTitle) {
+
+        this.listeningMultipleSituationsTitle = listeningMultipleSituationsTitle;
+        this.blankFillingTitle = blankFillingTitle;
+        this.matchSpeakersTitle = matchSpeakersTitle;
+        this.listeningOneSituationTitle = listeningOneSituationTitle;
+        this.testTimeElapsed = 0L;
+        this.testCompletion = TestCompletion.NOT_STARTED;
+
     }
 
     public int getId() {
@@ -50,47 +50,51 @@ public class ListeningPackage {
         this.id = id;
     }
 
-    @NonNull
-    public ListeningMultipleSituationsQuestion getListeningMultipleSituationsQuestion() {
-        return listeningMultipleSituationsQuestion;
+    public String getListeningMultipleSituationsTitle() {
+        return listeningMultipleSituationsTitle;
     }
 
-    public void setListeningMultipleSituationsQuestion(@NonNull ListeningMultipleSituationsQuestion listeningMultipleSituationsQuestion) {
-        this.listeningMultipleSituationsQuestion = listeningMultipleSituationsQuestion;
+    public void setListeningMultipleSituationsTitle(String listeningMultipleSituationsTitle) {
+        this.listeningMultipleSituationsTitle = listeningMultipleSituationsTitle;
     }
 
-    @NonNull
-    public BlankFillingQuestion getBlankFillingQuestion() {
-        return blankFillingQuestion;
+    public String getBlankFillingTitle() {
+        return blankFillingTitle;
     }
 
-    public void setBlankFillingQuestion(@NonNull BlankFillingQuestion blankFillingQuestion) {
-        this.blankFillingQuestion = blankFillingQuestion;
+    public void setBlankFillingTitle(String blankFillingTitle) {
+        this.blankFillingTitle = blankFillingTitle;
     }
 
-    @NonNull
-    public MatchSpeakersQuestion getMatchSpeakersQuestion() {
-        return matchSpeakersQuestion;
+    public String getMatchSpeakersTitle() {
+        return matchSpeakersTitle;
     }
 
-    public void setMatchSpeakersQuestion(@NonNull MatchSpeakersQuestion matchSpeakersQuestion) {
-        this.matchSpeakersQuestion = matchSpeakersQuestion;
+    public void setMatchSpeakersTitle(String matchSpeakersTitle) {
+        this.matchSpeakersTitle = matchSpeakersTitle;
     }
 
-    @NonNull
-    public ListeningOneSituationQuestion getListeningOneSituationQuestion() {
-        return listeningOneSituationQuestion;
+    public String getListeningOneSituationTitle() {
+        return listeningOneSituationTitle;
     }
 
-    public void setListeningOneSituationQuestion(@NonNull ListeningOneSituationQuestion listeningOneSituationQuestion) {
-        this.listeningOneSituationQuestion = listeningOneSituationQuestion;
+    public void setListeningOneSituationTitle(String listeningOneSituationTitle) {
+        this.listeningOneSituationTitle = listeningOneSituationTitle;
     }
 
-    public boolean isComplete() {
-        return complete;
+    public long getTestTimeElapsed() {
+        return testTimeElapsed;
     }
 
-    public void setComplete(boolean complete) {
-        this.complete = complete;
+    public void setTestTimeElapsed(long testTimeElapsed) {
+        this.testTimeElapsed = testTimeElapsed;
+    }
+
+    public TestCompletion getTestCompletion() {
+        return testCompletion;
+    }
+
+    public void setTestCompletion(TestCompletion testCompletion) {
+        this.testCompletion = testCompletion;
     }
 }

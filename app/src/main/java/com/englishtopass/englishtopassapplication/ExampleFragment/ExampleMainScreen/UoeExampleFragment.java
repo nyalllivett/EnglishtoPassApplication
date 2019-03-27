@@ -12,10 +12,10 @@ import android.view.ViewGroup;
 import com.englishtopass.englishtopassapplication.Adapters.ExamplePageRecyclerViewAdapter;
 import com.englishtopass.englishtopassapplication.ExampleFragment.ExampleMainScreen.Parent.ExamplePageParent;
 import com.englishtopass.englishtopassapplication.ExampleFragment.ExampleQuestions.UoeQuestion;
-import com.englishtopass.englishtopassapplication.MainActivityViewModel;
-import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Package.UoeCompletion;
-import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question.Parent.ModelUoeParent;
-import com.englishtopass.englishtopassapplication.QuestionType;
+import com.englishtopass.englishtopassapplication.Enums.TestCompletion;
+import com.englishtopass.englishtopassapplication.ViewModels.MainActivityViewModel;
+import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question.Parent.UoeParent;
+import com.englishtopass.englishtopassapplication.Enums.QuestionType;
 import com.englishtopass.englishtopassapplication.R;
 import com.google.android.flexbox.FlexDirection;
 import com.google.android.flexbox.FlexboxLayoutManager;
@@ -56,15 +56,16 @@ public class UoeExampleFragment extends ExamplePageParent implements View.OnClic
         // Required empty public constructor
     }
 
-    // Setting the arguments into the bundle
-
-    public static UoeExampleFragment newInstance(QuestionType questionType, int packageID, int packageChildren) {
+    public static UoeExampleFragment newInstance(QuestionType questionType, int packageID) {
 
         UoeExampleFragment fragment = new UoeExampleFragment();
 
         Bundle bundle = new Bundle();
 
+        // Enum
         bundle.putSerializable("questionType", questionType);
+
+        // ID
         bundle.putInt("packageId", packageID);
 
         fragment.setArguments(bundle);
@@ -131,15 +132,15 @@ public class UoeExampleFragment extends ExamplePageParent implements View.OnClic
         MainActivityViewModel mainActivityViewModel = ViewModelProviders.of(this).get(MainActivityViewModel.class);
 
         getSingle(mainActivityViewModel).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SingleObserver<List<ModelUoeParent>>() {
+                .subscribe(new SingleObserver<List<UoeParent>>() {
                     @Override
                     public void onSubscribe(Disposable d) {
                         compositeDisposable.add(d);
                     }
 
                     @Override
-                    public void onSuccess(List<ModelUoeParent> modelUoeParents) {
-                        adapter.submitList(modelUoeParents);
+                    public void onSuccess(List<UoeParent> uoeParents) {
+                        adapter.submitList(uoeParents);
                     }
 
                     @Override
@@ -171,7 +172,7 @@ public class UoeExampleFragment extends ExamplePageParent implements View.OnClic
 
         startTestButton.setOnClickListener(this);
 
-        settingForTextViews(UoeCompletion.NOT_STARTED);
+        settingForTextViews(TestCompletion.NOT_STARTED);
 
         return view;
 
@@ -192,30 +193,39 @@ public class UoeExampleFragment extends ExamplePageParent implements View.OnClic
         return super.onOptionsItemSelected(item);
     }
 
-    private void settingForTextViews(UoeCompletion uoeCompletion) {
+    private void settingForTextViews(TestCompletion testCompletion) {
 
-        String packageName = getContext().getPackageName();
-
-        switch (uoeCompletion) {
+        switch (testCompletion) {
 
             case NOT_STARTED:
 
-                testType = getString(R.string.uoe_test_title);
+                partFromResources = getString(R.string.uoe_part_one_title);
 
-                partFromResources = (String) getResources().getText(getResources().getIdentifier("uoe_part_one_title", "string", packageName));
-
-                descriptionFromResources = (String) getResources().getText(getResources().getIdentifier("uoe_part_one_description", "string", packageName));
+                descriptionFromResources = getString(R.string.uoe_part_one_description);
 
                 break;
 
             case FIRST_COMPLETE:
 
+                partFromResources = getString(R.string.uoe_part_two_title);
 
-                testType = (String) getResources().getText(getResources().getIdentifier("uoe_test_title", "string", packageName));
+                descriptionFromResources = getString(R.string.uoe_part_two_description);
 
-                partFromResources = (String) getResources().getText(getResources().getIdentifier("uoe_part_two_title", "string", packageName));
+                break;
 
-                descriptionFromResources = (String) getResources().getText(getResources().getIdentifier("uoe_part_two_description", "string", packageName));
+            case SECOND_COMPLETE:
+
+                partFromResources = getString(R.string.uoe_part_three_title);
+
+                descriptionFromResources = getString(R.string.uoe_part_three_description);
+
+                break;
+
+            case THIRD_COMPLETE:
+
+                partFromResources = getString(R.string.uoe_part_three_title);
+
+                descriptionFromResources = getString(R.string.uoe_part_three_description);
 
                 break;
 
@@ -227,8 +237,6 @@ public class UoeExampleFragment extends ExamplePageParent implements View.OnClic
         exampleDescriptionTextView.setText(descriptionFromResources);
 
         examplePartType.setText(partFromResources);
-
-
 
     }
 
@@ -271,7 +279,6 @@ public class UoeExampleFragment extends ExamplePageParent implements View.OnClic
         }
 
     }
-
 
 
     private void changeToExamplePageLayout() {
@@ -450,7 +457,8 @@ public class UoeExampleFragment extends ExamplePageParent implements View.OnClic
 
     }
 
-    private Single<List<ModelUoeParent>> getSingle(MainActivityViewModel mainActivityViewModel) {
+
+    private Single<List<UoeParent>> getSingle(MainActivityViewModel mainActivityViewModel) {
 
         return  Single.zip(
 
@@ -460,7 +468,7 @@ public class UoeExampleFragment extends ExamplePageParent implements View.OnClic
                 mainActivityViewModel.getMenuWordFormationQuestion(packageId),
                 ((keywordTransformationQuestion, multipleChoiceClozeQuestion, openClozeQuestion, wordFormationQuestion) -> {
 
-                    List<ModelUoeParent> arrayList = new ArrayList<>();
+                    List<UoeParent> arrayList = new ArrayList<>();
                     arrayList.add(keywordTransformationQuestion);
                     arrayList.add(multipleChoiceClozeQuestion);
                     arrayList.add(openClozeQuestion);

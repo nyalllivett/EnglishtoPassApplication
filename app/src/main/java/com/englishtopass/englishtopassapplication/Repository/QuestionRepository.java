@@ -2,14 +2,31 @@ package com.englishtopass.englishtopassapplication.Repository;
 
 import android.app.Application;
 
-import com.englishtopass.englishtopassapplication.Dao.KeywordTransformationDao;
-import com.englishtopass.englishtopassapplication.Dao.ListeningDao;
-import com.englishtopass.englishtopassapplication.Dao.MultipleChoiceClozeDao;
-import com.englishtopass.englishtopassapplication.Dao.OpenClozeDao;
-import com.englishtopass.englishtopassapplication.Dao.UseOfEnglishDao;
-import com.englishtopass.englishtopassapplication.Dao.WordFormationDao;
+import com.englishtopass.englishtopassapplication.Dao.ListeningDaos.BlankFillingDao;
+import com.englishtopass.englishtopassapplication.Dao.ListeningDaos.ListeningMultipleDao;
+import com.englishtopass.englishtopassapplication.Dao.ListeningDaos.ListeningOneDao;
+import com.englishtopass.englishtopassapplication.Dao.ListeningDaos.MatchSpeakersDao;
+import com.englishtopass.englishtopassapplication.Dao.ReadingDao.GappedDao;
+import com.englishtopass.englishtopassapplication.Dao.ReadingDao.MatchingExerciseDao;
+import com.englishtopass.englishtopassapplication.Dao.ReadingDao.MultipleChoiceDao;
+import com.englishtopass.englishtopassapplication.Dao.ReadingDao.ReadingDao;
+import com.englishtopass.englishtopassapplication.Dao.UseOfEnglishDaos.KeywordTransformationDao;
+import com.englishtopass.englishtopassapplication.Dao.ListeningDaos.ListeningDao;
+import com.englishtopass.englishtopassapplication.Dao.UseOfEnglishDaos.MultipleChoiceClozeDao;
+import com.englishtopass.englishtopassapplication.Dao.UseOfEnglishDaos.OpenClozeDao;
+import com.englishtopass.englishtopassapplication.Dao.UseOfEnglishDaos.UseOfEnglishDao;
+import com.englishtopass.englishtopassapplication.Dao.UseOfEnglishDaos.WordFormationDao;
 import com.englishtopass.englishtopassapplication.Database.QuestionDatabase;
 import com.englishtopass.englishtopassapplication.Model.Listening.Package.ListeningPackage;
+import com.englishtopass.englishtopassapplication.Model.Listening.Questions.BlankFillingQuestion;
+import com.englishtopass.englishtopassapplication.Model.Listening.Questions.ListeningMultipleSituationsQuestion;
+import com.englishtopass.englishtopassapplication.Model.Listening.Questions.ListeningOneSituationQuestion;
+import com.englishtopass.englishtopassapplication.Model.Listening.Questions.MatchSpeakersQuestion;
+import com.englishtopass.englishtopassapplication.Model.Reading.Package.ReadingPackage;
+import com.englishtopass.englishtopassapplication.Model.Reading.Questions.GappedTextQuestion;
+import com.englishtopass.englishtopassapplication.Model.Reading.Questions.MatchingExerciseQuestion;
+import com.englishtopass.englishtopassapplication.Model.Reading.Questions.MultipleChoiceQuestion;
+import com.englishtopass.englishtopassapplication.Model.Reading.Questions.Parent.ReadingParent;
 import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Package.UseOfEnglishPackage;
 import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question.KeywordTransformationQuestion;
 import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question.MultipleChoiceClozeQuestion;
@@ -24,11 +41,25 @@ import io.reactivex.Single;
 public class QuestionRepository {
 
     private UseOfEnglishDao useOfEnglishDao;
-    private ListeningDao listeningDao;
+
     private MultipleChoiceClozeDao multipleChoiceClozeDao;
     private OpenClozeDao openClozeDao;
     private KeywordTransformationDao keywordTransformationDao;
     private WordFormationDao wordFormationDao;
+
+    private ListeningDao listeningDao;
+
+    private ListeningMultipleDao listeningMultipleDao;
+    private ListeningOneDao listeningOneDao;
+    private MatchSpeakersDao matchSpeakersDao;
+    private BlankFillingDao blankFillingDao;
+
+    private ReadingDao readingDao;
+
+    private MultipleChoiceDao multipleChoiceDao;
+    private GappedDao gappedDao;
+    private MatchingExerciseDao matchingExerciseDao;
+
 
     private LiveData<List<UseOfEnglishPackage>> useOfEnglishLivePackages;
     private LiveData<UseOfEnglishPackage> singleUseOfEnglishPackage;
@@ -36,6 +67,8 @@ public class QuestionRepository {
     private LiveData<List<ListeningPackage>> listeningPackages;
     private LiveData<ListeningPackage> singleListeningPackage;
 
+    private LiveData<List<ReadingPackage>> readingPackages;
+    private LiveData<ReadingPackage> singleReadingPackage;
 
     // INIT
     public QuestionRepository(Application application) {
@@ -50,16 +83,33 @@ public class QuestionRepository {
          */
         useOfEnglishDao = questionDatabase.useOfEnglishDao();
 
-            multipleChoiceClozeDao = questionDatabase.multipleChoiceClozeDao();
+        multipleChoiceClozeDao = questionDatabase.multipleChoiceClozeDao();
 
-            openClozeDao = questionDatabase.openClozeDao();
+        openClozeDao = questionDatabase.openClozeDao();
 
-            keywordTransformationDao = questionDatabase.keywordTransformationDao();
+        keywordTransformationDao = questionDatabase.keywordTransformationDao();
 
-            wordFormationDao = questionDatabase.wordFormationDao();
+        wordFormationDao = questionDatabase.wordFormationDao();
+
 
         listeningDao = questionDatabase.listeningDao();
 
+        listeningMultipleDao = questionDatabase.listeningMultipleDao();
+
+        listeningOneDao = questionDatabase.listeningOneDao();
+
+        blankFillingDao = questionDatabase.blankFillingDao();
+
+        matchSpeakersDao = questionDatabase.matchSpeakersDao();
+
+
+        readingDao = questionDatabase.readingDao();
+
+        multipleChoiceDao = questionDatabase.multipleChoiceDao();
+
+        gappedDao = questionDatabase.gappedDao();
+
+        matchingExerciseDao = questionDatabase.matchingExerciseDao();
 
 
         /**
@@ -68,6 +118,8 @@ public class QuestionRepository {
         useOfEnglishLivePackages = useOfEnglishDao.getAllUseOfEnglishPackages();
 
         listeningPackages = listeningDao.getAllListeningPackages();
+
+        readingPackages = readingDao.getAllReadingPackages();
 
     }
 
@@ -88,18 +140,30 @@ public class QuestionRepository {
 
     }
 
-
-
     public LiveData<List<ListeningPackage>> getAllListeningPackages() {
-        return listeningPackages;
-    }
 
+        return listeningPackages;
+
+    }
 
     public LiveData<ListeningPackage> getSingleListeningPackages(int i) {
 
         return listeningDao.getSingleListeningPackage(i);
 
     }
+
+    public LiveData<List<ReadingPackage>> getAllReadingPackages() {
+
+        return readingPackages;
+
+    }
+
+    public LiveData<ReadingPackage> getSingleReadingPackages(int i) {
+
+        return readingDao.getSingleReadingPackage(i);
+
+    }
+
 
     /**
      UOE SINGLES
@@ -117,7 +181,7 @@ public class QuestionRepository {
 
     }
 
-    public Single<MultipleChoiceClozeQuestion> getMenuMultipleChoice(int i ) {
+    public Single<MultipleChoiceClozeQuestion> getMenuMultipleChoiceCloze(int i ) {
 
         return multipleChoiceClozeDao.getModelParentMultipleChoice(i);
 
@@ -126,6 +190,48 @@ public class QuestionRepository {
     public Single<WordFormationQuestion> getMenuWordFormation(int i ) {
 
         return wordFormationDao.getModelParentWordFormation(i);
+
+    }
+
+    public Single<MultipleChoiceQuestion> getMenuMulipleChoice(int i ) {
+
+        return multipleChoiceDao.getModelParentMultipleChoice(i);
+
+    }
+
+    public Single<GappedTextQuestion> getMenuGappedText(int i ) {
+
+        return gappedDao.getModelParentGappedText(i);
+
+    }
+
+    public Single<MatchingExerciseQuestion> getMenuMatchingExercise(int i ) {
+
+        return matchingExerciseDao.getModelParentMatchingExercise(i);
+
+    }
+
+    public Single<ListeningMultipleSituationsQuestion> getMenuMulipleSituations(int i ) {
+
+        return listeningMultipleDao.getModelParentListeningMultiple(i);
+
+    }
+
+    public Single<ListeningOneSituationQuestion> getMenuOneSituation(int i) {
+
+        return listeningOneDao.getModelParentListeningOne(i);
+
+    }
+
+    public Single<BlankFillingQuestion> getMenuBlankFilling(int i ) {
+
+        return blankFillingDao.getModelParentBlankFilling(i);
+
+    }
+
+    public Single<MatchSpeakersQuestion> getMenuMatchSpeakers(int i ) {
+
+        return matchSpeakersDao.getModelParentMatchSpeakers(i);
 
     }
 

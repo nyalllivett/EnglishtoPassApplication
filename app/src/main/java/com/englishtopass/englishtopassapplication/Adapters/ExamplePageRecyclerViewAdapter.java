@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question.Parent.ModelUoeParent;
+import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question.Parent.UoeParent;
 import com.englishtopass.englishtopassapplication.R;
 
 import androidx.annotation.NonNull;
@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class ExamplePageRecyclerViewAdapter extends ListAdapter<ModelUoeParent,ExamplePageRecyclerViewAdapter.ExampleItemViewHolder> {
+public class ExamplePageRecyclerViewAdapter extends ListAdapter<UoeParent,ExamplePageRecyclerViewAdapter.ExampleItemViewHolder> {
     private static final String TAG = "ExamplePageRecyclerView";
     private LayoutInflater layoutInflater;
 
@@ -25,17 +25,17 @@ public class ExamplePageRecyclerViewAdapter extends ListAdapter<ModelUoeParent,E
 
     }
 
-    private static final DiffUtil.ItemCallback<ModelUoeParent> DIFF_CALLBACK = new DiffUtil.ItemCallback<ModelUoeParent>() {
+    private static final DiffUtil.ItemCallback<UoeParent> DIFF_CALLBACK = new DiffUtil.ItemCallback<UoeParent>() {
         @Override
-        public boolean areItemsTheSame(@NonNull ModelUoeParent oldItem, @NonNull ModelUoeParent newItem) {
+        public boolean areItemsTheSame(@NonNull UoeParent oldItem, @NonNull UoeParent newItem) {
             return false;
 
         }
 
         @Override
-        public boolean areContentsTheSame(@NonNull ModelUoeParent oldItem, @NonNull ModelUoeParent newItem) {
+        public boolean areContentsTheSame(@NonNull UoeParent oldItem, @NonNull UoeParent newItem) {
 
-             return oldItem.getTimeElapsed() == (newItem.getTimeElapsed());
+             return oldItem.getTestTimeElapsed() == (newItem.getTestTimeElapsed());
 
         }
     };
@@ -53,7 +53,7 @@ public class ExamplePageRecyclerViewAdapter extends ListAdapter<ModelUoeParent,E
     public void onBindViewHolder(@NonNull ExampleItemViewHolder holder, int position) {
 
         holder.partTitle.setText(getItem(position).getTitle());
-        holder.testTime.setText(String.valueOf(getItem(position).getTimeElapsed()));
+        holder.testTime.setText(String.valueOf(getItem(position).getTestTimeElapsed()));
         holder.partType.setText("Mulitple");
 
     }

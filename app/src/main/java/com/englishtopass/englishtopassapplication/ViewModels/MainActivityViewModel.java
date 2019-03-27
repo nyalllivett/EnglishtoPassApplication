@@ -1,4 +1,4 @@
-package com.englishtopass.englishtopassapplication;
+package com.englishtopass.englishtopassapplication.ViewModels;
 
 import android.app.Application;
 
@@ -10,7 +10,6 @@ import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question.Op
 import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question.WordFormationQuestion;
 import com.englishtopass.englishtopassapplication.Repository.QuestionRepository;
 
-import java.security.Key;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -23,11 +22,8 @@ public class MainActivityViewModel extends AndroidViewModel {
     private QuestionRepository questionRepository;
 
     private LiveData<List<UseOfEnglishPackage>> useOfEnglishPackageLiveData;
-    private LiveData<UseOfEnglishPackage> singleUseOfEnglishPackageLiveData;
 
     private LiveData<List<ListeningPackage>> listeningPackageLiveData;
-    private LiveData<ListeningPackage> singleListeningPackageLiveData;
-
 
     public MainActivityViewModel(@NonNull Application application) {
         super(application);
@@ -49,19 +45,9 @@ public class MainActivityViewModel extends AndroidViewModel {
         return listeningPackageLiveData;
     }
 
-    // RETRIEVE SINGLE PACKAGE LIVE DATA -
-    public LiveData<UseOfEnglishPackage> getSingleUseOfEnglishPackage(int id) {
-        return singleUseOfEnglishPackageLiveData = questionRepository.getSingleUseOfEnglishPackages(id);
-    }
-
-    public LiveData<ListeningPackage> getSingleListeningPackage(int id) {
-        return singleListeningPackageLiveData = questionRepository.getSingleListeningPackages(id);
-    }
-
-
     // RETRIEVE SINGLE UOE QUESTION DATA -
     public Single<MultipleChoiceClozeQuestion> getMenuMultipleChoiceQuestion(int id) {
-        return questionRepository.getMenuMultipleChoice(id);
+        return questionRepository.getMenuMultipleChoiceCloze(id);
     }
 
     public Single<OpenClozeQuestion> getMenuOpenClozeQuestion(int id) {

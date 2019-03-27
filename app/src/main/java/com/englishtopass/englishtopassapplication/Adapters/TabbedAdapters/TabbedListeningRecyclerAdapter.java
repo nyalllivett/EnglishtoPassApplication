@@ -1,4 +1,4 @@
-package com.englishtopass.englishtopassapplication.Adapters;
+package com.englishtopass.englishtopassapplication.Adapters.TabbedAdapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -11,30 +11,40 @@ import com.englishtopass.englishtopassapplication.ExampleFragment.ExampleMainScr
 import com.englishtopass.englishtopassapplication.Model.Listening.Package.ListeningPackage;
 import com.englishtopass.englishtopassapplication.R;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
-import static com.englishtopass.englishtopassapplication.QuestionType.LISTENING;
+import static com.englishtopass.englishtopassapplication.Enums.QuestionType.LISTENING;
 
-public class TabbedListeningRecyclerAdapter extends RecyclerView.Adapter<TabbedListeningRecyclerAdapter.ListeningViewHolder> implements View.OnClickListener {
+public class TabbedListeningRecyclerAdapter extends ListAdapter<ListeningPackage, TabbedListeningRecyclerAdapter.ListeningViewHolder> implements View.OnClickListener {
     private static final String TAG = "TabbedListeningRecycler";
 
-    private List<ListeningPackage> listeningPackages = new ArrayList<>();
     private LayoutInflater layoutInflater;
     private AppCompatActivity appCompatActivity;
 
     public TabbedListeningRecyclerAdapter(Context context, AppCompatActivity appCompatActivity) {
-
+        super(diffUtil);
         layoutInflater = LayoutInflater.from(context);
-
         this.appCompatActivity = appCompatActivity;
 
     }
+
+    private static final DiffUtil.ItemCallback<ListeningPackage> diffUtil = new DiffUtil.ItemCallback<ListeningPackage>() {
+        @Override
+        public boolean areItemsTheSame(@NonNull ListeningPackage oldItem, @NonNull ListeningPackage newItem) {
+            return oldItem.getId() == newItem.getId();
+        }
+
+        @Override
+        public boolean areContentsTheSame(@NonNull ListeningPackage oldItem, @NonNull ListeningPackage newItem) {
+            return oldItem.getTestCompletion() == newItem.getTestCompletion() ||
+                    oldItem.getTestTimeElapsed() == newItem.getTestTimeElapsed();
+        }
+    };
 
     @NonNull
     @Override
@@ -48,9 +58,8 @@ public class TabbedListeningRecyclerAdapter extends RecyclerView.Adapter<TabbedL
     @Override
     public void onBindViewHolder(@NonNull ListeningViewHolder holder, int position) {
 
-        if (listeningPackages != null) {
 
-            ListeningPackage listeningPackage = listeningPackages.get(position);
+            ListeningPackage listeningPackage = getItem(position);
 
             holder.startListeningQuestionButton.setOnClickListener(this);
 
@@ -58,57 +67,17 @@ public class TabbedListeningRecyclerAdapter extends RecyclerView.Adapter<TabbedL
 
             holder.listeningTestNumberTextView.setText(String.format("Test Number %s", listeningPackage.getId()));
 
-            holder.listeningMultipleSituationTitle.setText(String.format("• %s", listeningPackage.getListeningMultipleSituationsQuestion().getTitle()));
+            holder.listeningMultipleSituationTitle.setText(String.format("• %s", listeningPackage.getListeningMultipleSituationsTitle()));
 
-            holder.blankFillingTitle.setText(String.format("• %s", listeningPackage.getBlankFillingQuestion().getTitle()));
+            holder.blankFillingTitle.setText(String.format("• %s", listeningPackage.getBlankFillingTitle()));
 
-            holder.matchSpeakersTitle.setText(String.format("• %s", listeningPackage.getMatchSpeakersQuestion().getTitle()));
+            holder.matchSpeakersTitle.setText(String.format("• %s", listeningPackage.getMatchSpeakersTitle()));
 
-            holder.listeningOneSituationTitle.setText(String.format("• %s", listeningPackage.getListeningOneSituationQuestion().getTitle()));
+            holder.listeningOneSituationTitle.setText(String.format("• %s", listeningPackage.getListeningOneSituationTitle()));
 
-
-        } else {
-
-            // Setting the text views to loading if the database transaction hasn't completed,
-            // Once it has it will trigger the observer and set the text views
-
-            holder.listeningTestNumberTextView.setText("Loading");
-
-            holder.listeningMultipleSituationTitle.setText("Loading");
-
-            holder.blankFillingTitle.setText("Loading");
-
-            holder.matchSpeakersTitle.setText("Loading");
-
-            holder.listeningOneSituationTitle.setText("Loading");
-
-        }
 
     }
 
-    @Override
-    public int getItemCount() {
-
-        if (listeningPackages != null) {
-
-            return listeningPackages.size();
-
-        } else {
-
-            return 0;
-
-        }
-
-    }
-
-
-    public void setTabbedList(List<ListeningPackage> arrayList){
-
-        this.listeningPackages = arrayList;
-
-        notifyDataSetChanged();
-
-    }
 
     @Override
     public void onClick(View v) {
@@ -120,7 +89,7 @@ public class TabbedListeningRecyclerAdapter extends RecyclerView.Adapter<TabbedL
                 FragmentTransaction transaction = appCompatActivity.getSupportFragmentManager()
                         .beginTransaction();
 
-                transaction.add(R.id.questionFragmentHolder, ListeningExampleFragment.newInstance(LISTENING, (Integer) v.getTag(), 4), "listeningExampleFragment")
+                transaction.add(R.id.questionFragmentHolder, ListeningExampleFragment.newInstance(LISTENING, (Integer) v.getTag()), "listeningExampleFragment")
                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                         .addToBackStack("listeningExampleFragment")
                         .commit();

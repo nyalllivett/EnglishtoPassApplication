@@ -1,7 +1,6 @@
-package com.englishtopass.englishtopassapplication.Dao;
+package com.englishtopass.englishtopassapplication.Dao.UseOfEnglishDaos;
 
 import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question.MultipleChoiceClozeQuestion;
-import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question.Parent.ModelUoeParent;
 
 import androidx.room.Dao;
 import androidx.room.Insert;

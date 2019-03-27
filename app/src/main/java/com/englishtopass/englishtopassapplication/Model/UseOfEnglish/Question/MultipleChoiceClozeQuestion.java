@@ -1,7 +1,7 @@
 package com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question;
 
 import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Package.UseOfEnglishPackage;
-import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question.Parent.ModelUoeParent;
+import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question.Parent.UoeParent;
 
 import java.util.ArrayList;
 
@@ -14,7 +14,7 @@ import androidx.room.PrimaryKey;
 
 @Entity(tableName = "multiple_choice_cloze_table", foreignKeys =
 @ForeignKey(onDelete = ForeignKey.CASCADE, entity = UseOfEnglishPackage.class, parentColumns = "id", childColumns = "uoe_id"))
-public class MultipleChoiceClozeQuestion extends ModelUoeParent {
+public class MultipleChoiceClozeQuestion extends UoeParent {
 
     @PrimaryKey(autoGenerate = true)
     private int id;
@@ -80,7 +80,7 @@ public class MultipleChoiceClozeQuestion extends ModelUoeParent {
         super(title);
         this.uoeId = uoeId;
         this.body = body;
-        this.timeElapsed = 0;
+        this.testTimeElapsed = 0;
         this.complete = false;
 
     }

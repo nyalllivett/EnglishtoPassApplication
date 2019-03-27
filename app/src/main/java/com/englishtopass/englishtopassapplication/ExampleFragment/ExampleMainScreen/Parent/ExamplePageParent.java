@@ -21,7 +21,7 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import com.englishtopass.englishtopassapplication.QuestionType;
+import com.englishtopass.englishtopassapplication.Enums.QuestionType;
 import com.englishtopass.englishtopassapplication.R;
 
 
@@ -78,7 +78,7 @@ public class ExamplePageParent extends Fragment implements OnBackPressedCallback
 
             actionBar.setDisplayHomeAsUpEnabled(true);
 
-            actionBar.setSubtitle(testType);
+            actionBar.setSubtitle(getString(R.string.uoe_test_title));
         }
 
     }

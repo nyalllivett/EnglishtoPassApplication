@@ -1,7 +1,7 @@
 package com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question;
 
 import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Package.UseOfEnglishPackage;
-import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question.Parent.ModelUoeParent;
+import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question.Parent.UoeParent;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
@@ -11,7 +11,7 @@ import androidx.room.PrimaryKey;
 
 @Entity(tableName = "open_cloze_table", foreignKeys =
 @ForeignKey(onDelete = ForeignKey.CASCADE, entity = UseOfEnglishPackage.class, parentColumns = "id", childColumns = "uoe_id"))
-public class OpenClozeQuestion extends ModelUoeParent {
+public class OpenClozeQuestion extends UoeParent {
 
     @PrimaryKey(autoGenerate = true)
     private int id;
@@ -29,7 +29,7 @@ public class OpenClozeQuestion extends ModelUoeParent {
         this.uoeId = uoeId;
         this.questionBody = questionBody;
         this.complete = false;
-        this.timeElapsed = 0;
+        this.testTimeElapsed = 0;
 
     }
 

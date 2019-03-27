@@ -12,8 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.englishtopass.englishtopassapplication.Adapters.TabbedUoeRecyclerAdapter;
-import com.englishtopass.englishtopassapplication.MainActivityViewModel;
+import com.englishtopass.englishtopassapplication.Adapters.TabbedAdapters.TabbedUoeRecyclerAdapter;
+import com.englishtopass.englishtopassapplication.ViewModels.MainActivityViewModel;
 import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Package.UseOfEnglishPackage;
 import com.englishtopass.englishtopassapplication.R;
 
@@ -49,7 +49,7 @@ public class UoETabbedFragment extends Fragment {
 
         recyclerView = view.findViewById(R.id.uoeTabbedRecyclerView);
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
 
         final TabbedUoeRecyclerAdapter adapter = new TabbedUoeRecyclerAdapter(getContext(), getActivity());
 

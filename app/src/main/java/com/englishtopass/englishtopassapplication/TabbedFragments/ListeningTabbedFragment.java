@@ -14,8 +14,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.englishtopass.englishtopassapplication.Adapters.TabbedListeningRecyclerAdapter;
-import com.englishtopass.englishtopassapplication.MainActivityViewModel;
+import com.englishtopass.englishtopassapplication.Adapters.TabbedAdapters.TabbedListeningRecyclerAdapter;
+import com.englishtopass.englishtopassapplication.ViewModels.ListeningViewModel;
 import com.englishtopass.englishtopassapplication.Model.Listening.Package.ListeningPackage;
 import com.englishtopass.englishtopassapplication.R;
 
@@ -24,7 +24,7 @@ import java.util.List;
 public class ListeningTabbedFragment extends Fragment {
     private static final String TAG = "ListeningTabbedFragment";
 
-    private MainActivityViewModel mainActivityViewModel;
+    private ListeningViewModel listeningViewModel;
     private RecyclerView recyclerView;
 
     public ListeningTabbedFragment() {
@@ -51,18 +51,18 @@ public class ListeningTabbedFragment extends Fragment {
 
         recyclerView.setHasFixedSize(true);
 
-        final TabbedListeningRecyclerAdapter tabbedListeningRecyclerAdapter = new TabbedListeningRecyclerAdapter(getContext(), (AppCompatActivity) getActivity());
+        final TabbedListeningRecyclerAdapter adapter = new TabbedListeningRecyclerAdapter(getContext(), (AppCompatActivity) getActivity());
 
-        recyclerView.setAdapter(tabbedListeningRecyclerAdapter);
+        recyclerView.setAdapter(adapter);
 
-        mainActivityViewModel = ViewModelProviders.of(this).get(MainActivityViewModel.class);
+        listeningViewModel = ViewModelProviders.of(this).get(ListeningViewModel.class);
 
-        mainActivityViewModel.getListeningPackageLiveData().observe(this, new Observer<List<ListeningPackage>>() {
+        listeningViewModel.getListeningPackageLiveData().observe(this, new Observer<List<ListeningPackage>>() {
 
             @Override
             public void onChanged(List<ListeningPackage> listeningPackages) {
 
-                tabbedListeningRecyclerAdapter.setTabbedList(listeningPackages);
+                adapter.submitList(listeningPackages);
 
             }
         });

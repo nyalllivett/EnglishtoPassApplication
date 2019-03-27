@@ -1,7 +1,7 @@
 package com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question;
 
 import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Package.UseOfEnglishPackage;
-import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question.Parent.ModelUoeParent;
+import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question.Parent.UoeParent;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
@@ -11,7 +11,7 @@ import androidx.room.PrimaryKey;
 
 @Entity(tableName = "word_formation_table", foreignKeys =
 @ForeignKey(onDelete = ForeignKey.CASCADE, entity = UseOfEnglishPackage.class, parentColumns = "id", childColumns = "uoe_id"))
-public class WordFormationQuestion extends ModelUoeParent {
+public class WordFormationQuestion extends UoeParent {
 
 
     @PrimaryKey(autoGenerate = true)
@@ -31,7 +31,7 @@ public class WordFormationQuestion extends ModelUoeParent {
         this.uoeId = uoeId;
         this.questionBody = questionBody;
         this.complete = false;
-        this.timeElapsed = 0;
+        this.testTimeElapsed = 0;
 
     }
 

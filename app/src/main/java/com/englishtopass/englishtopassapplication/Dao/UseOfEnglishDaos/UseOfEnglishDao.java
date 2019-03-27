@@ -1,4 +1,4 @@
-package com.englishtopass.englishtopassapplication.Dao;
+package com.englishtopass.englishtopassapplication.Dao.UseOfEnglishDaos;
 
 import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Package.UseOfEnglishPackage;
 import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question.KeywordTransformationQuestion;

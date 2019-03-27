@@ -11,7 +11,7 @@ import android.widget.TextView;
 import com.englishtopass.englishtopassapplication.CustomViews.MovableFloatingActionButton;
 import com.englishtopass.englishtopassapplication.ExampleFragment.ExampleQuestions.GrandParent.BaseQuestion;
 import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question.MultipleChoiceClozeQuestion;
-import com.englishtopass.englishtopassapplication.QuestionType;
+import com.englishtopass.englishtopassapplication.Enums.QuestionType;
 import com.englishtopass.englishtopassapplication.R;
 
 import java.util.ArrayList;

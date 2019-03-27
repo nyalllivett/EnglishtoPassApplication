@@ -1,7 +1,5 @@
-package com.englishtopass.englishtopassapplication.Dao;
+package com.englishtopass.englishtopassapplication.Dao.UseOfEnglishDaos;
 
-import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question.OpenClozeQuestion;
-import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question.Parent.ModelUoeParent;
 import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question.WordFormationQuestion;
 
 import androidx.room.Dao;

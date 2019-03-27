@@ -1,5 +1,7 @@
 package com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Package;
 
+import com.englishtopass.englishtopassapplication.Enums.TestCompletion;
+
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -9,7 +11,6 @@ import androidx.room.PrimaryKey;
 public class UseOfEnglishPackage {
 
     @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "id")
     private int id;
 
     private String multipleChoiceClozeTitle;
@@ -19,7 +20,7 @@ public class UseOfEnglishPackage {
 
     private long uoeTimeElapsed;
 
-    private UoeCompletion uoeCompletion;
+    private TestCompletion testCompletion;
 
     public UseOfEnglishPackage(String multipleChoiceClozeTitle, String openClozeTitle,
                                String keywordTransformationTitle, String wordFormationTitle) {
@@ -29,7 +30,7 @@ public class UseOfEnglishPackage {
         this.keywordTransformationTitle = keywordTransformationTitle;
         this.wordFormationTitle = wordFormationTitle;
         this.uoeTimeElapsed = 0L;
-        this.uoeCompletion = UoeCompletion.NOT_STARTED;
+        this.testCompletion = TestCompletion.NOT_STARTED;
 
     }
 
@@ -41,12 +42,12 @@ public class UseOfEnglishPackage {
         this.id = id;
     }
 
-    public UoeCompletion getUoeCompletion() {
-        return uoeCompletion;
+    public TestCompletion getTestCompletion() {
+        return testCompletion;
     }
 
-    public void setUoeCompletion(UoeCompletion uoeCompletion) {
-        this.uoeCompletion = uoeCompletion;
+    public void setTestCompletion(TestCompletion testCompletion) {
+        this.testCompletion = testCompletion;
     }
 
     public String getMultipleChoiceClozeTitle() {
