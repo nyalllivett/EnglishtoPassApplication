@@ -17,7 +17,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import io.reactivex.Single;
 
-public class MainActivityViewModel extends AndroidViewModel {
+public class UoeViewModel extends AndroidViewModel {
 
     private QuestionRepository questionRepository;
 
@@ -25,7 +25,7 @@ public class MainActivityViewModel extends AndroidViewModel {
 
     private LiveData<List<ListeningPackage>> listeningPackageLiveData;
 
-    public MainActivityViewModel(@NonNull Application application) {
+    public UoeViewModel(@NonNull Application application) {
         super(application);
 
         questionRepository = new QuestionRepository(application);

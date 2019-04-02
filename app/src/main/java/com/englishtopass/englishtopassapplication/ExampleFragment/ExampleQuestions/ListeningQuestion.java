@@ -12,7 +12,6 @@ import com.englishtopass.englishtopassapplication.CustomViews.MovableFloatingAct
 import com.englishtopass.englishtopassapplication.Enums.TestCompletion;
 import com.englishtopass.englishtopassapplication.ExampleFragment.ExampleQuestions.GrandParent.BaseQuestion;
 import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question.MultipleChoiceClozeQuestion;
-import com.englishtopass.englishtopassapplication.Enums.QuestionType;
 import com.englishtopass.englishtopassapplication.R;
 
 import java.util.ArrayList;
@@ -21,7 +20,7 @@ import java.util.Arrays;
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.Nullable;
 
-public class UoeQuestion extends BaseQuestion implements OnBackPressedCallback, View.OnClickListener {
+public class ListeningQuestion extends BaseQuestion implements OnBackPressedCallback, View.OnClickListener {
     private static final String TAG = "UoeExampleQuestion";
 
     private TestCompletion testCompletion;
@@ -29,17 +28,17 @@ public class UoeQuestion extends BaseQuestion implements OnBackPressedCallback, 
     private MultipleChoiceClozeQuestion multipleChoiceClozeQuestion;
     private MovableFloatingActionButton movableFloatingActionButton;
 
-    public UoeQuestion() {
+    public ListeningQuestion() {
         // Required empty public constructor
     }
 
-    public static UoeQuestion newInstance(TestCompletion testCompletion) {
+    public static ListeningQuestion newInstance(TestCompletion testCompletion) {
 
         Bundle bundle = new Bundle();
 
         bundle.putSerializable("TEST_COMPLETION", testCompletion);
 
-        UoeQuestion uoeExampleQuestion = new UoeQuestion();
+        ListeningQuestion uoeExampleQuestion = new ListeningQuestion();
 
         uoeExampleQuestion.setArguments(bundle);
 

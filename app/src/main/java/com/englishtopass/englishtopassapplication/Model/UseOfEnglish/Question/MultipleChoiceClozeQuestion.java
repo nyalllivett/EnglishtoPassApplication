@@ -80,7 +80,7 @@ public class MultipleChoiceClozeQuestion extends UoeParent {
         super(title);
         this.uoeId = uoeId;
         this.body = body;
-        this.testTimeElapsed = 0;
+        this.testTimeElapsed = 0L;
         this.complete = false;
 
     }

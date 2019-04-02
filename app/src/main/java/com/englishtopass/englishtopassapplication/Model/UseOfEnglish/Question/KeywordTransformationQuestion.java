@@ -30,14 +30,9 @@ public class KeywordTransformationQuestion extends UoeParent {
         super(title);
         this.uoeId = uoeId;
         this.questionBody = questionBody;
-        this.testTimeElapsed = 0;
+        this.testTimeElapsed = 0L;
         this.complete = false;
 
-    }
-
-    @NonNull
-    public String getQuestionTitle() {
-        return title;
     }
 
     @NonNull

@@ -9,14 +9,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.englishtopass.englishtopassapplication.Adapters.ExampleAdapters.ExampleUoeAdapter;
-import com.englishtopass.englishtopassapplication.ExampleFragment.ExampleMainScreen.Parent.ExamplePageParent;
-import com.englishtopass.englishtopassapplication.ExampleFragment.ExampleQuestions.UoeQuestion;
+import com.englishtopass.englishtopassapplication.Adapters.ExampleAdapters.ExampleListeningAdapter;
+import com.englishtopass.englishtopassapplication.Adapters.ExampleAdapters.ExampleReadingAdapter;
 import com.englishtopass.englishtopassapplication.Enums.TestCompletion;
-import com.englishtopass.englishtopassapplication.QuestionFragments.MultipleChoiceClozeQuestion;
-import com.englishtopass.englishtopassapplication.ViewModels.UoeViewModel;
-import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question.Parent.UoeParent;
+import com.englishtopass.englishtopassapplication.ExampleFragment.ExampleMainScreen.Parent.ExamplePageParent;
+import com.englishtopass.englishtopassapplication.ExampleFragment.ExampleQuestions.ListeningQuestion;
+import com.englishtopass.englishtopassapplication.Model.Listening.Questions.Parent.ListeningParent;
+import com.englishtopass.englishtopassapplication.Model.Reading.Questions.Parent.ReadingParent;
 import com.englishtopass.englishtopassapplication.R;
+import com.englishtopass.englishtopassapplication.ViewModels.ListeningViewModel;
+import com.englishtopass.englishtopassapplication.ViewModels.ReadingViewModel;
 import com.google.android.flexbox.FlexDirection;
 import com.google.android.flexbox.FlexboxLayoutManager;
 import com.google.android.flexbox.JustifyContent;
@@ -43,28 +45,27 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
-// TODO: 16/03/2019 Sort all this animation rubbish out ABSOLUTE WANK!
-public class UoeExampleFragment extends ExamplePageParent implements View.OnClickListener, OnBackPressedCallback {
-    private static final String TAG = "MainExampleFragment";
+
+public class ReadingExampleFragment extends ExamplePageParent implements OnBackPressedCallback, View.OnClickListener {
+    private static final String TAG = "ListeningExampleFragmen";
 
     private TestCompletion testCompletion;
     private int packageId;
 
-    public UoeExampleFragment() {
+
+
+    public ReadingExampleFragment() {
         // Required empty public constructor
     }
 
-    public static UoeExampleFragment newInstance(TestCompletion testCompletion, int packageID) {
+    public static ReadingExampleFragment newInstance(TestCompletion testCompletion, int packageID) {
 
-        UoeExampleFragment fragment = new UoeExampleFragment();
+        ReadingExampleFragment fragment = new ReadingExampleFragment();
 
         Bundle bundle = new Bundle();
 
-        // Enum
-        bundle.putSerializable("testCompletion", testCompletion);
-
-        // ID
-        bundle.putInt("packageId", packageID);
+        bundle.putSerializable("TEST_COMPLETION", testCompletion);
+        bundle.putInt("LISTENING_PACKAGE_ID", packageID);
 
         fragment.setArguments(bundle);
 
@@ -88,15 +89,14 @@ public class UoeExampleFragment extends ExamplePageParent implements View.OnClic
 
         if (getArguments() != null) {
 
-            testCompletion = (TestCompletion) getArguments().getSerializable("testCompletion");
-            packageId = getArguments().getInt("packageId");
+            testCompletion = (TestCompletion) getArguments().getSerializable("TEST_COMPLETION");
+            packageId = getArguments().getInt("LISTENING_PACKAGE_ID");
 
         }
 
         compositeDisposable = new CompositeDisposable();
 
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -115,7 +115,7 @@ public class UoeExampleFragment extends ExamplePageParent implements View.OnClic
 
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
 
-        final ExampleUoeAdapter adapter = new ExampleUoeAdapter(getContext());
+        final ExampleReadingAdapter adapter = new ExampleReadingAdapter(getContext());
 
         FlexboxLayoutManager flexboxLayoutManager = new FlexboxLayoutManager(getContext());
 
@@ -127,26 +127,26 @@ public class UoeExampleFragment extends ExamplePageParent implements View.OnClic
 
         recyclerView.setLayoutManager(flexboxLayoutManager);
 
-        UoeViewModel uoeViewModel = ViewModelProviders.of(this).get(UoeViewModel.class);
+        ReadingViewModel viewModel = ViewModelProviders.of(this).get(ReadingViewModel.class);
 
-        getSingle(uoeViewModel).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SingleObserver<List<UoeParent>>() {
+        getSingle(viewModel).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SingleObserver<List<ReadingParent>>() {
                     @Override
                     public void onSubscribe(Disposable d) {
                         compositeDisposable.add(d);
                     }
 
                     @Override
-                    public void onSuccess(List<UoeParent> uoeParents) {
-                        adapter.submitList(uoeParents);
+                    public void onSuccess(List<ReadingParent> listeningParents) {
+                        adapter.submitList(listeningParents);
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        Log.d(TAG, "onError: " + e.getLocalizedMessage());
+
                     }
                 });
-
 
         // Constraint layout-
 
@@ -158,7 +158,11 @@ public class UoeExampleFragment extends ExamplePageParent implements View.OnClic
 
         exampleDescriptionTextView = view.findViewById(R.id.testPartDescription);
 
+        exampleDescriptionTextView.setText(descriptionFromResources);
+
         examplePartType = view.findViewById(R.id.testPartName);
+
+        examplePartType.setText(partFromResources);
 
         // The buttons
 
@@ -173,8 +177,8 @@ public class UoeExampleFragment extends ExamplePageParent implements View.OnClic
         settingForTextViews(testCompletion);
 
         return view;
-
     }
+
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
@@ -197,33 +201,25 @@ public class UoeExampleFragment extends ExamplePageParent implements View.OnClic
 
             case NOT_STARTED:
 
-                partFromResources = getString(R.string.uoe_part_one_title);
+                partFromResources = getString(R.string.reading_part_one_title);
 
-                descriptionFromResources = getString(R.string.uoe_part_one_description);
+                descriptionFromResources = getString(R.string.reading_part_one_description);
 
                 break;
 
             case FIRST_COMPLETE:
 
-                partFromResources = getString(R.string.uoe_part_two_title);
+                partFromResources = getString(R.string.reading_part_two_title);
 
-                descriptionFromResources = getString(R.string.uoe_part_two_description);
+                descriptionFromResources = getString(R.string.reading_part_two_description);
 
                 break;
 
             case SECOND_COMPLETE:
 
-                partFromResources = getString(R.string.uoe_part_three_title);
+                partFromResources = getString(R.string.reading_part_three_title);
 
-                descriptionFromResources = getString(R.string.uoe_part_three_description);
-
-                break;
-
-            case THIRD_COMPLETE:
-
-                partFromResources = getString(R.string.uoe_part_three_title);
-
-                descriptionFromResources = getString(R.string.uoe_part_three_description);
+                descriptionFromResources = getString(R.string.reading_part_three_description);
 
                 break;
 
@@ -277,18 +273,13 @@ public class UoeExampleFragment extends ExamplePageParent implements View.OnClic
 
             case R.id.uoeStartTestButton:
 
-                FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
-
-                fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                        .add(R.id.questionFragmentHolder, MultipleChoiceClozeQuestion.newInstance(), "MULTIPLE_CHOICE_QUESTION")
-                        .addToBackStack("TAKE_QUESTION")
-                        .commit();
 
                 break;
 
         }
 
     }
+
 
 
     private void changeToExamplePageLayout() {
@@ -452,7 +443,7 @@ public class UoeExampleFragment extends ExamplePageParent implements View.OnClic
         transaction
                 .addToBackStack("uoe_example_question")
                 .setCustomAnimations(R.anim.slide_in_from_right, R.anim.slide_out_from_right, R.anim.slide_in_from_right, R.anim.slide_out_from_right)
-                .add(frameLayout.getId(), UoeQuestion.newInstance(testCompletion), "uoe_example_question")
+                .add(frameLayout.getId(), ListeningQuestion.newInstance(testCompletion), "uoe_example_question")
                 .commit();
 
 
@@ -468,27 +459,31 @@ public class UoeExampleFragment extends ExamplePageParent implements View.OnClic
     }
 
 
-    private Single<List<UoeParent>> getSingle(UoeViewModel uoeViewModel) {
+    private Single<List<ReadingParent>> getSingle(ReadingViewModel viewModel) {
 
-        return  Single.zip(
+        return Single.zip(
 
-                uoeViewModel.getMenuKeywordTransformation(packageId),
-                uoeViewModel.getMenuMultipleChoiceQuestion(packageId),
-                uoeViewModel.getMenuOpenClozeQuestion(packageId),
-                uoeViewModel.getMenuWordFormationQuestion(packageId),
-                ((keywordTransformationQuestion, multipleChoiceClozeQuestion, openClozeQuestion, wordFormationQuestion) -> {
+                viewModel.getMenuMultipleChoice(packageId),
+                viewModel.getMenuGappedText(packageId),
+                viewModel.getMenuMatchingExercise(packageId),
+                ((multipleChoiceQuestion, gappedTextQuestion, matchingExerciseQuestion) -> {
 
-                    List<UoeParent> arrayList = new ArrayList<>();
-                    arrayList.add(keywordTransformationQuestion);
-                    arrayList.add(multipleChoiceClozeQuestion);
-                    arrayList.add(openClozeQuestion);
-                    arrayList.add(wordFormationQuestion);
+                    List<ReadingParent> arrayList = new ArrayList<>();
+
+                    arrayList.add(matchingExerciseQuestion);
+                    arrayList.add(gappedTextQuestion);
+                    arrayList.add(matchingExerciseQuestion);
 
                     return arrayList;
+
                 })
+
         );
     }
 
 }
+
+
+
 
 

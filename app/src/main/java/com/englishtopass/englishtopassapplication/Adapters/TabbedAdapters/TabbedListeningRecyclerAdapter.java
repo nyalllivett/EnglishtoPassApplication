@@ -25,6 +25,7 @@ public class TabbedListeningRecyclerAdapter extends ListAdapter<ListeningPackage
 
     private LayoutInflater layoutInflater;
     private AppCompatActivity appCompatActivity;
+    private ListeningPackage listeningPackage;
 
     public TabbedListeningRecyclerAdapter(Context context, AppCompatActivity appCompatActivity) {
         super(diffUtil);
@@ -59,7 +60,7 @@ public class TabbedListeningRecyclerAdapter extends ListAdapter<ListeningPackage
     public void onBindViewHolder(@NonNull ListeningViewHolder holder, int position) {
 
 
-            ListeningPackage listeningPackage = getItem(position);
+            listeningPackage = getItem(position);
 
             holder.startListeningQuestionButton.setOnClickListener(this);
 
@@ -89,7 +90,7 @@ public class TabbedListeningRecyclerAdapter extends ListAdapter<ListeningPackage
                 FragmentTransaction transaction = appCompatActivity.getSupportFragmentManager()
                         .beginTransaction();
 
-                transaction.add(R.id.questionFragmentHolder, ListeningExampleFragment.newInstance(LISTENING, (Integer) v.getTag()), "listeningExampleFragment")
+                transaction.add(R.id.questionFragmentHolder, ListeningExampleFragment.newInstance(listeningPackage.getTestCompletion(), (Integer) v.getTag()), "listeningExampleFragment")
                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                         .addToBackStack("listeningExampleFragment")
                         .commit();

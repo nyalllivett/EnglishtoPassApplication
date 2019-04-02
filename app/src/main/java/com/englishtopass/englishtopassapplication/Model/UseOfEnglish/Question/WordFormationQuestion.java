@@ -31,7 +31,7 @@ public class WordFormationQuestion extends UoeParent {
         this.uoeId = uoeId;
         this.questionBody = questionBody;
         this.complete = false;
-        this.testTimeElapsed = 0;
+        this.testTimeElapsed = 0L;
 
     }
 
@@ -43,8 +43,6 @@ public class WordFormationQuestion extends UoeParent {
     public boolean isComplete() {
         return complete;
     }
-
-
 
     public void setComplete(boolean complete) {
         this.complete = complete;

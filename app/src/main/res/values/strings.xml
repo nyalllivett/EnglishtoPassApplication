@@ -35,7 +35,7 @@
 
     <string name="reading_test_title">Reading</string>
 
-    <string name="reading_part_one_description">You are going to read a news paper article about a young mother whose house was burgled. (2 points for each question). For questions 1 – 7, choose the correct answer from A, B, C or <D></D></string>
+    <string name="reading_part_one_description">You are going to read a news paper article about a young mother whose house was burgled. (2 points for each question). For questions 1 – 7, choose the correct answer from A, B, C or D></string>
     <string name="reading_part_two_description">You are going to read a magazine article. Six sentences have been removed from the article. Choose from the sentences A – H the one that fits the best (8 – 14). There is one extra sentence which you do not to use. (2 points for each question) </string>
     <string name="reading_part_three_description">You are going to read an article about student accommodation in which four college students talk about the place they live. For questions 15–26, choose from the people (A-D). The people may be chosen more than once.</string>
 
@@ -64,5 +64,6 @@
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="back">back</string>
+    <string name="testing">Charlotte Church looks like a (0) ........ teenager, but she is far from average. She has an amazing voice. Her fans stand in (1) ........ for hours to get tickets for her concerts and she is often on television. Charlotte’s singing (2) ........ began when she performed on a TV show at the age of 11. The head of a record company was so impressed by her voice that he(3) ........ her up on the spot. Her first album rose to number one in the charts. Charlotte still attends school in her home town when she can. (4) ........ , she is often away on tour for weeks at a time. She doesn’t miss out on lessons, though, because she takes her own tutor with her! She (5) ........ three hours every morning with him. Her exam results in all the (6) ........ she studies are impressive. But how does she (7) ........ with this unusual way of life? She (8) ........ that she has the same friends as before. That may be true, but she can no longer go into town with them because everybody stops her in the street to ask for her (9) ........ . It seems that, like most stars, she must learn to (10) ........ these restrictions and the lack of privacy. It’s the price of fame!</string>
 
 </resources>

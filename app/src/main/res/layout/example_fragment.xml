@@ -54,7 +54,7 @@
     <View
         android:id="@+id/greenView"
         android:layout_width="0dp"
-        android:layout_height="160dp"
+        android:layout_height="50dp"
         android:background="@color/colorPrimary"
         android:fontFamily="sans-serif-smallcaps"
         android:paddingTop="20dp"
@@ -65,36 +65,39 @@
 
     <TextView
         android:id="@+id/testPartName"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
-        tools:text="@string/multiple_choice_cloze"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
         android:textAlignment="center"
         android:textColor="@color/white"
         android:textSize="28sp"
-        app:layout_constraintBottom_toTopOf="@+id/descriptionCardView"
+        app:layout_constraintBottom_toBottomOf="@+id/greenView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="@string/multiple_choice_cloze" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/descriptionCardView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="52dp"
-        android:layout_marginEnd="32dp"
-        app:layout_constraintBottom_toBottomOf="@+id/greenView"
+        android:layout_height="140dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:maxHeight="140dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/greenView"
-        app:layout_constraintVertical_bias="0.476">
+        app:layout_constraintTop_toBottomOf="@+id/greenView">
 
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="22dp">
+            android:layout_height="wrap_content"
+            android:maxHeight="145dp"
+            android:padding="20dp">
 
             <TextView
                 android:id="@+id/textView2"
@@ -113,11 +116,10 @@
                 android:layout_below="@id/textView2"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="8dp"
-                tools:text="@string/uoe_part_one_description"
                 android:textAlignment="center"
                 android:textColor="#9e9e9e"
-                android:textSize="18sp" />
-
+                android:textSize="18sp"
+                tools:text="@string/uoe_part_one_description" />
 
         </RelativeLayout>
 
@@ -155,7 +157,6 @@
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/uoeStartTestButton"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
@@ -168,8 +169,20 @@
         android:text="Start Test"
         android:textColor="@color/colorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/uoeSeeExampleButton"
         app:layout_constraintTop_toTopOf="@+id/uoeSeeExampleButton" />
+
+    <FrameLayout
+        android:id="@+id/questionFragmentHolder"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:elevation="4dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        >
+
+    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

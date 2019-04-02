@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.englishtopass.englishtopassapplication.Enums.QuestionType;
 import com.englishtopass.englishtopassapplication.ExampleFragment.ExampleMainScreen.ListeningExampleFragment;
+import com.englishtopass.englishtopassapplication.ExampleFragment.ExampleMainScreen.ReadingExampleFragment;
 import com.englishtopass.englishtopassapplication.Model.Reading.Package.ReadingPackage;
 import com.englishtopass.englishtopassapplication.R;
 
@@ -27,6 +28,7 @@ public class TabbedReadingRecyclerAdapter extends ListAdapter<ReadingPackage, Ta
 
     private LayoutInflater layoutInflater;
     private AppCompatActivity appCompatActivity;
+    private ReadingPackage readingPackage;
 
     public TabbedReadingRecyclerAdapter(Context context, AppCompatActivity appCompatActivity) {
         super(diffUtil);
@@ -63,7 +65,7 @@ public class TabbedReadingRecyclerAdapter extends ListAdapter<ReadingPackage, Ta
     public void onBindViewHolder(@NonNull ReadingViewHolder holder, int position) {
 
 
-            ReadingPackage readingPackage = getItem(position);
+            readingPackage = getItem(position);
 
             holder.startListeningQuestionButton.setOnClickListener(this);
 
@@ -91,7 +93,7 @@ public class TabbedReadingRecyclerAdapter extends ListAdapter<ReadingPackage, Ta
                 FragmentTransaction transaction = appCompatActivity.getSupportFragmentManager()
                         .beginTransaction();
 
-                transaction.add(R.id.questionFragmentHolder, ListeningExampleFragment.newInstance(READING, (Integer) v.getTag()), "listeningExampleFragment")
+                transaction.add(R.id.questionFragmentHolder, ReadingExampleFragment.newInstance(readingPackage.getTestCompletion(), (Integer) v.getTag()), "listeningExampleFragment")
                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                         .addToBackStack("listeningExampleFragment")
                         .commit();

@@ -13,6 +13,7 @@ import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.transition.TransitionSet;
+import io.reactivex.disposables.CompositeDisposable;
 
 import android.util.Log;
 import android.view.View;
@@ -44,16 +45,13 @@ public class ExamplePageParent extends Fragment implements OnBackPressedCallback
 
     protected FrameLayout frameLayout;
 
-    protected String testType, descriptionFromResources, partFromResources;
+    protected String descriptionFromResources, partFromResources;
 
     protected androidx.appcompat.widget.Toolbar toolbar;
 
     protected FragmentManager fragmentManager;
 
-    protected QuestionType QUESTION_TYPE;
-    protected int UOE_PACKAGE_ID;
-    protected int QUESTION_CHILDREN;
-
+    protected CompositeDisposable compositeDisposable;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -148,6 +146,8 @@ public class ExamplePageParent extends Fragment implements OnBackPressedCallback
     public void onDestroy() {
 
         getActivity().removeOnBackPressedCallback(this);
+
+        compositeDisposable.dispose();
 
         super.onDestroy();
 

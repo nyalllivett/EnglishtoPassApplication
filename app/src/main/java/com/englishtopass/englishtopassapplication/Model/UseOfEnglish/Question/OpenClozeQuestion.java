@@ -29,7 +29,7 @@ public class OpenClozeQuestion extends UoeParent {
         this.uoeId = uoeId;
         this.questionBody = questionBody;
         this.complete = false;
-        this.testTimeElapsed = 0;
+        this.testTimeElapsed = 0L;
 
     }
 

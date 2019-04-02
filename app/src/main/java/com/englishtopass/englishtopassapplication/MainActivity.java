@@ -7,6 +7,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.englishtopass.englishtopassapplication.Adapters.SectionsPagerAdapter;
+import com.englishtopass.englishtopassapplication.QuestionFragments.MultipleChoiceClozeQuestion;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
@@ -14,6 +15,8 @@ import com.google.android.material.tabs.TabLayout;
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.viewpager.widget.ViewPager;
 
 
@@ -93,8 +96,6 @@ public class MainActivity extends AppCompatActivity implements OnBackPressedCall
             return true;
         }
 
-
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -105,5 +106,7 @@ public class MainActivity extends AppCompatActivity implements OnBackPressedCall
         Log.d(TAG, "handleOnBackPressed: main activity");
 
         return true;
+
     }
+
 }

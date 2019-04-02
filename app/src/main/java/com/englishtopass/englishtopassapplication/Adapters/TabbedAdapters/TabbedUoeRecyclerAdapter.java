@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.englishtopass.englishtopassapplication.Enums.TestCompletion;
 import com.englishtopass.englishtopassapplication.ExampleFragment.ExampleMainScreen.UoeExampleFragment;
 import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Package.UseOfEnglishPackage;
 import com.englishtopass.englishtopassapplication.Enums.QuestionType;
@@ -25,7 +26,7 @@ public class TabbedUoeRecyclerAdapter extends ListAdapter<UseOfEnglishPackage, T
 
     private LayoutInflater mInflater;
     private AppCompatActivity activity;
-
+    private UseOfEnglishPackage useOfEnglishPackage;
 
 
     public TabbedUoeRecyclerAdapter(Context context, Activity activity) {
@@ -60,7 +61,7 @@ public class TabbedUoeRecyclerAdapter extends ListAdapter<UseOfEnglishPackage, T
     @Override
     public void onBindViewHolder(@NonNull UseOfEnglishViewHolder holder, int position) {
 
-            UseOfEnglishPackage useOfEnglishPackage = getItem(position);
+            useOfEnglishPackage = getItem(position);
 
             holder.startUoeQuestionButton.setOnClickListener(this);
 
@@ -83,17 +84,13 @@ public class TabbedUoeRecyclerAdapter extends ListAdapter<UseOfEnglishPackage, T
     @Override
     public void onClick(View v) {
 
-
-
         FragmentTransaction transaction = activity.getSupportFragmentManager()
                 .beginTransaction();
 
-        transaction.add(R.id.questionFragmentHolder, UoeExampleFragment.newInstance(QuestionType.USE_OF_ENGLISH, (Integer) v.getTag()), "uoeExampleFragment")
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                .add(R.id.questionFragmentHolder, UoeExampleFragment.newInstance(useOfEnglishPackage.getTestCompletion(), (Integer) v.getTag()), "uoeExampleFragment")
                 .addToBackStack("uoeExampleFragment")
                 .commit();
-
-
 
     }
 

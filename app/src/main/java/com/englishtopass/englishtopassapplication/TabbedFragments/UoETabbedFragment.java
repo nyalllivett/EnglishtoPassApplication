@@ -13,7 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.englishtopass.englishtopassapplication.Adapters.TabbedAdapters.TabbedUoeRecyclerAdapter;
-import com.englishtopass.englishtopassapplication.ViewModels.MainActivityViewModel;
+import com.englishtopass.englishtopassapplication.ViewModels.UoeViewModel;
 import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Package.UseOfEnglishPackage;
 import com.englishtopass.englishtopassapplication.R;
 
@@ -24,7 +24,7 @@ public class UoETabbedFragment extends Fragment {
     private static final String TAG = "UoETabbedFragment";
 
     private RecyclerView recyclerView;
-    private MainActivityViewModel mWordViewModel;
+    private UoeViewModel mWordViewModel;
 
 
     public UoETabbedFragment() {
@@ -55,7 +55,7 @@ public class UoETabbedFragment extends Fragment {
 
         recyclerView.setAdapter(adapter);
 
-        mWordViewModel = ViewModelProviders.of(this).get(MainActivityViewModel.class);
+        mWordViewModel = ViewModelProviders.of(this).get(UoeViewModel.class);
 
         mWordViewModel.getUseOfEnglishPackageLiveData().observe(this, new Observer<List<UseOfEnglishPackage>>() {
             @Override
