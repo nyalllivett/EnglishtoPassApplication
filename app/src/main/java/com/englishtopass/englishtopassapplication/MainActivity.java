@@ -22,7 +22,7 @@ import androidx.viewpager.widget.ViewPager;
 
 
 // TODO: 05/02/2019 allow back up true -
-public class MainActivity extends AppCompatActivity implements OnBackPressedCallback {
+public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
@@ -97,16 +97,6 @@ public class MainActivity extends AppCompatActivity implements OnBackPressedCall
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-
-    @Override
-    public boolean handleOnBackPressed() {
-
-        Log.d(TAG, "handleOnBackPressed: main activity");
-
-        return true;
-
     }
 
 }

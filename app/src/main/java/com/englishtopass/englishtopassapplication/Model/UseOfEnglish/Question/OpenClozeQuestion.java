@@ -20,22 +20,22 @@ public class OpenClozeQuestion extends UoeParent {
     private int uoeId;
 
     @NonNull
-    private String questionBody;
+    private String body;
 
     private boolean complete;
 
-    public OpenClozeQuestion(@NonNull String title, int uoeId, @NonNull String questionBody) {
+    public OpenClozeQuestion(@NonNull String title, int uoeId, @NonNull String body) {
         super(title);
         this.uoeId = uoeId;
-        this.questionBody = questionBody;
+        this.body = body;
         this.complete = false;
         this.testTimeElapsed = 0L;
 
     }
 
     @NonNull
-    public String getQuestionBody() {
-        return questionBody;
+    public String getBody() {
+        return body;
     }
 
     public boolean isComplete() {
