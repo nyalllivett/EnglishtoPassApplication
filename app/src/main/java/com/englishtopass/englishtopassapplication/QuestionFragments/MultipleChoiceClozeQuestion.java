@@ -1,11 +1,14 @@
 package com.englishtopass.englishtopassapplication.QuestionFragments;
 
 import android.animation.Animator;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
+import android.animation.PropertyValuesHolder;
+import android.animation.ValueAnimator;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import io.reactivex.SingleObserver;
@@ -18,28 +21,30 @@ import android.os.SystemClock;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
-import android.transition.TransitionManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationSet;
 import android.widget.Chronometer;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import com.englishtopass.englishtopassapplication.CustomViews.MovableFloatingActionButton;
+import com.englishtopass.englishtopassapplication.AnimationUtil;
+import com.englishtopass.englishtopassapplication.CustomViews.MainSettingFloatingActionButton;
+import com.englishtopass.englishtopassapplication.CustomViews.SettingsFloatingActionButton;
 import com.englishtopass.englishtopassapplication.CustomViews.TaggableClickableSpan;
 import com.englishtopass.englishtopassapplication.Enums.FabSetting;
+import com.englishtopass.englishtopassapplication.FadeIconsListener;
 import com.englishtopass.englishtopassapplication.R;
 import com.englishtopass.englishtopassapplication.ViewModels.UoeViewModel;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class MultipleChoiceClozeQuestion extends Fragment implements View.OnClickListener {
+public class MultipleChoiceClozeQuestion extends Fragment implements View.OnClickListener, FadeIconsListener {
     private static final String TAG = "MultipleChoiceClozeQues";
     private int packageId;
     private Pattern pattern;
@@ -47,12 +52,11 @@ public class MultipleChoiceClozeQuestion extends Fragment implements View.OnClic
     private CompositeDisposable compositeDisposable;
     private Chronometer chronometer;
     private TextView questionBody;
-    private FloatingActionButton floatingActionButton;
     private int spanSelected;
     private FabSetting fabSetting = FabSetting.SETTINGS;
-    private MovableFloatingActionButton timerFab, fontSizeFab, viewPageFab, hideSettingsFab;
+    private SettingsFloatingActionButton timerFab, fontSizeFab, viewPageFab, hideSettingsFab;
+    private MainSettingFloatingActionButton floatingActionButton;
     private ConstraintLayout questionRoot;
-    private ConstraintSet constraintSet2, constraintSet;
     private FrameLayout frameLayout;
     private boolean progressHolderCreated;
     private boolean set = false;
@@ -87,6 +91,7 @@ public class MultipleChoiceClozeQuestion extends Fragment implements View.OnClic
         setSpanSelected(-1);
 
         progressHolderCreated = false;
+
     }
 
     @Override
@@ -97,27 +102,60 @@ public class MultipleChoiceClozeQuestion extends Fragment implements View.OnClic
 
         TextView questionTitle = view.findViewById(R.id.questionTitle);
 
+        // Constraint layout/set
+
         questionRoot = view.findViewById(R.id.questionRoot);
 
         questionBody = view.findViewById(R.id.questionBody);
 
         questionBody.setOnClickListener(this);
 
-        frameLayout = view.findViewById(R.id.settingsHolder);
-
         questionBody.setMovementMethod(LinkMovementMethod.getInstance());
 
+        // Settings menu
+
+        // Main settings button
         floatingActionButton = view.findViewById(R.id.showSettingsFab);
+
+        floatingActionButton.setUpConstraintLayout(questionRoot);
 
         floatingActionButton.setOnClickListener(this);
 
-        fontSizeFab = view.findViewById(R.id.viewPageFab);
+        floatingActionButton.setFadeIconsListener(this);
+
+        // Font size Fab
+        fontSizeFab = view.findViewById(R.id.fontSizeFab);
 
         fontSizeFab.setOnClickListener(this);
 
+        // Timer Fab
+        timerFab = view.findViewById(R.id.viewTimerFab);
+
+        timerFab.setOnClickListener(this);
+
+        // View page Fab
+        viewPageFab = view.findViewById(R.id.viewPageFab);
+
+        viewPageFab.setOnClickListener(this);
+
+        // Hide setting Fab
+        hideSettingsFab = view.findViewById(R.id.hideSettingsFab);
+
+        hideSettingsFab.setOnClickListener(this);
+
+        // Timer
+
         chronometer = view.findViewById(R.id.timer);
 
+        // Regex
+
         pattern = Pattern.compile("[.]{8}");
+
+        // Frame for font size seek bar
+
+        frameLayout = view.findViewById(R.id.settingsHolder);
+
+        // View model
 
         UoeViewModel viewModel = ViewModelProviders.of(this).get(UoeViewModel.class);
 
@@ -154,15 +192,6 @@ public class MultipleChoiceClozeQuestion extends Fragment implements View.OnClic
 
                 });
 
-        set = false;
-        constraintSet = new ConstraintSet();
-        constraintSet2 = new ConstraintSet();
-
-        constraintSet.clone(questionRoot);
-
-        constraintSet2.clone(getContext(), R.layout.fragment_multiple_choice_cloze_question_set);
-
-
         return view;
 
     }
@@ -197,7 +226,7 @@ public class MultipleChoiceClozeQuestion extends Fragment implements View.OnClic
 
                 if (getSpanSelected() < 0) {
 
-                    changeFabIcon(toggleSettings());
+                    floatingActionButton.changeButtonIcon(toggleSettings());
 
                     setSpanSelected(this.getTag());
 
@@ -246,11 +275,9 @@ public class MultipleChoiceClozeQuestion extends Fragment implements View.OnClic
 
                 if (questionBody.getSelectionStart() == -1 && questionBody.getSelectionEnd() == -1 && fabSetting == FabSetting.ANSWER) {
 
-                    changeFabIcon(toggleSettings());
+                    floatingActionButton.changeButtonIcon(toggleSettings());
 
                     setSpanSelected(-1);
-
-                    Log.d(TAG, "onClick: span tag" + getSpanSelected());
 
                 }
 
@@ -258,17 +285,15 @@ public class MultipleChoiceClozeQuestion extends Fragment implements View.OnClic
 
             case R.id.showSettingsFab:
 
-                TransitionManager.beginDelayedTransition(questionRoot);
+                set = floatingActionButton.showSettingsButtons(set);
 
-                ConstraintSet cSet = (set) ? constraintSet : constraintSet2;
+                floatingActionButton.setClickable(false);
 
-                cSet.applyTo(questionRoot);
-
-                set = !set;
+                showIcons(set);
 
                 break;
 
-            case R.id.viewPageFab:
+            case R.id.fontSizeFab:
 
                 if (!progressHolderCreated) {
 
@@ -281,6 +306,18 @@ public class MultipleChoiceClozeQuestion extends Fragment implements View.OnClic
                 }
 
                 break;
+        }
+
+    }
+
+    private void showIcons(boolean set) {
+
+        if (set) {
+
+            fontSizeFab.setImageResource(R.drawable.answer_24dp);
+
+            fontSizeFab.getDrawable().setAlpha(0);
+
         }
 
     }
@@ -326,38 +363,6 @@ public class MultipleChoiceClozeQuestion extends Fragment implements View.OnClic
         progressHolderCreated = true;
     }
 
-    private void changeFabIcon(int fabSetting){
-
-
-        floatingActionButton.animate()
-                .rotation(360)
-                .setDuration(100)
-                .setListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-                floatingActionButton.setImageResource(fabSetting);
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                floatingActionButton.setRotation(0);
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animation) {
-
-            }
-
-        }).start();
-
-    }
-
     public int getSpanSelected() {
         return spanSelected;
     }
@@ -388,6 +393,20 @@ public class MultipleChoiceClozeQuestion extends Fragment implements View.OnClic
         compositeDisposable.dispose();
 
         super.onDestroy();
+
+    }
+
+    @Override
+    public void fadeInIcons() {
+
+        new AnimationUtil().showSettingsIcons(hideSettingsFab, viewPageFab, fontSizeFab, timerFab, floatingActionButton).start();
+
+    }
+
+    @Override
+    public void fadeOutIcons() {
+
+        new AnimationUtil().hideSettingsIcon(hideSettingsFab, viewPageFab, fontSizeFab, timerFab, floatingActionButton).start();
 
     }
 }

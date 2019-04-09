@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.englishtopass.englishtopassapplication.CustomViews.MovableFloatingActionButton;
+import com.englishtopass.englishtopassapplication.CustomViews.SettingsFloatingActionButton;
 import com.englishtopass.englishtopassapplication.Enums.TestCompletion;
 import com.englishtopass.englishtopassapplication.ExampleFragment.ExampleQuestions.GrandParent.BaseQuestion;
 import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question.MultipleChoiceClozeQuestion;
@@ -26,7 +26,7 @@ public class ListeningQuestion extends BaseQuestion implements OnBackPressedCall
     private TestCompletion testCompletion;
 
     private MultipleChoiceClozeQuestion multipleChoiceClozeQuestion;
-    private MovableFloatingActionButton movableFloatingActionButton;
+    private SettingsFloatingActionButton settingsFloatingActionButton;
 
     public ListeningQuestion() {
         // Required empty public constructor
@@ -101,9 +101,9 @@ public class ListeningQuestion extends BaseQuestion implements OnBackPressedCall
 
         // Setting the FAB
 
-        movableFloatingActionButton = view.findViewById(R.id.movableFab);
+        settingsFloatingActionButton = view.findViewById(R.id.movableFab);
 
-        movableFloatingActionButton.setOnClickListener(this);
+        settingsFloatingActionButton.setOnClickListener(this);
 
 
         // Setting the spans
