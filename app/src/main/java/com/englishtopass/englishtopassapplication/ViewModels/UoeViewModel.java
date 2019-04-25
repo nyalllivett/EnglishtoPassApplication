@@ -1,6 +1,7 @@
 package com.englishtopass.englishtopassapplication.ViewModels;
 
 import android.app.Application;
+import android.util.Log;
 
 import com.englishtopass.englishtopassapplication.Model.Listening.Package.ListeningPackage;
 import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Package.UseOfEnglishPackage;
@@ -15,6 +16,7 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import io.reactivex.Single;
 
 public class UoeViewModel extends AndroidViewModel {
@@ -23,7 +25,7 @@ public class UoeViewModel extends AndroidViewModel {
 
     private LiveData<List<UseOfEnglishPackage>> useOfEnglishPackageLiveData;
 
-    private LiveData<List<ListeningPackage>> listeningPackageLiveData;
+    private MutableLiveData<OpenClozeQuestion> mutableLiveData = new MutableLiveData<>();
 
     public UoeViewModel(@NonNull Application application) {
         super(application);
@@ -32,18 +34,58 @@ public class UoeViewModel extends AndroidViewModel {
 
         useOfEnglishPackageLiveData = questionRepository.getAllUseOfEnglishPackages();
 
-        listeningPackageLiveData = questionRepository.getAllListeningPackages();
 
     }
+
+
+
+    public LiveData<OpenClozeQuestion> getOpenClozeQuestionMutableLiveData(int id) {
+
+        return questionRepository.getOpenClozeQuestionLiveData(id);
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     // RETRIEVE ALL PACKAGES -
     public LiveData<List<UseOfEnglishPackage>> getUseOfEnglishPackageLiveData() {
         return useOfEnglishPackageLiveData;
     }
 
-    public LiveData<List<ListeningPackage>> getListeningPackageLiveData() {
-        return listeningPackageLiveData;
+    // RETRIEVE SINGLE PACKAGE -
+    public UseOfEnglishPackage useOfEnglishPackage(int id) {
+        return questionRepository.getSingleUseOfEnglishPackages(id);
     }
+
+    public void updateUseOfEnglishPackage(UseOfEnglishPackage useOfEnglishPackage) {
+
+        questionRepository.updateUseOfEnglishPackage(useOfEnglishPackage);
+
+    }
+
 
     // RETRIEVE SINGLE UOE QUESTION DATA -
     public Single<MultipleChoiceClozeQuestion> getMenuMultipleChoiceQuestion(int id) {
@@ -61,6 +103,11 @@ public class UoeViewModel extends AndroidViewModel {
 
     public Single<WordFormationQuestion> getMenuWordFormationQuestion(int id) {
         return questionRepository.getMenuWordFormation(id);
+
+    }
+
+    public void updateMultipleChoice(MultipleChoiceClozeQuestion multipleChoiceClozeQuestion) {
+        questionRepository.updateMultipleChoiceCloze(multipleChoiceClozeQuestion);
 
     }
 

@@ -4,12 +4,21 @@ import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 public class UoeParent {
-
     protected String title;
     protected long testTimeElapsed;
+    protected boolean complete;
 
     public UoeParent(String title) {
         this.title = title;
+        this.complete = false;
+    }
+
+    public boolean isComplete() {
+        return complete;
+    }
+
+    public void setComplete(boolean complete) {
+        this.complete = complete;
     }
 
     public String getTitle() {

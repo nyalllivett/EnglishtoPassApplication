@@ -36,10 +36,12 @@ import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question.Wo
 import java.util.List;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import io.reactivex.Single;
 
 public class QuestionRepository {
 
+    // USE OF ENGLISH DAOS
     private UseOfEnglishDao useOfEnglishDao;
 
     private MultipleChoiceClozeDao multipleChoiceClozeDao;
@@ -47,6 +49,7 @@ public class QuestionRepository {
     private KeywordTransformationDao keywordTransformationDao;
     private WordFormationDao wordFormationDao;
 
+    // LISTENING DAOS
     private ListeningDao listeningDao;
 
     private ListeningMultipleDao listeningMultipleDao;
@@ -54,6 +57,7 @@ public class QuestionRepository {
     private MatchSpeakersDao matchSpeakersDao;
     private BlankFillingDao blankFillingDao;
 
+    // READING DAOS
     private ReadingDao readingDao;
 
     private MultipleChoiceDao multipleChoiceDao;
@@ -61,19 +65,18 @@ public class QuestionRepository {
     private MatchingExerciseDao matchingExerciseDao;
 
 
+    // LIVE DATA PACKAGES
     private LiveData<List<UseOfEnglishPackage>> useOfEnglishLivePackages;
-    private LiveData<UseOfEnglishPackage> singleUseOfEnglishPackage;
 
     private LiveData<List<ListeningPackage>> listeningPackages;
-    private LiveData<ListeningPackage> singleListeningPackage;
 
     private LiveData<List<ReadingPackage>> readingPackages;
-    private LiveData<ReadingPackage> singleReadingPackage;
 
     // INIT
     public QuestionRepository(Application application) {
 
         /**
+         * CONSTRUCTOR
          * getting instance of database
          */
         QuestionDatabase questionDatabase = QuestionDatabase.getInstance(application);
@@ -124,6 +127,18 @@ public class QuestionRepository {
     }
 
     /**
+     * TESTING THE LIVE DATA FOR A QUESTION
+     */
+
+    public LiveData<OpenClozeQuestion> getOpenClozeQuestionLiveData(int id) {
+
+        return openClozeDao.getOpenCloze(id);
+
+    }
+
+
+
+    /**
      * methods to return the live data
      */
 
@@ -134,9 +149,15 @@ public class QuestionRepository {
 
     }
 
-    public LiveData<UseOfEnglishPackage> getSingleUseOfEnglishPackages(int i) {
+    public UseOfEnglishPackage getSingleUseOfEnglishPackages(int i) {
 
         return useOfEnglishDao.getSingleUseOfEnglishPackage(i);
+
+    }
+
+    public void updateUseOfEnglishPackage(UseOfEnglishPackage useOfEnglishPackage) {
+
+        useOfEnglishDao.update(useOfEnglishPackage);
 
     }
 
@@ -165,7 +186,10 @@ public class QuestionRepository {
     }
 
 
+
+
     /**
+     * RETURNING RX JAVA SINGLE OBJECTS TO POPULATE QUESTION SCREEN
      UOE SINGLES
      */
 
@@ -185,6 +209,10 @@ public class QuestionRepository {
 
         return multipleChoiceClozeDao.getModelParentMultipleChoice(i);
 
+    }
+
+    public void updateMultipleChoiceCloze(MultipleChoiceClozeQuestion multipleChoiceClozeQuestion) {
+        multipleChoiceClozeDao.updateMultipleChoiceClozeQuestion(multipleChoiceClozeQuestion);
     }
 
     public Single<WordFormationQuestion> getMenuWordFormation(int i ) {

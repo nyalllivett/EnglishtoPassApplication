@@ -18,8 +18,6 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
-import static com.englishtopass.englishtopassapplication.Enums.QuestionType.LISTENING;
-
 public class TabbedListeningRecyclerAdapter extends ListAdapter<ListeningPackage, TabbedListeningRecyclerAdapter.ListeningViewHolder> implements View.OnClickListener {
     private static final String TAG = "TabbedListeningRecycler";
 
@@ -51,7 +49,7 @@ public class TabbedListeningRecyclerAdapter extends ListAdapter<ListeningPackage
     @Override
     public ListeningViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-        View view = layoutInflater.inflate(R.layout.tabbed_uoe_item, parent, false);
+        View view = layoutInflater.inflate(R.layout.main_menu_4_item, parent, false);
 
         return new ListeningViewHolder(view);
     }

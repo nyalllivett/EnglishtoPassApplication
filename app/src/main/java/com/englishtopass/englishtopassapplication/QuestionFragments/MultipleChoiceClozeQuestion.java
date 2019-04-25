@@ -1,70 +1,96 @@
 package com.englishtopass.englishtopassapplication.QuestionFragments;
 
-import android.animation.Animator;
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
-import android.animation.PropertyValuesHolder;
-import android.animation.ValueAnimator;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.fragment.app.Fragment;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProviders;
+import io.reactivex.Completable;
+import io.reactivex.CompletableObserver;
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Action;
 import io.reactivex.schedulers.Schedulers;
 
+import android.os.Handler;
 import android.os.SystemClock;
+import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
-import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AnimationSet;
-import android.widget.Chronometer;
+import android.view.ViewTreeObserver;
+import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.RelativeLayout;
-import android.widget.SeekBar;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.englishtopass.englishtopassapplication.AnimationUtil;
-import com.englishtopass.englishtopassapplication.CustomViews.MainSettingFloatingActionButton;
-import com.englishtopass.englishtopassapplication.CustomViews.SettingsFloatingActionButton;
-import com.englishtopass.englishtopassapplication.CustomViews.TaggableClickableSpan;
-import com.englishtopass.englishtopassapplication.Enums.FabSetting;
-import com.englishtopass.englishtopassapplication.FadeIconsListener;
+import com.englishtopass.englishtopassapplication.CustomViews.ChronometerCustom;
+import com.englishtopass.englishtopassapplication.CustomViews.LinkMovementMethodCustom;
+import com.englishtopass.englishtopassapplication.CustomViews.ClickableSpanCustom;
+import com.englishtopass.englishtopassapplication.Interfaces.SetScrollYListener;
 import com.englishtopass.englishtopassapplication.R;
+import com.englishtopass.englishtopassapplication.UtilClass;
 import com.englishtopass.englishtopassapplication.ViewModels.UoeViewModel;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class MultipleChoiceClozeQuestion extends Fragment implements View.OnClickListener, FadeIconsListener {
+
+public class MultipleChoiceClozeQuestion extends MultipleChoiceAnswer implements View.OnClickListener, SetScrollYListener {
     private static final String TAG = "MultipleChoiceClozeQues";
+
+    // identify package
     private int packageId;
-    private Pattern pattern;
-    private SpannableStringBuilder spannableStringBuilder;
+
+    // ViewModel
+    private UoeViewModel viewModel;
+
+    //
+    private com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question.MultipleChoiceClozeQuestion multipleChoiceCloze;
+
+    // regex for identifying the blank spaces
+//    private Pattern pattern;
+
+    // builder to build spans
+//    private SpannableStringBuilder spannableStringBuilder;
+
+    // Dispose of unused rx's
     private CompositeDisposable compositeDisposable;
-    private Chronometer chronometer;
-    private TextView questionBody;
-    private int spanSelected;
-    private FabSetting fabSetting = FabSetting.SETTINGS;
-    private SettingsFloatingActionButton timerFab, fontSizeFab, viewPageFab, hideSettingsFab;
-    private MainSettingFloatingActionButton floatingActionButton;
-    private ConstraintLayout questionRoot;
-    private FrameLayout frameLayout;
-    private boolean progressHolderCreated;
-    private boolean set = false;
+
+    // Timer
+    private ChronometerCustom chronometer;
+
+    // Views
+//    private TextView questionBody;
+    private FrameLayout actionFrameLayout;
+    private ScrollView scrollView;
+
+    // identifier for which span is selected
+//    private int spanSelected;
+
+    // Touch coords
+    private float actionFrameY;
+    private int spanYPosition;
+    private float scrollAmount;
+
+    // boolean for touch coords
+    private boolean actionBarOpen;
+    private boolean bufferTimeElapsed;
+
+    // arrays to store answers in memory
+//    private String[][] partitionedAnswers = new String[8][4]; // MOVED TO MULTIPLE CHOICE ANSWER PARENT
+    private String[] correctAnswers;
+//    private int[] spanIndices = new int[2];
 
     public MultipleChoiceClozeQuestion() {
         // Required empty public constructor
     }
-
 
     public static MultipleChoiceClozeQuestion newInstance(int packageId) {
         MultipleChoiceClozeQuestion fragment = new MultipleChoiceClozeQuestion();
@@ -86,17 +112,19 @@ public class MultipleChoiceClozeQuestion extends Fragment implements View.OnClic
 
         compositeDisposable = new CompositeDisposable();
 
-        pattern = Pattern.compile("[.]{8}");
+        sqCompileRegexPattern("[.]{8}");
 
-        setSpanSelected(-1);
+        sqSetSpanSelected(-1);
 
-        progressHolderCreated = false;
+        actionBarOpen = false;
+
 
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_multiple_choice_cloze_question, container, false);
 
@@ -104,60 +132,37 @@ public class MultipleChoiceClozeQuestion extends Fragment implements View.OnClic
 
         // Constraint layout/set
 
-        questionRoot = view.findViewById(R.id.questionRoot);
-
         questionBody = view.findViewById(R.id.questionBody);
 
         questionBody.setOnClickListener(this);
 
-        questionBody.setMovementMethod(LinkMovementMethod.getInstance());
+        view.findViewById(R.id.finishTestButton).setOnClickListener(this);
 
-        // Settings menu
+        LinkMovementMethodCustom linkMovementMethodCustom = LinkMovementMethodCustom.getInstance();
 
-        // Main settings button
-        floatingActionButton = view.findViewById(R.id.showSettingsFab);
+        linkMovementMethodCustom.setSetScrollYListener(this);
 
-        floatingActionButton.setUpConstraintLayout(questionRoot);
+        questionBody.setMovementMethod(linkMovementMethodCustom);
 
-        floatingActionButton.setOnClickListener(this);
-
-        floatingActionButton.setFadeIconsListener(this);
-
-        // Font size Fab
-        fontSizeFab = view.findViewById(R.id.fontSizeFab);
-
-        fontSizeFab.setOnClickListener(this);
-
-        // Timer Fab
-        timerFab = view.findViewById(R.id.viewTimerFab);
-
-        timerFab.setOnClickListener(this);
-
-        // View page Fab
-        viewPageFab = view.findViewById(R.id.viewPageFab);
-
-        viewPageFab.setOnClickListener(this);
-
-        // Hide setting Fab
-        hideSettingsFab = view.findViewById(R.id.hideSettingsFab);
-
-        hideSettingsFab.setOnClickListener(this);
+        scrollView = view.findViewById(R.id.scrollView);
 
         // Timer
 
         chronometer = view.findViewById(R.id.timer);
 
+        startTimer();
+
         // Regex
 
-        pattern = Pattern.compile("[.]{8}");
+//        pattern = Pattern.compile("[.]{8}");
 
-        // Frame for font size seek bar
+        // Frame for actions
 
-        frameLayout = view.findViewById(R.id.settingsHolder);
+        actionFrameLayout = view.findViewById(R.id.actionFrameLayout);
 
         // View model
 
-        UoeViewModel viewModel = ViewModelProviders.of(this).get(UoeViewModel.class);
+        viewModel = ViewModelProviders.of(this).get(UoeViewModel.class);
 
         viewModel.getMenuMultipleChoiceQuestion(packageId)
                 .subscribeOn(Schedulers.io())
@@ -172,6 +177,20 @@ public class MultipleChoiceClozeQuestion extends Fragment implements View.OnClic
 
                     @Override
                     public void onSuccess(com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question.MultipleChoiceClozeQuestion multipleChoiceClozeQuestion) {
+
+                        multipleChoiceCloze = multipleChoiceClozeQuestion;
+
+                        /*
+                            mcaPartition is parent method called from MultipleChoiceAnswer to
+                            mcaPartition the answers in the groups of four in this case.
+                            params:
+                            2D array of all answers, size of 3D array/mcaPartition
+                         */
+                        mcaPartition(UtilClass.stringSplitter(multipleChoiceClozeQuestion.getAllAnswers()), 4);
+
+                        /*
+                         */
+                        setCorrectAnswers(UtilClass.stringSplitter(multipleChoiceClozeQuestion.getCorrectAnswers()));
 
                         questionTitle.setText(multipleChoiceClozeQuestion.getTitle());
 
@@ -206,173 +225,238 @@ public class MultipleChoiceClozeQuestion extends Fragment implements View.OnClic
 
             createClickableSpan(matcher.start(), matcher.end(), tagCounter);
 
-            Log.d(TAG, "onSuccess: " + matcher.start() + " " + matcher.end());
-
             tagCounter++;
 
         }
 
-        setClickableText();
+        questionBody.setText(spannableStringBuilder);
 
     }
 
-
-
     private void createClickableSpan(int startingIndex, int endingIndex, int tag){
 
-        spannableStringBuilder.setSpan(new TaggableClickableSpan(tag) {
+        spannableStringBuilder.setSpan(new ClickableSpanCustom(tag) {
+
             @Override
             public void onClick(@NonNull View widget) {
 
-                if (getSpanSelected() < 0) {
+                sqSetSpanSelected(this.getTag());
 
-                    floatingActionButton.changeButtonIcon(toggleSettings());
+                TextView textView = (TextView) widget;
 
-                    setSpanSelected(this.getTag());
+                Spannable spannable = (Spannable) textView.getText();
 
-                    Log.d(TAG, "onClick: span tag" + getSpanSelected());
+                sqSetCurrentSpanIndices(spannable.getSpanStart(this), spannable.getSpanEnd(this));
 
-                }
-
-
-
+                if (!actionBarOpen)
+                    openActionBar();
             }
 
         }, startingIndex, endingIndex, Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
 
     }
 
-    private int toggleSettings() {
 
-        if (fabSetting == FabSetting.SETTINGS) {
 
-            fabSetting = FabSetting.ANSWER;
+    private void openActionBar(){
 
-            return R.drawable.answer_24dp;
+        actionFrameLayout.getViewTreeObserver().addOnGlobalLayoutListener(
+                new ViewTreeObserver.OnGlobalLayoutListener() {
+                    public void onGlobalLayout() {
 
-        } else {
+                        actionFrameLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
 
-            fabSetting = FabSetting.SETTINGS;
+                        // This is open,
+                        actionBarOpen = true;
 
-            return R.drawable.tool_box_24dp;
+                        bufferTimeElapsed = false;
+
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                               bufferTimeElapsed = true;
+                            }
+                        }, 100);
+
+                        actionFrameY = actionFrameLayout.getY();
+
+                        scrollQuestionText(null);
+
+                    }
+
+                }
+        );
+
+        View.OnClickListener onClickListenerAnswer = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                switch (v.getId()) {
+
+                    case R.id.multipleChoiceOne:
+                    case R.id.multipleChoiceTwo:
+                    case R.id.multipleChoiceThree:
+                    case R.id.multipleChoiceFour:
+
+                        if (sqGetCurrentSpanIndices()[0] != -1 && sqGetCurrentSpanIndices()[1] != -1) {
+
+                            sqReplaceAndSetBuilderText(((Button) v).getText().toString());
+
+                            for (ClickableSpanCustom clickableSpanCustom : sqReturnOrderedSpanList()) {
+
+                                if (clickableSpanCustom.getTag() == sqGetSpanSelected()) {
+
+                                    clickableSpanCustom.setAnswerTag(((Button) v).getText().toString());
+
+                                    hideActionFrame();
+
+                                    return;
+
+                                }
+
+                            }
+
+                            return;
+
+                        } else {
+
+                            throw new IllegalStateException("Span indices incorrect");
+
+                        }
+
+                    case R.id.resetSpanText:
+
+                        sqReplaceAndSetBuilderText("........");
+
+                        break;
+
+                }
+
+            }
+        };
+
+        View view = LayoutInflater.from(getContext()).inflate(R.layout.multiple_choice_questions, actionFrameLayout, true);
+
+        view.findViewById(R.id.hideActionFrameNumber).setOnClickListener(this);
+
+        view.findViewById(R.id.resetSpanText).setOnClickListener(onClickListenerAnswer);
+
+        LinearLayout linearLayout = view.findViewById(R.id.linearQuestions);
+
+
+        for (int i = 0; i < linearLayout.getChildCount(); i++) {
+
+            Button button = (Button) linearLayout.getChildAt(i);
+
+            button.setText(partitionedAnswers[sqGetSpanSelected()][i]);
+
+            button.setOnClickListener(onClickListenerAnswer);
 
         }
 
     }
 
-    private void setClickableText(){
 
-        questionBody.setText(spannableStringBuilder);
-
-    }
 
     @Override
     public void onClick(View v) {
 
+        if (actionBarOpen && bufferTimeElapsed) {
+
+            hideActionFrame();
+
+            return;
+
+        }
+
         switch (v.getId()) {
 
-            case R.id.questionBody:
+//            case R.id.questionBody:
+//
+////                if (sqGetSpanSelected() >= 0 && questionBody.getSelectionStart() == -1 && questionBody.getSelectionEnd() == -1) {
+////
+////                    Log.d(TAG, "onClick: " + questionBody.getSelectionStart());
+////                    sqSetSpanSelected(-1);
+////                    sqSetCurrentSpanIndices(-1, -1);
+////
+////                }
+//
+//                break;
 
-                if (questionBody.getSelectionStart() == -1 && questionBody.getSelectionEnd() == -1 && fabSetting == FabSetting.ANSWER) {
+            case R.id.hideActionFrameNumber:
 
-                    floatingActionButton.changeButtonIcon(toggleSettings());
-
-                    setSpanSelected(-1);
-
-                }
-
-                break;
-
-            case R.id.showSettingsFab:
-
-                set = floatingActionButton.showSettingsButtons(set);
-
-                floatingActionButton.setClickable(false);
-
-                showIcons(set);
+                hideActionFrame();
 
                 break;
 
-            case R.id.fontSizeFab:
+            case R.id.finishTestButton:
 
-                if (!progressHolderCreated) {
-
-                    createProgressbarHolder();
-
-                } else {
-
-                    removeProgressbarHolder();
-
-                }
+                finishTest();
 
                 break;
+
+        }
+
+
+
+    }
+
+    // SPAN METHODS
+    // Called from CustomLinkMovementMethod -
+    @Override
+    public void setSpanYPosition(int yCoord) {
+        this.spanYPosition = yCoord;
+    }
+
+    // Called from scrollQuestionText()
+    private int getSpanYPosition() {
+        return spanYPosition;
+    }
+
+    // Called from openActionBar() & hideActionBar()
+    private void scrollQuestionText(@Nullable Integer scrollAmountBack){
+
+        if (null != scrollAmountBack) {
+
+            scrollView.scrollTo(0, -scrollAmountBack);
+
+            return;
+
+        }
+
+        scrollAmount = (getSpanYPosition() - actionFrameY);
+
+        if (scrollAmount > 0) {
+
+            scrollView.scrollTo(0, (int) (scrollAmount) + 10);
+
         }
 
     }
 
-    private void showIcons(boolean set) {
 
-        if (set) {
 
-            fontSizeFab.setImageResource(R.drawable.answer_24dp);
-
-            fontSizeFab.getDrawable().setAlpha(0);
-
-        }
-
+    public String[] getCorrectAnswers() {
+        return correctAnswers;
     }
 
-    private void removeProgressbarHolder() {
-
-        frameLayout.removeAllViews();
-
-        progressHolderCreated = false;
-
+    public void setCorrectAnswers(String[] correctAnswers) {
+        this.correctAnswers = correctAnswers;
     }
 
-    private void createProgressbarHolder() {
+    // Called from sqSetClickableText() & main onClick
+//    private List<ClickableSpanCustom> sqReturnOrderedSpanList() {
+//
+//        List<ClickableSpanCustom> clickableSpans = Arrays.asList(spannableStringBuilder.getSpans(0, spannableStringBuilder.length(), ClickableSpanCustom.class));
+//
+//        Collections.sort(clickableSpans, new SpanByTagComparator());
+//
+//        return clickableSpans;
+//
+//    }
 
-        RelativeLayout relativeLayout = new RelativeLayout(getContext());
-
-        relativeLayout.setBackgroundResource(R.drawable.pop_up_grey_box);
-
-        frameLayout.addView(relativeLayout);
-
-        FrameLayout.LayoutParams relativeParams = (FrameLayout.LayoutParams) relativeLayout.getLayoutParams();
-
-        relativeParams.height = FrameLayout.LayoutParams.MATCH_PARENT;
-        relativeParams.width = FrameLayout.LayoutParams.MATCH_PARENT;
-
-        relativeLayout.setLayoutParams(relativeParams);
-
-        SeekBar progressBar = new SeekBar(getContext());
-
-        progressBar.setBackgroundResource(R.drawable.custom_seek_bar);
-
-        relativeLayout.addView(progressBar);
-
-        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) progressBar.getLayoutParams();
-
-        params.addRule(RelativeLayout.CENTER_IN_PARENT);
-
-        params.width = 500;
-        params.height = 100;
-
-        progressBar.setLayoutParams(params);
-
-        progressHolderCreated = true;
-    }
-
-    public int getSpanSelected() {
-        return spanSelected;
-    }
-
-    public void setSpanSelected(int spanSelected) {
-        this.spanSelected = spanSelected;
-    }
-
-
-
+    // QUESTION METHODS
+    // CHRONO METHODS
     private void startTimer() {
 
         chronometer.setBase(SystemClock.elapsedRealtime());
@@ -381,14 +465,91 @@ public class MultipleChoiceClozeQuestion extends Fragment implements View.OnClic
 
     }
 
+    // QUESTION METHOD
     private void endTimer() {
 
         chronometer.stop();
 
     }
 
+    // QUESTION METHOD
+    // hide action frame view
+    private void hideActionFrame() {
+
+        actionFrameLayout.removeAllViews();
+
+        actionBarOpen = false;
+
+        scrollQuestionText((int) scrollAmount);
+
+        sqSetSpanSelected(-1);
+
+        sqSetCurrentSpanIndices(-1, -1);
+
+    }
+
+    // QUESTION METHOD for any question where we compare answers.
+    // Creating the set of answers
+
+
+
+    public void finishTest(){
+
+        multipleChoiceCloze.setAnswersAreCorrect(getCheckedAnswerBooleans());
+        multipleChoiceCloze.setComplete(true);
+        multipleChoiceCloze.setTestTimeElapsed(836736);
+
+        Completable.fromAction(new Action() {
+            @Override
+            public void run() throws Exception {
+                viewModel.updateMultipleChoice(multipleChoiceCloze);
+            }
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new CompletableObserver() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        Log.d(TAG, "onSubscribe: hello");
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.d(TAG, "onError: " + e.getLocalizedMessage());
+                    }
+                });
+
+
+
+
+    }
+
+    private boolean[] getCheckedAnswerBooleans() {
+
+        int i = 0;
+
+        boolean[] answers = new boolean[8];
+
+        for (ClickableSpanCustom span : sqReturnOrderedSpanList()) {
+
+            answers[i] = span.getAnswerTag().equals(getCorrectAnswers()[i]);
+
+            i++;
+
+        }
+
+        return answers;
+
+    }
+
     @Override
     public void onDestroy() {
+
+        endTimer();
 
         compositeDisposable.dispose();
 
@@ -396,17 +557,5 @@ public class MultipleChoiceClozeQuestion extends Fragment implements View.OnClic
 
     }
 
-    @Override
-    public void fadeInIcons() {
 
-        new AnimationUtil().showSettingsIcons(hideSettingsFab, viewPageFab, fontSizeFab, timerFab, floatingActionButton).start();
-
-    }
-
-    @Override
-    public void fadeOutIcons() {
-
-        new AnimationUtil().hideSettingsIcon(hideSettingsFab, viewPageFab, fontSizeFab, timerFab, floatingActionButton).start();
-
-    }
 }

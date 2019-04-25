@@ -22,13 +22,13 @@ public class OpenClozeQuestion extends UoeParent {
     @NonNull
     private String body;
 
-    private boolean complete;
+    private String correctAnswers;
 
-    public OpenClozeQuestion(@NonNull String title, int uoeId, @NonNull String body) {
+    public OpenClozeQuestion(@NonNull String title, int uoeId, @NonNull String body, String correctAnswers) {
         super(title);
         this.uoeId = uoeId;
         this.body = body;
-        this.complete = false;
+        this.correctAnswers = correctAnswers;
         this.testTimeElapsed = 0L;
 
     }
@@ -36,14 +36,6 @@ public class OpenClozeQuestion extends UoeParent {
     @NonNull
     public String getBody() {
         return body;
-    }
-
-    public boolean isComplete() {
-        return complete;
-    }
-
-    public void setComplete(boolean complete) {
-        this.complete = complete;
     }
 
     public int getId() {
@@ -56,5 +48,13 @@ public class OpenClozeQuestion extends UoeParent {
 
     public int getUoeId() {
         return uoeId;
+    }
+
+    public String getCorrectAnswers() {
+        return correctAnswers;
+    }
+
+    public void setCorrectAnswers(String correctAnswers) {
+        this.correctAnswers = correctAnswers;
     }
 }

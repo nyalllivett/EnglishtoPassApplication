@@ -24,13 +24,10 @@ public class WordFormationQuestion extends UoeParent {
     @NonNull
     private String body;
 
-    private boolean complete;
-
     public WordFormationQuestion(@NonNull String title, int uoeId, @NonNull String body) {
         super(title);
         this.uoeId = uoeId;
         this.body = body;
-        this.complete = false;
         this.testTimeElapsed = 0L;
 
     }
@@ -38,14 +35,6 @@ public class WordFormationQuestion extends UoeParent {
     @NonNull
     public String getBody() {
         return body;
-    }
-
-    public boolean isComplete() {
-        return complete;
-    }
-
-    public void setComplete(boolean complete) {
-        this.complete = complete;
     }
 
     public int getUoeId() {

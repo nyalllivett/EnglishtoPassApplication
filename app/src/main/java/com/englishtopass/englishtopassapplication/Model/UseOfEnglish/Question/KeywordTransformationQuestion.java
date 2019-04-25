@@ -23,29 +23,18 @@ public class KeywordTransformationQuestion extends UoeParent {
 
     @NonNull
     private String body;
-    private boolean complete;
-
 
     public KeywordTransformationQuestion(@NonNull String title, int uoeId, @NonNull String body) {
         super(title);
         this.uoeId = uoeId;
         this.body = body;
         this.testTimeElapsed = 0L;
-        this.complete = false;
 
     }
 
     @NonNull
     public String getBody() {
         return body;
-    }
-
-    public void setComplete(boolean complete) {
-        this.complete = complete;
-    }
-
-    public boolean isComplete() {
-        return complete;
     }
 
     public int getId() {

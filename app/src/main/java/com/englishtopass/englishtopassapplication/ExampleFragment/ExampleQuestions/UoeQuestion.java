@@ -58,16 +58,16 @@ public class UoeQuestion extends BaseQuestion implements OnBackPressedCallback, 
         }
 
 
-
-        ArrayList<String> exampleGroup = new ArrayList<>(Arrays.asList(String.valueOf(R.string.multiple_choice_cloze_example_answer_group).trim().split("#")));
-
-        multipleChoiceClozeQuestion =
-                new MultipleChoiceClozeQuestion(
-                        String.valueOf(getString(R.string.multiple_choice_cloze_example_title)),
-                        String.valueOf(getString(R.string.multiple_choice_cloze_example_body)),
-                        exampleGroup,
-                        String.valueOf(getString(R.string.multiple_choice_cloze_example_answer))
-                );
+//
+//        ArrayList<String> exampleGroup = new ArrayList<>(Arrays.asList(String.valueOf(R.string.multiple_choice_cloze_example_answer_group).trim().split("#")));
+//
+//        multipleChoiceClozeQuestion =
+//                new MultipleChoiceClozeQuestion(
+//                        String.valueOf(getString(R.string.multiple_choice_cloze_example_title)),
+//                        String.valueOf(getString(R.string.multiple_choice_cloze_example_body)),
+//                        exampleGroup,
+//                        String.valueOf(getString(R.string.multiple_choice_cloze_example_answer))
+//                );
 
     }
 

@@ -16,6 +16,7 @@ import java.util.regex.Pattern;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -24,7 +25,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 public class OpenClozeQuestion extends Fragment {
-    private static final String TAG = "MultipleChoiceClozeQues";
+    private static final String TAG = "Open";
     private int packageId;
     private Pattern pattern;
     private SpannableStringBuilder spannableStringBuilder;
@@ -58,7 +59,6 @@ public class OpenClozeQuestion extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
     }
 
     @Override
@@ -75,41 +75,48 @@ public class OpenClozeQuestion extends Fragment {
 
         UoeViewModel viewModel = ViewModelProviders.of(this).get(UoeViewModel.class);
 
-        viewModel.getMenuOpenClozeQuestion(packageId)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SingleObserver<com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question.OpenClozeQuestion>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
+        viewModel.getOpenClozeQuestionMutableLiveData(packageId).observe(getViewLifecycleOwner(), new Observer<com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question.OpenClozeQuestion>() {
+            @Override
+            public void onChanged(com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question.OpenClozeQuestion openClozeQuestion) {
+                questionTitle.setText(openClozeQuestion.getTitle());
 
-                        compositeDisposable.add(d);
+                spannableStringBuilder = new SpannableStringBuilder(openClozeQuestion.getBody());
 
-                    }
+                questionBody.setText(spannableStringBuilder);
 
-                    @Override
-                    public void onSuccess(com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question.OpenClozeQuestion openClozeQuestion) {
+                Matcher matcher = pattern.matcher(openClozeQuestion.getBody());
 
-                        questionTitle.setText(openClozeQuestion.getTitle());
+                while (matcher.find()) {
 
-                        spannableStringBuilder = new SpannableStringBuilder(openClozeQuestion.getBody());
+                    Log.d(TAG, "onSuccess: " + matcher.start() + " " + matcher.end());
 
-                        questionBody.setText(spannableStringBuilder);
+                }
+            }
+        });
 
-                        Matcher matcher = pattern.matcher(openClozeQuestion.getBody());
-
-                        while (matcher.find()) {
-
-                            Log.d(TAG, "onSuccess: " + matcher.start() + " " + matcher.end());
-
-                        }
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-                });
+//        viewModel.getMenuOpenClozeQuestion(packageId)
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new SingleObserver<com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question.OpenClozeQuestion>() {
+//                    @Override
+//                    public void onSubscribe(Disposable d) {
+//
+//                        compositeDisposable.add(d);
+//
+//                    }
+//
+//                    @Override
+//                    public void onSuccess(com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question.OpenClozeQuestion openClozeQuestion) {
+//
+//
+//
+//                    }
+//
+//                    @Override
+//                    public void onError(Throwable e) {
+//
+//                    }
+//                });
 
         return view;
     }

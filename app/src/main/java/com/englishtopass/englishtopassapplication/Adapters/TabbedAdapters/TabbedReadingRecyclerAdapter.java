@@ -7,8 +7,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.englishtopass.englishtopassapplication.Enums.QuestionType;
-import com.englishtopass.englishtopassapplication.ExampleFragment.ExampleMainScreen.ListeningExampleFragment;
 import com.englishtopass.englishtopassapplication.ExampleFragment.ExampleMainScreen.ReadingExampleFragment;
 import com.englishtopass.englishtopassapplication.Model.Reading.Package.ReadingPackage;
 import com.englishtopass.englishtopassapplication.R;
@@ -19,9 +17,6 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
-
-import static com.englishtopass.englishtopassapplication.Enums.QuestionType.LISTENING;
-import static com.englishtopass.englishtopassapplication.Enums.QuestionType.READING;
 
 public class TabbedReadingRecyclerAdapter extends ListAdapter<ReadingPackage, TabbedReadingRecyclerAdapter.ReadingViewHolder> implements View.OnClickListener {
     private static final String TAG = "TabbedListeningRecycler";
@@ -56,7 +51,7 @@ public class TabbedReadingRecyclerAdapter extends ListAdapter<ReadingPackage, Ta
     @Override
     public ReadingViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-        View view = layoutInflater.inflate(R.layout.tabbed_uoe_item, parent, false);
+        View view = layoutInflater.inflate(R.layout.main_menu_3_item, parent, false);
 
         return new ReadingViewHolder(view);
     }
@@ -64,20 +59,21 @@ public class TabbedReadingRecyclerAdapter extends ListAdapter<ReadingPackage, Ta
     @Override
     public void onBindViewHolder(@NonNull ReadingViewHolder holder, int position) {
 
+        // TODO: 11/04/2019 change part number text
+        readingPackage = getItem(position);
 
-            readingPackage = getItem(position);
+        holder.startListeningQuestionButton.setOnClickListener(this);
 
-            holder.startListeningQuestionButton.setOnClickListener(this);
+        holder.startListeningQuestionButton.setTag(readingPackage.getId());
 
-            holder.startListeningQuestionButton.setTag(readingPackage.getId());
+        holder.readingTestNumberTextView.setText(String.format("Test Number %s", readingPackage.getId()));
 
-            holder.readingTestNumberTextView.setText(String.format("Test Number %s", readingPackage.getId()));
+        holder.multipleChoiceTitle.setText(String.format("• %s", readingPackage.getMultipleChoiceTitle()));
 
-            holder.multipleChoiceTitle.setText(String.format("• %s", readingPackage.getMultipleChoiceTitle()));
+        holder.gappedTextTitle.setText(String.format("• %s", readingPackage.getGappedTextTitle()));
 
-            holder.gappedTextTitle.setText(String.format("• %s", readingPackage.getGappedTextTitle()));
+        holder.matchingExerciseTitle.setText(String.format("• %s", readingPackage.getMatchingExerciseTitle()));
 
-            holder.matchingExerciseTitle.setText(String.format("• %s", readingPackage.getMatchingExerciseTitle()));
 
 
     }
@@ -114,7 +110,6 @@ public class TabbedReadingRecyclerAdapter extends ListAdapter<ReadingPackage, Ta
         public ReadingViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            // REUSING THE UOE RECYCLER VIEW ITEM SO ID DO NOT CORRESPOND WITH READING -
             startListeningQuestionButton = itemView.findViewById(R.id.startUoeQuestionButton);
             readingTestNumberTextView = itemView.findViewById(R.id.uoeTestNumberTextView);
             multipleChoiceTitle = itemView.findViewById(R.id.multipleChoiceClozeTitleTextView);

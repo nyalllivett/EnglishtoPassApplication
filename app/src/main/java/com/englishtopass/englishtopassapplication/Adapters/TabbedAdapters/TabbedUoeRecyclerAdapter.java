@@ -8,10 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.englishtopass.englishtopassapplication.Enums.TestCompletion;
 import com.englishtopass.englishtopassapplication.ExampleFragment.ExampleMainScreen.UoeExampleFragment;
 import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Package.UseOfEnglishPackage;
-import com.englishtopass.englishtopassapplication.Enums.QuestionType;
 import com.englishtopass.englishtopassapplication.R;
 
 import androidx.annotation.NonNull;
@@ -52,7 +50,7 @@ public class TabbedUoeRecyclerAdapter extends ListAdapter<UseOfEnglishPackage, T
     @Override
     public UseOfEnglishViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-        View view = mInflater.inflate(R.layout.tabbed_uoe_item, parent, false);
+        View view = mInflater.inflate(R.layout.main_menu_4_item, parent, false);
 
         return new UseOfEnglishViewHolder(view);
 

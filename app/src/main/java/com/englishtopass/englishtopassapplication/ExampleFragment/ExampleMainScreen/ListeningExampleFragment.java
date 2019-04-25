@@ -262,11 +262,6 @@ public class ListeningExampleFragment extends ExamplePageParent implements View.
 
     }
 
-
-
-
-
-
     private void addExampleQuestionFragment() {
 
         fragmentManager = getActivity().getSupportFragmentManager();

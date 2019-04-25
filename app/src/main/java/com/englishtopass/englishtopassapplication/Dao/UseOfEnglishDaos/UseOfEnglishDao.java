@@ -13,6 +13,7 @@ import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.Update;
 
 
 @Dao
@@ -22,13 +23,16 @@ public interface UseOfEnglishDao {
     LiveData<List<UseOfEnglishPackage>> getAllUseOfEnglishPackages();
 
     @Query("SELECT * FROM use_of_english_questions_table WHERE id = :id_entry")
-    LiveData<UseOfEnglishPackage> getSingleUseOfEnglishPackage(int id_entry);
+    UseOfEnglishPackage getSingleUseOfEnglishPackage(int id_entry);
 
     @Query("SELECT COUNT(*) FROM use_of_english_questions_table")
     int count();
 
     @Insert
     long insert(UseOfEnglishPackage useOfEnglishPackage);
+
+    @Update
+    void update(UseOfEnglishPackage useOfEnglishPackage);
 
     @Insert
     void insertAll(UseOfEnglishPackage... useOfEnglishPackage);
