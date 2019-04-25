@@ -1,12 +1,8 @@
 package com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Package;
 
-import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question.KeywordTransformationQuestion;
-import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question.MultipleChoiceClozeQuestion;
-import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question.OpenClozeQuestion;
-import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question.WordFormationQuestion;
+import com.englishtopass.englishtopassapplication.Enums.TestCompletion;
 
-import androidx.annotation.NonNull;
-import androidx.room.Embedded;
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
@@ -17,30 +13,25 @@ public class UseOfEnglishPackage {
     @PrimaryKey(autoGenerate = true)
     private int id;
 
-    private UoeCompletion uoeCompletion;
+    private String multipleChoiceClozeTitle;
+    private String openClozeTitle;
+    private String keywordTransformationTitle;
+    private String wordFormationTitle;
 
-    @NonNull
-    private MultipleChoiceClozeQuestion multipleChoiceClozeQuestion;
+    private long uoeTimeElapsed;
 
-    @NonNull
-    private OpenClozeQuestion openClozeQuestion;
+    private TestCompletion testCompletion;
 
-    @NonNull
-    private KeywordTransformationQuestion keywordTransformationQuestion;
+    public UseOfEnglishPackage(String multipleChoiceClozeTitle, String openClozeTitle,
+                               String keywordTransformationTitle, String wordFormationTitle) {
 
-    @NonNull
-    private WordFormationQuestion wordFormationQuestion;
+        this.multipleChoiceClozeTitle = multipleChoiceClozeTitle;
+        this.openClozeTitle = openClozeTitle;
+        this.keywordTransformationTitle = keywordTransformationTitle;
+        this.wordFormationTitle = wordFormationTitle;
+        this.uoeTimeElapsed = 0L;
+        this.testCompletion = TestCompletion.NOT_STARTED;
 
-    public UseOfEnglishPackage(@NonNull MultipleChoiceClozeQuestion multipleChoiceClozeQuestion,
-                               @NonNull OpenClozeQuestion openClozeQuestion,
-                               @NonNull KeywordTransformationQuestion keywordTransformationQuestion,
-                               @NonNull WordFormationQuestion wordFormationQuestion) {
-
-        this.uoeCompletion = UoeCompletion.FIRST_COMPLETE;
-        this.multipleChoiceClozeQuestion = multipleChoiceClozeQuestion;
-        this.openClozeQuestion = openClozeQuestion;
-        this.keywordTransformationQuestion = keywordTransformationQuestion;
-        this.wordFormationQuestion = wordFormationQuestion;
     }
 
     public int getId() {
@@ -51,50 +42,51 @@ public class UseOfEnglishPackage {
         this.id = id;
     }
 
-    public UoeCompletion getUoeCompletion() {
-        return uoeCompletion;
+    public TestCompletion getTestCompletion() {
+        return testCompletion;
     }
 
-    public void setUoeCompletion(UoeCompletion uoeCompletion) {
-        this.uoeCompletion = uoeCompletion;
+    public void setTestCompletion(TestCompletion testCompletion) {
+        this.testCompletion = testCompletion;
     }
 
-    @NonNull
-    public MultipleChoiceClozeQuestion getMultipleChoiceClozeQuestion() {
-        return multipleChoiceClozeQuestion;
+    public String getMultipleChoiceClozeTitle() {
+        return multipleChoiceClozeTitle;
     }
 
-    public void setMultipleChoiceClozeQuestion(@NonNull MultipleChoiceClozeQuestion multipleChoiceClozeQuestion) {
-        this.multipleChoiceClozeQuestion = multipleChoiceClozeQuestion;
+    public void setMultipleChoiceClozeTitle(String multipleChoiceClozeTitle) {
+        this.multipleChoiceClozeTitle = multipleChoiceClozeTitle;
     }
 
-    @NonNull
-    public OpenClozeQuestion getOpenClozeQuestion() {
-        return openClozeQuestion;
+    public String getOpenClozeTitle() {
+        return openClozeTitle;
     }
 
-    public void setOpenClozeQuestion(@NonNull OpenClozeQuestion openClozeQuestion) {
-        this.openClozeQuestion = openClozeQuestion;
+    public void setOpenClozeTitle(String openClozeTitle) {
+        this.openClozeTitle = openClozeTitle;
     }
 
-    @NonNull
-    public KeywordTransformationQuestion getKeywordTransformationQuestion() {
-        return keywordTransformationQuestion;
+    public String getKeywordTransformationTitle() {
+        return keywordTransformationTitle;
     }
 
-    public void setKeywordTransformationQuestion(@NonNull KeywordTransformationQuestion keywordTransformationQuestion) {
-        this.keywordTransformationQuestion = keywordTransformationQuestion;
+    public void setKeywordTransformationTitle(String keywordTransformationTitle) {
+        this.keywordTransformationTitle = keywordTransformationTitle;
     }
 
-    @NonNull
-    public WordFormationQuestion getWordFormationQuestion() {
-        return wordFormationQuestion;
+    public String getWordFormationTitle() {
+        return wordFormationTitle;
     }
 
-    public void setWordFormationQuestion(@NonNull WordFormationQuestion wordFormationQuestion) {
-        this.wordFormationQuestion = wordFormationQuestion;
+    public void setWordFormationTitle(String wordFormationTitle) {
+        this.wordFormationTitle = wordFormationTitle;
     }
 
+    public long getUoeTimeElapsed() {
+        return uoeTimeElapsed;
+    }
 
-
+    public void setUoeTimeElapsed(long uoeTimeElapsed) {
+        this.uoeTimeElapsed = uoeTimeElapsed;
+    }
 }

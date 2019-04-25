@@ -1,8 +1,6 @@
 package com.englishtopass.englishtopassapplication.ExampleFragment.ExampleMainScreen;
 
 
-import android.app.Application;
-import android.graphics.drawable.TransitionDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,81 +8,71 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.englishtopass.englishtopassapplication.Adapters.ExamplePageRecyclerViewAdapter;
-import com.englishtopass.englishtopassapplication.Dao.UseOfEnglishDao;
-import com.englishtopass.englishtopassapplication.Database.QuestionDatabase;
+import com.englishtopass.englishtopassapplication.Adapters.ExampleAdapters.ExampleUoeAdapter;
+import com.englishtopass.englishtopassapplication.Enums.TestCompletion;
 import com.englishtopass.englishtopassapplication.ExampleFragment.ExampleMainScreen.Parent.ExamplePageParent;
 import com.englishtopass.englishtopassapplication.ExampleFragment.ExampleQuestions.UoeQuestion;
-import com.englishtopass.englishtopassapplication.MainActivityViewModel;
-import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Package.UoeCompletion;
-import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Package.UseOfEnglishPackage;
-import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question.Parent.ModelUoeParent;
-import com.englishtopass.englishtopassapplication.QuestionType;
+import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question.Parent.UoeParent;
+import com.englishtopass.englishtopassapplication.QuestionFragments.KeywordTransformationQuestion;
+import com.englishtopass.englishtopassapplication.QuestionFragments.MultipleChoiceClozeQuestion;
+import com.englishtopass.englishtopassapplication.QuestionFragments.OpenClozeQuestion;
+import com.englishtopass.englishtopassapplication.QuestionFragments.WordFormationQuestion;
 import com.englishtopass.englishtopassapplication.R;
-import com.englishtopass.englishtopassapplication.Repository.QuestionRepository;
+import com.englishtopass.englishtopassapplication.ViewModels.UoeViewModel;
 import com.google.android.flexbox.FlexDirection;
 import com.google.android.flexbox.FlexboxLayoutManager;
 import com.google.android.flexbox.JustifyContent;
 
 import java.util.ArrayList;
+import java.util.List;
 
-import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.transition.ChangeBounds;
-import androidx.transition.Fade;
-import androidx.transition.Transition;
-import androidx.transition.TransitionManager;
-import androidx.transition.TransitionSet;
-import io.reactivex.Completable;
-import io.reactivex.CompletableObserver;
+import io.reactivex.Single;
+import io.reactivex.SingleObserver;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Action;
-import io.reactivex.observers.DisposableCompletableObserver;
 import io.reactivex.schedulers.Schedulers;
 
-// TODO: 16/03/2019 Sort all this animation rubbish out ABSOLUTE WANK!
-public class UoeExampleFragment extends ExamplePageParent implements View.OnClickListener, OnBackPressedCallback{
+public class UoeExampleFragment extends ExamplePageParent implements View.OnClickListener{
     private static final String TAG = "MainExampleFragment";
 
-    private QuestionType QUESTION_TYPE;
-    private int UOE_PACKAGE_ID;
-    private int QUESTION_CHILDREN;
-
+    private TestCompletion testCompletion;
+    private int packageId;
+    FragmentManager fragmentManager;
 
     public UoeExampleFragment() {
         // Required empty public constructor
     }
 
-    // Setting the arguments into the bundle
-
-    public static UoeExampleFragment newInstance(QuestionType questionType, int packageID, int packageChildren) {
+    public static UoeExampleFragment newInstance(TestCompletion testCompletion, int packageID) {
 
         UoeExampleFragment fragment = new UoeExampleFragment();
 
         Bundle bundle = new Bundle();
 
-        bundle.putSerializable("QUESTION_TYPE", questionType);
-        bundle.putInt("UOE_PACKAGE_ID", packageID);
-        bundle.putInt("QUESTION_CHILDREN", packageChildren);
+        // Enum
+        bundle.putSerializable("testCompletion", testCompletion);
+
+        // ID
+        bundle.putInt("packageId", packageID);
 
         fragment.setArguments(bundle);
 
         return fragment;
     }
 
-
-
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        getActivity().addOnBackPressedCallback(getViewLifecycleOwner(), this);
+        fragmentManager = getActivity().getSupportFragmentManager();
 
     }
 
@@ -95,14 +83,15 @@ public class UoeExampleFragment extends ExamplePageParent implements View.OnClic
 
         if (getArguments() != null) {
 
-            QUESTION_TYPE = (QuestionType) getArguments().getSerializable("QUESTION_TYPE");
-            UOE_PACKAGE_ID = getArguments().getInt("UOE_PACKAGE_ID");
-            QUESTION_CHILDREN = getArguments().getInt("QUESTION_CHILDREN");
+            testCompletion = (TestCompletion) getArguments().getSerializable("testCompletion");
+            packageId = getArguments().getInt("packageId");
 
         }
 
+        compositeDisposable = new CompositeDisposable();
 
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -121,7 +110,7 @@ public class UoeExampleFragment extends ExamplePageParent implements View.OnClic
 
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
 
-        final ExamplePageRecyclerViewAdapter adapter = new ExamplePageRecyclerViewAdapter(getContext());
+        final ExampleUoeAdapter adapter = new ExampleUoeAdapter(getContext());
 
         FlexboxLayoutManager flexboxLayoutManager = new FlexboxLayoutManager(getContext());
 
@@ -133,62 +122,26 @@ public class UoeExampleFragment extends ExamplePageParent implements View.OnClic
 
         recyclerView.setLayoutManager(flexboxLayoutManager);
 
-        MainActivityViewModel viewModel = ViewModelProviders.of(this).get(MainActivityViewModel.class);
+        UoeViewModel uoeViewModel = ViewModelProviders.of(this).get(UoeViewModel.class);
 
-        viewModel.getSingleUseOfEnglishPackage(UOE_PACKAGE_ID).observe(this, new Observer<UseOfEnglishPackage>() {
-            @Override
-            public void onChanged(final UseOfEnglishPackage useOfEnglishPackage) {
-
-
-                 Completable.fromAction(new Action() {
-                    @Override
-                    public void run() throws Exception {
-
-                        ArrayList<ModelUoeParent> arrayList = new ArrayList<>();
-
-                        arrayList.add(useOfEnglishPackage.getWordFormationQuestion());
-                        arrayList.add(useOfEnglishPackage.getMultipleChoiceClozeQuestion());
-                        arrayList.add(useOfEnglishPackage.getKeywordTransformationQuestion());
-                        arrayList.add(useOfEnglishPackage.getOpenClozeQuestion());
-
-
-
-
-                        adapter.submitList(arrayList);
-//                        settingForTextViews(useOfEnglishPackage.getUoeCompletion());
-                    }
-                }).observeOn(Schedulers.io()).subscribe(new CompletableObserver() {
+        getSingle(uoeViewModel).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SingleObserver<List<UoeParent>>() {
                     @Override
                     public void onSubscribe(Disposable d) {
-
-                        Log.d(TAG, "onSubscribe: on subscribe");
-
+                        compositeDisposable.add(d);
                     }
 
                     @Override
-                    public void onComplete() {
-
-                        Log.d(TAG, "onComplete: set text");
+                    public void onSuccess(List<UoeParent> uoeParents) {
+                        adapter.submitList(uoeParents);
                     }
 
                     @Override
                     public void onError(Throwable e) {
-
-                        Log.d(TAG, "onError: error");
-
+                        Log.d(TAG, "onError: " + e.getLocalizedMessage());
                     }
                 });
 
-            }
-
-        });
-
-
-        // Constraint layout-
-
-        rootConstraintLayout = view.findViewById(R.id.rootConstraintLayout);
-
-        setConstraintLayouts();
 
         // The text views
 
@@ -205,6 +158,8 @@ public class UoeExampleFragment extends ExamplePageParent implements View.OnClic
         startTestButton = view.findViewById(R.id.uoeStartTestButton);
 
         startTestButton.setOnClickListener(this);
+
+        settingForTextViews();
 
         return view;
 
@@ -225,35 +180,51 @@ public class UoeExampleFragment extends ExamplePageParent implements View.OnClic
         return super.onOptionsItemSelected(item);
     }
 
-    private void settingForTextViews(UoeCompletion uoeCompletion) {
+    private void settingForTextViews() {
 
-        String packageName = getContext().getPackageName();
-
-        switch (uoeCompletion) {
+        switch (testCompletion) {
 
             case NOT_STARTED:
 
-                testType = (String) getResources().getText(getResources().getIdentifier("uoe_test_title", "string", packageName));
+                partFromResources = getString(R.string.uoe_part_one_title);
 
-                partFromResources = (String) getResources().getText(getResources().getIdentifier("uoe_part_one_title", "string", packageName));
-
-                descriptionFromResources = (String) getResources().getText(getResources().getIdentifier("uoe_part_one_description", "string", packageName));
+                descriptionFromResources = getString(R.string.uoe_part_one_description);
 
                 break;
 
             case FIRST_COMPLETE:
 
+                partFromResources = getString(R.string.uoe_part_two_title);
 
-                testType = (String) getResources().getText(getResources().getIdentifier("uoe_test_title", "string", packageName));
-
-                partFromResources = (String) getResources().getText(getResources().getIdentifier("uoe_part_two_title", "string", packageName));
-
-                descriptionFromResources = (String) getResources().getText(getResources().getIdentifier("uoe_part_two_description", "string", packageName));
+                descriptionFromResources = getString(R.string.uoe_part_two_description);
 
                 break;
 
-                default:
-                    Log.d(TAG, "settingForTextViews: oh dear");
+            case SECOND_COMPLETE:
+
+                partFromResources = getString(R.string.uoe_part_three_title);
+
+                descriptionFromResources = getString(R.string.uoe_part_three_description);
+
+                break;
+
+            case THIRD_COMPLETE:
+
+                partFromResources = getString(R.string.uoe_part_three_title);
+
+                descriptionFromResources = getString(R.string.uoe_part_three_description);
+
+                break;
+
+            case PACKAGE_COMPLETE:
+
+                Log.d(TAG, "settingForTextViews: complete");
+
+                break;
+
+
+            default:
+                Log.d(TAG, "settingForTextViews: oh dear");
 
         }
 
@@ -261,14 +232,10 @@ public class UoeExampleFragment extends ExamplePageParent implements View.OnClic
 
         examplePartType.setText(partFromResources);
 
-
-
     }
 
     @Override
     public void onClick(View v) {
-
-        seeExampleButton.setClickable(false);
 
         switch (v.getId()) {
 
@@ -281,33 +248,18 @@ public class UoeExampleFragment extends ExamplePageParent implements View.OnClic
 
             case R.id.uoeSeeExampleButton:
 
-                if (!layoutChanged) {
-
-                    changeToExamplePageLayout();
-
-                    break;
-
-                } else {
-
-                    changeBackExamplePageLayout();
-
-                }
+                addExampleQuestionFragment();
 
                 break;
 
             case R.id.uoeStartTestButton:
 
-                Log.d(TAG, "onClick: hello");
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-
-                        UseOfEnglishDao useOfEnglishDao = QuestionDatabase.getInstance(getContext()).useOfEnglishDao();
-
-
-                    }
-                }).start();
+                fragmentTransaction.addToBackStack("TAKE_QUESTION")
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                        .add(R.id.questionFragmentHolder, returnFragment(), "MULTIPLE_CHOICE_QUESTION")
+                        .commit();
 
                 break;
 
@@ -315,185 +267,76 @@ public class UoeExampleFragment extends ExamplePageParent implements View.OnClic
 
     }
 
+    private Fragment returnFragment() {
 
+        switch (testCompletion){
 
-    private void changeToExamplePageLayout() {
+            case NOT_STARTED:
 
+                return MultipleChoiceClozeQuestion.newInstance(packageId);
 
-        transitionDrawable = (TransitionDrawable) seeExampleButton.getBackground();
-        transitionDrawable.startTransition(300);
+            case FIRST_COMPLETE:
 
+                return OpenClozeQuestion.newInstance(packageId);
 
-        /**
-         * setting up the animations
-         */
+            case SECOND_COMPLETE:
 
-        toTransitionSet = new TransitionSet().setOrdering(TransitionSet.ORDERING_SEQUENTIAL)
-                .addTransition(new Fade().setDuration(150))
-                .addTransition(new ChangeBounds().setDuration(150))
-                .setDuration(300)
-                .addListener(new Transition.TransitionListener() {
-                    @Override
-                    public void onTransitionStart(@NonNull Transition transition) {
+                return KeywordTransformationQuestion.newInstance(packageId);
 
-                        transitionRunning = true;
-                        toTransitionRunning = true;
+            case THIRD_COMPLETE:
 
-                    }
+                return WordFormationQuestion.newInstance(packageId);
 
-                    @Override
-                    public void onTransitionEnd(@NonNull Transition transition) {
-
-                        if (layoutChanged && transitionRunning) {
-
-                            addExampleQuestionFragment();
-
-                            return;
-                        }
-
-                        transitionRunning = false;
-                        toTransitionRunning = false;
-                    }
-
-                    @Override
-                    public void onTransitionCancel(@NonNull Transition transition) {
-
-                        Log.d(TAG, "onTransitionCancel: cancel");
-
-                    }
-
-                    @Override
-                    public void onTransitionPause(@NonNull Transition transition) {
-
-                        Log.d(TAG, "onTransitionPause: pause");
-
-                    }
-
-                    @Override
-                    public void onTransitionResume(@NonNull Transition transition) {
-
-                        Log.d(TAG, "onTransitionResume: resume");
-
-                    }
-                });
-
-        TransitionManager.beginDelayedTransition(rootConstraintLayout, toTransitionSet);
-
-        layoutChanged = true;
-
-        seeExampleButton.setText(R.string.back);
-
-        addFrameLayout();
-
-        constraintSetAfterExample.applyTo((ConstraintLayout) rootConstraintLayout);
-
-    }
-
-
-
-    private void changeBackExamplePageLayout() {
-
-        if (transitionDrawable != null ) {
-
-            transitionDrawable.reverseTransition(300);
+                default:
+                    Log.d(TAG, "returnFragment: something went wrong");
 
         }
 
-        // Button cant be clicked until the the layout change has taken place -
-        backTransitionSet = new TransitionSet().setOrdering(TransitionSet.ORDERING_SEQUENTIAL)
-                .setStartDelay(200)
-                .addTransition(new ChangeBounds().setDuration(150))
-                .addTransition(new Fade().setDuration(150))
-                .setDuration(300)
-                .addListener(new Transition.TransitionListener() {
-                    @Override
-                    public void onTransitionStart(@NonNull Transition transition) {
-
-                        transitionRunning = true;
-
-                    }
-
-                    @Override
-                    public void onTransitionEnd(@NonNull Transition transition) {
-
-                        if (!layoutChanged) {
-
-                            transitionRunning = false;
-
-                        }
-                        // Allowing the back to be clicked to revert back the layout -
-                        seeExampleButton.setClickable(true);
-                    }
-
-                    @Override
-                    public void onTransitionCancel(@NonNull Transition transition) {
-
-                    }
-
-                    @Override
-                    public void onTransitionPause(@NonNull Transition transition) {
-
-
-                    }
-
-                    @Override
-                    public void onTransitionResume(@NonNull Transition transition) {
-
-                    }
-                });
-
-
-        TransitionManager.beginDelayedTransition(rootConstraintLayout, backTransitionSet);
-
-        // Changing the text to Back so the user knows the button will now revert the layout back to its original layout -
-        seeExampleButton.setText(R.string.see_example);
-
-        // Remove the example question fragment -
-        if (exampleQuestionOpen) {
-
-            fragmentManager.popBackStack();
-
-        }
-
-        // Removing the newly constructed frame layout -
-        rootConstraintLayout.removeView(frameLayout);
-
-        // Applying the original set of constraints to the root
-        constraintSetBeforeExample.applyTo((ConstraintLayout) rootConstraintLayout);
-
-        layoutChanged = false;
-
-        exampleQuestionOpen = false;
-
+        return null;
     }
-
 
 
     private void addExampleQuestionFragment() {
-
-        fragmentManager = getActivity().getSupportFragmentManager();
 
         FragmentTransaction transaction = fragmentManager.beginTransaction();
 
         transaction
                 .addToBackStack("uoe_example_question")
                 .setCustomAnimations(R.anim.slide_in_from_right, R.anim.slide_out_from_right, R.anim.slide_in_from_right, R.anim.slide_out_from_right)
-                .add(frameLayout.getId(), UoeQuestion.newInstance(QUESTION_TYPE), "uoe_example_question")
+                .add(R.id.questionFragmentHolder, UoeQuestion.newInstance(testCompletion), "uoe_example_question")
                 .commit();
-
-
-        exampleQuestionOpen = true;
-
-        transitionRunning = false;
-
-        toTransitionRunning = false;
-
-        // Allowing the back to be clicked to revert back the layout -
-        seeExampleButton.setClickable(true);
 
     }
 
 
+    private Single<List<UoeParent>> getSingle(UoeViewModel uoeViewModel) {
+
+        return  Single.zip(
+
+                uoeViewModel.getMenuKeywordTransformation(packageId),
+                uoeViewModel.getMenuMultipleChoiceQuestion(packageId),
+                uoeViewModel.getMenuOpenClozeQuestion(packageId),
+                uoeViewModel.getMenuWordFormationQuestion(packageId),
+                ((keywordTransformationQuestion, multipleChoiceClozeQuestion, openClozeQuestion, wordFormationQuestion) -> {
+
+                    List<UoeParent> arrayList = new ArrayList<>();
+                    arrayList.add(keywordTransformationQuestion);
+                    arrayList.add(multipleChoiceClozeQuestion);
+                    arrayList.add(openClozeQuestion);
+                    arrayList.add(wordFormationQuestion);
+
+                    return arrayList;
+                })
+        );
+    }
+
+    @Override
+    public void onDestroy() {
+
+        compositeDisposable.dispose();
+
+        super.onDestroy();
+    }
 }
 
 

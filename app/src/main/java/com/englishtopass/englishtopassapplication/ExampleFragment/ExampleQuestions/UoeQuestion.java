@@ -8,10 +8,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.englishtopass.englishtopassapplication.CustomViews.MovableFloatingActionButton;
+import com.englishtopass.englishtopassapplication.CustomViews.SettingsFloatingActionButton;
+import com.englishtopass.englishtopassapplication.Enums.TestCompletion;
 import com.englishtopass.englishtopassapplication.ExampleFragment.ExampleQuestions.GrandParent.BaseQuestion;
 import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question.MultipleChoiceClozeQuestion;
-import com.englishtopass.englishtopassapplication.QuestionType;
 import com.englishtopass.englishtopassapplication.R;
 
 import java.util.ArrayList;
@@ -23,31 +23,20 @@ import androidx.annotation.Nullable;
 public class UoeQuestion extends BaseQuestion implements OnBackPressedCallback, View.OnClickListener {
     private static final String TAG = "UoeExampleQuestion";
 
-    QuestionType QUESTION_TYPE;
-
-
-    /**
-     *
-     *  QUESTION TYPE
-     *  1 multiple cloze
-     *  2 open cloze
-     *  3 keyword transformation
-     *  4 word formation
-     *
-     */
+    private TestCompletion testCompletion;
 
     private MultipleChoiceClozeQuestion multipleChoiceClozeQuestion;
-    private MovableFloatingActionButton movableFloatingActionButton;
+    private SettingsFloatingActionButton settingsFloatingActionButton;
 
     public UoeQuestion() {
         // Required empty public constructor
     }
 
-    public static UoeQuestion newInstance(QuestionType QUESTION_TYPE) {
+    public static UoeQuestion newInstance(TestCompletion testCompletion) {
 
         Bundle bundle = new Bundle();
 
-//        bundle.putInt("QUESTION_TYPE", Integer.valueOf(String.valueOf(QUESTION_TYPE)));
+        bundle.putSerializable("TEST_COMPLETION", testCompletion);
 
         UoeQuestion uoeExampleQuestion = new UoeQuestion();
 
@@ -64,21 +53,21 @@ public class UoeQuestion extends BaseQuestion implements OnBackPressedCallback, 
 
         if (getArguments() != null) {
 
-            QUESTION_TYPE = QuestionType.values()[getArguments().getInt("QUESTION_TYPE")];
+            testCompletion = TestCompletion.values()[getArguments().getInt("TEST_COMPLETION")];
 
         }
 
 
-
-        ArrayList<String> exampleGroup = new ArrayList<>(Arrays.asList(String.valueOf(R.string.multiple_choice_cloze_example_answer_group).trim().split("#")));
-
-        multipleChoiceClozeQuestion =
-                new MultipleChoiceClozeQuestion(
-                        String.valueOf(getString(R.string.multiple_choice_cloze_example_title)),
-                        String.valueOf(getString(R.string.multiple_choice_cloze_example_body)),
-                        exampleGroup,
-                        String.valueOf(getString(R.string.multiple_choice_cloze_example_answer))
-                );
+//
+//        ArrayList<String> exampleGroup = new ArrayList<>(Arrays.asList(String.valueOf(R.string.multiple_choice_cloze_example_answer_group).trim().split("#")));
+//
+//        multipleChoiceClozeQuestion =
+//                new MultipleChoiceClozeQuestion(
+//                        String.valueOf(getString(R.string.multiple_choice_cloze_example_title)),
+//                        String.valueOf(getString(R.string.multiple_choice_cloze_example_body)),
+//                        exampleGroup,
+//                        String.valueOf(getString(R.string.multiple_choice_cloze_example_answer))
+//                );
 
     }
 
@@ -93,17 +82,6 @@ public class UoeQuestion extends BaseQuestion implements OnBackPressedCallback, 
         super.onActivityCreated(savedInstanceState);
 
     }
-
-    @Override
-    public void onDestroy() {
-
-        endTimer();
-
-        getActivity().removeOnBackPressedCallback(this);
-
-        super.onDestroy();
-    }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -123,9 +101,9 @@ public class UoeQuestion extends BaseQuestion implements OnBackPressedCallback, 
 
         // Setting the FAB
 
-        movableFloatingActionButton = view.findViewById(R.id.movableFab);
+        settingsFloatingActionButton = view.findViewById(R.id.movableFab);
 
-        movableFloatingActionButton.setOnClickListener(this);
+        settingsFloatingActionButton.setOnClickListener(this);
 
 
         // Setting the spans
@@ -138,6 +116,14 @@ public class UoeQuestion extends BaseQuestion implements OnBackPressedCallback, 
 
     }
 
+
+    @Override
+    public void onClick(View v) {
+
+        super.onClick(v);
+
+    }
+
     @Override
     public boolean handleOnBackPressed() {
 
@@ -146,9 +132,14 @@ public class UoeQuestion extends BaseQuestion implements OnBackPressedCallback, 
     }
 
     @Override
-    public void onClick(View v) {
+    public void onDestroy() {
 
-        super.onClick(v);
+        endTimer();
 
+        getActivity().removeOnBackPressedCallback(this);
+
+        super.onDestroy();
     }
+
+
 }

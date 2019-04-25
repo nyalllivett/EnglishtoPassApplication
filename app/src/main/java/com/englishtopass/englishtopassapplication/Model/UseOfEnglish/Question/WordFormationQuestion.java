@@ -1,34 +1,51 @@
 package com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question;
 
-import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question.Parent.ModelUoeParent;
+import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Package.UseOfEnglishPackage;
+import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question.Parent.UoeParent;
 
 import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.ForeignKey;
+import androidx.room.PrimaryKey;
 
-public class WordFormationQuestion extends ModelUoeParent {
+@Entity(tableName = "word_formation_table", foreignKeys =
+@ForeignKey(onDelete = ForeignKey.CASCADE, entity = UseOfEnglishPackage.class, parentColumns = "id", childColumns = "uoe_id"))
+public class WordFormationQuestion extends UoeParent {
+
+
+    @PrimaryKey(autoGenerate = true)
+    private int id;
 
     @NonNull
-    private String questionBody;
+    @ColumnInfo(name = "uoe_id", index = true)
+    private final int uoeId;
 
-    private boolean complete;
+    @NonNull
+    private String body;
 
-    public WordFormationQuestion(@NonNull String title, @NonNull String questionBody) {
+    public WordFormationQuestion(@NonNull String title, int uoeId, @NonNull String body) {
         super(title);
-        this.questionBody = questionBody;
-        this.complete = false;
-        this.timeElapsed = 0;
+        this.uoeId = uoeId;
+        this.body = body;
+        this.testTimeElapsed = 0L;
 
     }
 
     @NonNull
-    public String getQuestionBody() {
-        return questionBody;
+    public String getBody() {
+        return body;
     }
 
-    public boolean isComplete() {
-        return complete;
+    public int getUoeId() {
+        return uoeId;
     }
 
-    public void setComplete(boolean complete) {
-        this.complete = complete;
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

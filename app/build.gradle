@@ -4,7 +4,7 @@ android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.englishtopass.englishtopassapplication"
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
@@ -17,6 +17,10 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+    compileOptions {
+        sourceCompatibility = '1.8'
+        targetCompatibility = '1.8'
     }
 }
 
@@ -49,6 +53,7 @@ dependencies {
     implementation 'androidx.room:room-rxjava2:2.1.0-alpha04'
     implementation 'io.reactivex.rxjava2:rxjava:2.2.6'
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
+    implementation 'android.arch.persistence.room:rxjava2:1.1.1'
 
     /**
      * Gson
@@ -59,4 +64,5 @@ dependencies {
      * Flexbox manager for recycler view
      */
     implementation 'com.google.android:flexbox:1.1.0'
+    implementation 'androidx.recyclerview:recyclerview:1.0.0'
 }
