@@ -1,5 +1,6 @@
 package com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question;
 
+import com.englishtopass.englishtopassapplication.Enums.QuestionPartUoe;
 import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Package.UseOfEnglishPackage;
 import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question.Parent.UoeParent;
 
@@ -8,6 +9,9 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
+
+import static com.englishtopass.englishtopassapplication.Enums.QuestionPartUoe.KEYWORD_TRANSFORMATION;
+import static com.englishtopass.englishtopassapplication.Enums.QuestionPartUoe.OPEN_CLOZE;
 
 @Entity(tableName = "open_cloze_table", foreignKeys =
 @ForeignKey(onDelete = ForeignKey.CASCADE, entity = UseOfEnglishPackage.class, parentColumns = "id", childColumns = "uoe_id"))
@@ -21,15 +25,21 @@ public class OpenClozeQuestion extends UoeParent {
 
     @NonNull
     private String body;
-
     private String correctAnswers;
+    private boolean[] answersAreCorrect;
 
+    /**
+     * parent handles
+     * title
+     * question type
+     * time elapsed
+     */
     public OpenClozeQuestion(@NonNull String title, int uoeId, @NonNull String body, String correctAnswers) {
-        super(title);
+        super(title, OPEN_CLOZE);
         this.uoeId = uoeId;
         this.body = body;
         this.correctAnswers = correctAnswers;
-        this.testTimeElapsed = 0L;
+        this.answersAreCorrect = new boolean[]{false, false, false, false, false, false, false, false};
 
     }
 
@@ -57,4 +67,14 @@ public class OpenClozeQuestion extends UoeParent {
     public void setCorrectAnswers(String correctAnswers) {
         this.correctAnswers = correctAnswers;
     }
+
+
+    public boolean[] getAnswersAreCorrect() {
+        return answersAreCorrect;
+    }
+
+    public void setAnswersAreCorrect(boolean[] answersAreCorrect) {
+        this.answersAreCorrect = answersAreCorrect;
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question;
 
+import com.englishtopass.englishtopassapplication.Enums.QuestionPartUoe;
 import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Package.UseOfEnglishPackage;
 import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question.Parent.UoeParent;
 
@@ -8,6 +9,8 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
+
+import static com.englishtopass.englishtopassapplication.Enums.QuestionPartUoe.MULTIPLE_CHOICE_CLOZE;
 
 @Entity(tableName = "multiple_choice_cloze_table", foreignKeys =
 @ForeignKey(onDelete = ForeignKey.CASCADE, entity = UseOfEnglishPackage.class, parentColumns = "id", childColumns = "uoe_id"))
@@ -25,17 +28,20 @@ public class MultipleChoiceClozeQuestion extends UoeParent {
     private String allAnswers;
     private String correctAnswers;
     private boolean[] answersAreCorrect;
-    private int testingNumber;
 
+    /**
+     * parent handles
+     * title
+     * question type
+     * time elapsed
+     */
     public MultipleChoiceClozeQuestion(@NonNull String title, int uoeId, @NonNull String body,@NonNull String allAnswers, @NonNull String correctAnswers) {
-        super(title);
+        super(title, MULTIPLE_CHOICE_CLOZE);
         this.uoeId = uoeId;
         this.body = body;
         this.allAnswers = allAnswers;
         this.correctAnswers = correctAnswers;
-        this.testTimeElapsed = 0L;
         this.answersAreCorrect = new boolean[]{false, false, false, false, false, false, false, false};
-        this.testingNumber = 0;
 
     }
 
@@ -53,14 +59,6 @@ public class MultipleChoiceClozeQuestion extends UoeParent {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public int getTestingNumber() {
-        return testingNumber;
-    }
-
-    public void setTestingNumber(int testingNumber) {
-        this.testingNumber = testingNumber;
     }
 
     public int getUoeId() {
@@ -89,6 +87,15 @@ public class MultipleChoiceClozeQuestion extends UoeParent {
 
     public void setAnswersAreCorrect(boolean[] answersAreCorrect) {
         this.answersAreCorrect = answersAreCorrect;
+    }
+
+    public void finishQuestion(long timeElapsed, boolean completed, boolean[] markedAnswers) {
+
+        this.setTestTimeElapsed(timeElapsed);
+        this.setComplete(complete);
+        this.setAnswersAreCorrect(markedAnswers);
+
+
     }
 
 }

@@ -13,6 +13,7 @@ import com.englishtopass.englishtopassapplication.Converters.UseOfEnglishConvert
 import com.englishtopass.englishtopassapplication.Converters.UseOfEnglishConverters.KeywordTransformationConverter;
 import com.englishtopass.englishtopassapplication.Converters.UseOfEnglishConverters.MultipleChoiceClozeConverter;
 import com.englishtopass.englishtopassapplication.Converters.UseOfEnglishConverters.OpenClozeConverter;
+import com.englishtopass.englishtopassapplication.Converters.UseOfEnglishConverters.PartEnumConverter;
 import com.englishtopass.englishtopassapplication.Converters.UseOfEnglishConverters.TestEnumConverter;
 import com.englishtopass.englishtopassapplication.Converters.UseOfEnglishConverters.WordFormationConverter;
 import com.englishtopass.englishtopassapplication.Dao.ListeningDaos.BlankFillingDao;
@@ -80,7 +81,8 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
         MatchSpeakersConverter.class,
         TestEnumConverter.class,
         ArrayListConverter.class,
-        BooleanListConverter.class
+        BooleanListConverter.class,
+        PartEnumConverter.class
 
 })
 
@@ -197,11 +199,9 @@ public abstract class QuestionDatabase extends RoomDatabase {
         @Override
         protected Void doInBackground(final Void... params) {
 
-//            mUoeDao.deleteAll();
+            mUoeDao.deleteAll();
 
             String stringBody = "Charlotte Church looks like a normal teenager, but she is far from average. She has an amazing voice. Her fans stand in (1) ........ for hours to get tickets for her concerts and she is often on television.\n\nCharlotte’s singing (2) ........ began when she performed on a TV show at the age of 11. The head of a record company was so impressed by her voice that he(3) ........ her up on the spot.\n\nHer first album rose to number one in the charts. Charlotte still attends school in her home town when she can. (4) ........ , she is often away on tour for weeks at a time. She doesn’t miss out on lessons, though, because she takes her own tutor with her! She (5) ........ three hours every morning with him. Her exam results in all the (6) ........ she studies are impressive.\n\nBut how does she cope with this unusual way of life? She (7) ........ that she has the same friends as before. That may be true, but she can no longer go into town with them because everybody stops her in the street to ask for her (8) ........ .\n\nIt seems that, like most stars, she must learn to control these restrictions and the lack of privacy. It’s the price of fame!";
-
-            Log.d(TAG, "doInBackground: im populating");
 
             UseOfEnglishPackage useOfEnglishPackage = new UseOfEnglishPackage(
                     "Who Wants to Be a Millionaire",
@@ -216,13 +216,28 @@ public abstract class QuestionDatabase extends RoomDatabase {
                     stringBody, "one#two#three#four#five#six#seven#eight#nine#ten#eleven#twelve#thirteen#fourteen#" +
                     "fifteen#sixteen#seventeen#eighteen#ninteen#twenty" +
                     "#twentyone#twentytwo#twentythree#twentyfour#twentyfive#" +
-                    "twentysix#twentyseven#twentyeight#twentynine#thirty#thirtyone#thirtytwo", "one#five#nine#thirteen#seventeen#twentyone#twentyfive#twentynine"));
+                    "twentysix#twentyseven#twentyeight#twentynine#thirty#thirtyone#thirtytwo", "one#five#nine#thirteen#seventeen#twentyone#twentyfive#twentynine"
+                    ));
 
-            openClozeDao.insert(new OpenClozeQuestion("The New Year", (int)check, stringBody, "one#five#nine#thirteen#seventeen#twentyone#twentyfive#twentynine"));
+            openClozeDao.insert(new OpenClozeQuestion(
+                    "The New Year",
+                    (int)check,
+                    stringBody,
+                    "one#five#nine#thirteen#seventeen#twentyone#twentyfive#twentynine"
+                    ));
 
-            keywordTransformationDao.insert(new KeywordTransformationQuestion("Greenland - The biggest Island in the World",  (int) check, stringBody));
+            keywordTransformationDao.insert(new KeywordTransformationQuestion(
+                    "Greenland - The biggest Island in the World",
+                    (int)check,
+                    stringBody,
+                    "one#five#nine#thirteen#seventeen#twentyone#twentyfive#twentynine",
+                    "product#ill#effect#science#add#press#advantage#spice"
+                    ));
 
-            wordFormationDao.insert(new WordFormationQuestion("Deep Sleep", (int)check, stringBody));
+            wordFormationDao.insert(new WordFormationQuestion(
+                    "Deep Sleep",
+                    (int)check,
+                    stringBody));
 
 
             UseOfEnglishPackage useOfEnglishPackage2 = new UseOfEnglishPackage(
@@ -236,16 +251,34 @@ public abstract class QuestionDatabase extends RoomDatabase {
 
             long check2 = mUoeDao.insert(useOfEnglishPackage2);
 
-            multipleChoiceClozeDao.insert(new MultipleChoiceClozeQuestion("The Story of Adidas of Puma",(int) check2, stringBody, "one#two#three#four#five#six#seven#eight#nine#ten#eleven#twelve#thirteen#fourteen#" +
+            multipleChoiceClozeDao.insert(new MultipleChoiceClozeQuestion(
+                    "The Story of Adidas of Puma",
+                    (int) check2,
+                    stringBody,
+                    "one#two#three#four#five#six#seven#eight#nine#ten#eleven#twelve#thirteen#fourteen#" +
                     "fifteen#sixteen#seventeen#eighteen#ninteen#twenty" +
                     "#twentyone#twentytwo#twentythree#twentyfour#twentyfive#" +
-                    "twentysix#twentyseven#twentyeight#twentynine#thirty#thirtyone#thirtytwo", "one#five#nine#thirteen#seventeen#twentyone#twentyfive#twentynine"));
+                    "twentysix#twentyseven#twentyeight#twentynine#thirty#thirtyone#thirtytwo",
+                    "one#five#nine#thirteen#seventeen#twentyone#twentyfive#twentynine"));
 
-            openClozeDao.insert(new OpenClozeQuestion("The Bermuda Triangle",(int) check2, stringBody,"one#five#nine#thirteen#seventeen#twentyone#twentyfive#twentynine"));
+            openClozeDao.insert(new OpenClozeQuestion(
+                    "The Bermuda Triangle",
+                    (int) check2,
+                    stringBody,
+                    "one#five#nine#thirteen#seventeen#twentyone#twentyfive#twentynine"));
 
-            keywordTransformationDao.insert(new KeywordTransformationQuestion("Walt Disney",(int) check2, stringBody));
+            keywordTransformationDao.insert(new KeywordTransformationQuestion(
+                    "Greenland - The biggest Island in the World",
+                    (int)check2,
+                    stringBody,
+                    "one#five#nine#thirteen#seventeen#twentyone#twentyfive#twentynine",
+                    "product#ill#effect#science#add#press#advantage#spice"
+            ));
 
-            wordFormationDao.insert(new WordFormationQuestion("Technology and the Young",(int) check2, stringBody));
+            wordFormationDao.insert(new WordFormationQuestion(
+                    "Technology and the Young",
+                    (int) check2,
+                    stringBody));
 
 
 
@@ -285,6 +318,12 @@ public abstract class QuestionDatabase extends RoomDatabase {
             blankFillingDao.insert(new BlankFillingQuestion("Walt Disney",(int) check4, stringBody));
 
             matchSpeakersDao.insert(new MatchSpeakersQuestion("Technology and the Young",(int) check4, stringBody));
+
+
+
+
+
+
 
 
 

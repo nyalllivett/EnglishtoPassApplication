@@ -1,6 +1,7 @@
 package com.englishtopass.englishtopassapplication.Adapters.ExampleAdapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +30,6 @@ public class ExampleUoeAdapter extends ListAdapter<UoeParent, ExampleUoeAdapter.
         @Override
         public boolean areItemsTheSame(@NonNull UoeParent oldItem, @NonNull UoeParent newItem) {
             return false;
-
         }
 
         @Override
@@ -54,7 +54,30 @@ public class ExampleUoeAdapter extends ListAdapter<UoeParent, ExampleUoeAdapter.
 
         holder.partTitle.setText(getItem(position).getTitle());
         holder.testTime.setText(getItem(position).timeElapsedToString());
-        holder.partType.setText("Mulitple");
+
+        String questionType = "";
+
+//        switch (getItem(position).getPartUoe()) {
+//
+//            case WORD_FORMATION:
+//                questionType = "Word Formation";
+//                break;
+//
+//            case KEYWORD_TRANSFORMATION:
+//                questionType = "Keyword Transformation";
+//                break;
+//
+//            case OPEN_CLOZE:
+//                questionType = "Open Cloze";
+//                break;
+//
+//            case MULTIPLE_CHOICE_CLOZE:
+//                questionType = "Multiple Choice Cloze";
+//                break;
+//
+//        }
+
+        holder.partType.setText(questionType);
 
     }
 

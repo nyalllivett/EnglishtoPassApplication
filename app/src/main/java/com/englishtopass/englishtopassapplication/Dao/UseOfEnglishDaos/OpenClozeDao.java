@@ -11,18 +11,12 @@ import io.reactivex.Single;
 @Dao
 public interface OpenClozeDao {
 
-
     @Insert
     void insert(OpenClozeQuestion openClozeQuestion);
 
     @Query("SELECT * FROM open_cloze_table WHERE :id = uoe_id")
     Single<OpenClozeQuestion> getModelParentOpenCloze(int id);
 
-
-    /**
-     * the testing
-     */
-
     @Query("SELECT * FROM open_cloze_table WHERE :id = uoe_id")
-    LiveData<OpenClozeQuestion> getOpenCloze(int id);
+    LiveData<OpenClozeQuestion> getOpenClozeLiveData(int id);
 }

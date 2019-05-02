@@ -88,15 +88,24 @@ public class MainActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        switch (id) {
 
-            Log.d(TAG, "onOptionsItemSelected: hello");
+            case R.id.information:
 
-            return true;
+                Log.d(TAG, "onOptionsItemSelected: info");
+
+                return true;
+
+            case R.id.games:
+
+                Log.d(TAG, "onOptionsItemSelected: games");
+
+                return true;
+
         }
 
         return super.onOptionsItemSelected(item);
+
     }
 
 }

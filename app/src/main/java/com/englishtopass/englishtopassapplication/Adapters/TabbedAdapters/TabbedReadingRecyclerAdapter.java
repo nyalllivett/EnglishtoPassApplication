@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.englishtopass.englishtopassapplication.ExampleFragment.ExampleMainScreen.ReadingExampleFragment;
+import com.englishtopass.englishtopassapplication.PreQuestionFragment.PreQuestionMainScreen.PreReadingScreen;
 import com.englishtopass.englishtopassapplication.Model.Reading.Package.ReadingPackage;
 import com.englishtopass.englishtopassapplication.R;
 
@@ -89,7 +89,7 @@ public class TabbedReadingRecyclerAdapter extends ListAdapter<ReadingPackage, Ta
                 FragmentTransaction transaction = appCompatActivity.getSupportFragmentManager()
                         .beginTransaction();
 
-                transaction.add(R.id.questionFragmentHolder, ReadingExampleFragment.newInstance(readingPackage.getTestCompletion(), (Integer) v.getTag()), "listeningExampleFragment")
+                transaction.add(R.id.questionFragmentHolder, PreReadingScreen.newInstance(readingPackage.getTestCompletion(), (Integer) v.getTag()), "listeningExampleFragment")
                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                         .addToBackStack("listeningExampleFragment")
                         .commit();

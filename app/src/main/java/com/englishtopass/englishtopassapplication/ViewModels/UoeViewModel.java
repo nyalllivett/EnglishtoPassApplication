@@ -1,9 +1,7 @@
 package com.englishtopass.englishtopassapplication.ViewModels;
 
 import android.app.Application;
-import android.util.Log;
 
-import com.englishtopass.englishtopassapplication.Model.Listening.Package.ListeningPackage;
 import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Package.UseOfEnglishPackage;
 import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question.KeywordTransformationQuestion;
 import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question.MultipleChoiceClozeQuestion;
@@ -16,16 +14,18 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import io.reactivex.Single;
 
 public class UoeViewModel extends AndroidViewModel {
+    private static final String TAG = "UoeViewModel";
 
     private QuestionRepository questionRepository;
 
     private LiveData<List<UseOfEnglishPackage>> useOfEnglishPackageLiveData;
 
-    private MutableLiveData<OpenClozeQuestion> mutableLiveData = new MutableLiveData<>();
+    private long savedTimeElapsed = 0L;
+
+    private boolean questionStarted;
 
     public UoeViewModel(@NonNull Application application) {
         super(application);
@@ -38,33 +38,41 @@ public class UoeViewModel extends AndroidViewModel {
     }
 
 
-
-    public LiveData<OpenClozeQuestion> getOpenClozeQuestionMutableLiveData(int id) {
-
-        return questionRepository.getOpenClozeQuestionLiveData(id);
-
+    public long getSavedTimeElapsed() {
+        return savedTimeElapsed;
     }
 
+    public void setSavedTimeElapsed(long savedTimeElapsed) {
+        this.savedTimeElapsed = savedTimeElapsed;
+    }
 
+    public boolean isQuestionStarted() {
+        return questionStarted;
+    }
 
+    public void setQuestionStarted(boolean questionStarted) {
+        this.questionStarted = questionStarted;
+    }
 
+    /**
+     * The live data for the Actual question
+     */
 
+    public LiveData<MultipleChoiceClozeQuestion> getMultipleChoiceClozeLiveData(int id) {
+        return questionRepository.getMultipleChoiceClozeLiveData(id);
+    }
 
+    public LiveData<OpenClozeQuestion> getOpenClozeQuestionLiveData(int id) {
+        return questionRepository.getOpenClozeQuestionLiveData(id);
+    }
 
+    public LiveData<KeywordTransformationQuestion> getKeywordTransformationLiveData(int id) {
+        return questionRepository.getKeywordTransformationQuestionLiveData(id);
+    }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+    public LiveData<WordFormationQuestion> getWordFormationLiveData(int id) {
+        return questionRepository.getWordFormationQuestionLiveData(id);
+    }
 
 
 
@@ -75,16 +83,11 @@ public class UoeViewModel extends AndroidViewModel {
         return useOfEnglishPackageLiveData;
     }
 
-    // RETRIEVE SINGLE PACKAGE -
-    public UseOfEnglishPackage useOfEnglishPackage(int id) {
-        return questionRepository.getSingleUseOfEnglishPackages(id);
-    }
-
-    public void updateUseOfEnglishPackage(UseOfEnglishPackage useOfEnglishPackage) {
-
-        questionRepository.updateUseOfEnglishPackage(useOfEnglishPackage);
+    public void updateMultipleChoice(MultipleChoiceClozeQuestion multipleChoiceClozeQuestion) {
+        questionRepository.updateMultipleChoiceCloze(multipleChoiceClozeQuestion);
 
     }
+
 
 
     // RETRIEVE SINGLE UOE QUESTION DATA -
@@ -103,13 +106,10 @@ public class UoeViewModel extends AndroidViewModel {
 
     public Single<WordFormationQuestion> getMenuWordFormationQuestion(int id) {
         return questionRepository.getMenuWordFormation(id);
-
     }
 
-    public void updateMultipleChoice(MultipleChoiceClozeQuestion multipleChoiceClozeQuestion) {
-        questionRepository.updateMultipleChoiceCloze(multipleChoiceClozeQuestion);
 
-    }
+
 
 
 }

@@ -19,9 +19,9 @@
             android:layout_marginStart="8dp"
             android:text="Question 0 "
             android:textSize="18sp"
-            app:layout_constraintBottom_toBottomOf="@+id/hideActionFrameNumber"
+            app:layout_constraintBottom_toBottomOf="@+id/hideActionFrame"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/hideActionFrameNumber" />
+            app:layout_constraintTop_toTopOf="@+id/hideActionFrame" />
 
         <Button
             android:id="@+id/resetSpanText"
@@ -33,13 +33,13 @@
             android:minHeight="0dp"
             android:text="reset"
             android:textSize="8sp"
-            app:layout_constraintBottom_toBottomOf="@+id/hideActionFrameNumber"
-            app:layout_constraintEnd_toStartOf="@+id/hideActionFrameNumber"
-            app:layout_constraintTop_toTopOf="@+id/hideActionFrameNumber" />
+            app:layout_constraintBottom_toBottomOf="@+id/hideActionFrame"
+            app:layout_constraintEnd_toStartOf="@+id/hideActionFrame"
+            app:layout_constraintTop_toTopOf="@+id/hideActionFrame" />
 
 
         <ImageButton
-            android:id="@+id/hideActionFrameNumber"
+            android:id="@+id/hideActionFrame"
             android:layout_width="35dp"
             android:layout_height="36dp"
             android:layout_marginTop="4dp"
@@ -58,7 +58,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/hideActionFrameNumber"
+            app:layout_constraintTop_toBottomOf="@+id/hideActionFrame"
             app:layout_constraintVertical_bias="0.0">
 
             <LinearLayout

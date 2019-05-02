@@ -7,11 +7,6 @@ import com.englishtopass.englishtopassapplication.Model.Listening.Questions.Blan
 import com.englishtopass.englishtopassapplication.Model.Listening.Questions.ListeningMultipleSituationsQuestion;
 import com.englishtopass.englishtopassapplication.Model.Listening.Questions.ListeningOneSituationQuestion;
 import com.englishtopass.englishtopassapplication.Model.Listening.Questions.MatchSpeakersQuestion;
-import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Package.UseOfEnglishPackage;
-import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question.KeywordTransformationQuestion;
-import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question.MultipleChoiceClozeQuestion;
-import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question.OpenClozeQuestion;
-import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question.WordFormationQuestion;
 import com.englishtopass.englishtopassapplication.Repository.QuestionRepository;
 
 import java.util.List;
@@ -33,16 +28,11 @@ public class ListeningViewModel extends AndroidViewModel {
         questionRepository = new QuestionRepository(application);
 
         listeningPackageLiveData = questionRepository.getAllListeningPackages();
-
-    }
-
-    public LiveData<List<ListeningPackage>> getListeningPackageLiveData() {
-        return listeningPackageLiveData;
     }
 
     // RETRIEVE SINGLE LISTENING QUESTION DATA -
     public Single<ListeningMultipleSituationsQuestion> getMenuListeningMultiple(int id) {
-        return questionRepository.getMenuMulipleSituations(id);
+        return questionRepository.getMenuMultipleSituations(id);
     }
 
     public Single<BlankFillingQuestion> getMenuBlankFilling(int id) {
@@ -57,6 +47,11 @@ public class ListeningViewModel extends AndroidViewModel {
     public Single<ListeningOneSituationQuestion> getMenuListeningOne(int id) {
         return questionRepository.getMenuOneSituation(id);
 
+    }
+
+
+    public LiveData<List<ListeningPackage>> getListeningPackageLiveData() {
+        return listeningPackageLiveData;
     }
 
 

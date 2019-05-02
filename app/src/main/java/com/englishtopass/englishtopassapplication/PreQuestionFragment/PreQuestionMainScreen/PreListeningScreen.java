@@ -1,4 +1,4 @@
-package com.englishtopass.englishtopassapplication.ExampleFragment.ExampleMainScreen;
+package com.englishtopass.englishtopassapplication.PreQuestionFragment.PreQuestionMainScreen;
 
 
 
@@ -11,8 +11,8 @@ import android.view.ViewGroup;
 
 import com.englishtopass.englishtopassapplication.Adapters.ExampleAdapters.ExampleListeningAdapter;
 import com.englishtopass.englishtopassapplication.Enums.TestCompletion;
-import com.englishtopass.englishtopassapplication.ExampleFragment.ExampleMainScreen.Parent.ExamplePageParent;
-import com.englishtopass.englishtopassapplication.ExampleFragment.ExampleQuestions.ListeningQuestion;
+import com.englishtopass.englishtopassapplication.PreQuestionFragment.PreQuestionMainScreen.Parent.ExamplePageParent;
+import com.englishtopass.englishtopassapplication.PreQuestionFragment.ExampleQuestions.ListeningQuestion;
 import com.englishtopass.englishtopassapplication.Model.Listening.Questions.Parent.ListeningParent;
 import com.englishtopass.englishtopassapplication.R;
 import com.englishtopass.englishtopassapplication.ViewModels.ListeningViewModel;
@@ -37,7 +37,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 
-public class ListeningExampleFragment extends ExamplePageParent implements View.OnClickListener {
+public class PreListeningScreen extends ExamplePageParent implements View.OnClickListener {
     private static final String TAG = "ListeningExampleFragmen";
 
     private TestCompletion testCompletion;
@@ -45,21 +45,16 @@ public class ListeningExampleFragment extends ExamplePageParent implements View.
     private FragmentManager fragmentManager;
 
 
-    public ListeningExampleFragment() {
+    public PreListeningScreen() {
         // Required empty public constructor
     }
 
-    public static ListeningExampleFragment newInstance(TestCompletion testCompletion, int packageID) {
-
-        ListeningExampleFragment fragment = new ListeningExampleFragment();
-
+    public static PreListeningScreen newInstance(TestCompletion testCompletion, int packageID) {
+        PreListeningScreen fragment = new PreListeningScreen();
         Bundle bundle = new Bundle();
-
         bundle.putSerializable("TEST_COMPLETION", testCompletion);
         bundle.putInt("LISTENING_PACKAGE_ID", packageID);
-
         fragment.setArguments(bundle);
-
         return fragment;
     }
 
@@ -134,7 +129,7 @@ public class ListeningExampleFragment extends ExamplePageParent implements View.
 
                     @Override
                     public void onError(Throwable e) {
-
+                        Log.d(TAG, "onError: " + e.getLocalizedMessage());
                     }
                 });
 
@@ -285,7 +280,7 @@ public class ListeningExampleFragment extends ExamplePageParent implements View.
                 viewModel.getMenuListeningMultiple(packageId),
                 viewModel.getMenuListeningOne(packageId),
                 viewModel.getMenuMatchSpeakers(packageId),
-                ((blankFillingQuestion, listeningMultipleSituationsQuestion, listeningOneSituationQuestion, matchSpeakersQuestion) -> {
+                (blankFillingQuestion, listeningMultipleSituationsQuestion, listeningOneSituationQuestion, matchSpeakersQuestion) -> {
 
                     List<ListeningParent> arrayList = new ArrayList<>();
 
@@ -296,7 +291,7 @@ public class ListeningExampleFragment extends ExamplePageParent implements View.
 
                     return arrayList;
 
-                })
+                }
 
         );
     }

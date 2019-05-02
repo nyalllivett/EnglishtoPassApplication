@@ -1,16 +1,27 @@
 package com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question.Parent;
 
+import com.englishtopass.englishtopassapplication.Enums.QuestionPartUoe;
+
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 public class UoeParent {
+
     protected String title;
     protected long testTimeElapsed;
     protected boolean complete;
 
-    public UoeParent(String title) {
+    private QuestionPartUoe partUoe;
+
+    public QuestionPartUoe getPartUoe() {
+        return partUoe;
+    }
+
+    public UoeParent(String title, QuestionPartUoe partUoe) {
         this.title = title;
         this.complete = false;
+        this.partUoe = partUoe;
+        this.testTimeElapsed = 0L;
     }
 
     public boolean isComplete() {
@@ -48,4 +59,9 @@ public class UoeParent {
         return String.format(Locale.getDefault(), "%01d:%02d:%02d",hours, minute,second);
 
     }
+
+    public void setPartUoe(QuestionPartUoe partUoe) {
+        this.partUoe = partUoe;
+    }
+
 }

@@ -1,4 +1,4 @@
-package com.englishtopass.englishtopassapplication.ExampleFragment.ExampleMainScreen;
+package com.englishtopass.englishtopassapplication.PreQuestionFragment.PreQuestionMainScreen;
 
 
 import android.os.Bundle;
@@ -10,8 +10,8 @@ import android.view.ViewGroup;
 
 import com.englishtopass.englishtopassapplication.Adapters.ExampleAdapters.ExampleReadingAdapter;
 import com.englishtopass.englishtopassapplication.Enums.TestCompletion;
-import com.englishtopass.englishtopassapplication.ExampleFragment.ExampleMainScreen.Parent.ExamplePageParent;
-import com.englishtopass.englishtopassapplication.ExampleFragment.ExampleQuestions.ListeningQuestion;
+import com.englishtopass.englishtopassapplication.PreQuestionFragment.PreQuestionMainScreen.Parent.ExamplePageParent;
+import com.englishtopass.englishtopassapplication.PreQuestionFragment.ExampleQuestions.ListeningQuestion;
 import com.englishtopass.englishtopassapplication.Model.Reading.Questions.Parent.ReadingParent;
 import com.englishtopass.englishtopassapplication.R;
 import com.englishtopass.englishtopassapplication.ViewModels.ReadingViewModel;
@@ -36,7 +36,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 
-public class ReadingExampleFragment extends ExamplePageParent implements View.OnClickListener {
+public class PreReadingScreen extends ExamplePageParent implements View.OnClickListener {
     private static final String TAG = "ListeningExampleFragmen";
 
     private TestCompletion testCompletion;
@@ -45,13 +45,13 @@ public class ReadingExampleFragment extends ExamplePageParent implements View.On
 
 
 
-    public ReadingExampleFragment() {
+    public PreReadingScreen() {
         // Required empty public constructor
     }
 
-    public static ReadingExampleFragment newInstance(TestCompletion testCompletion, int packageID) {
+    public static PreReadingScreen newInstance(TestCompletion testCompletion, int packageID) {
 
-        ReadingExampleFragment fragment = new ReadingExampleFragment();
+        PreReadingScreen fragment = new PreReadingScreen();
 
         Bundle bundle = new Bundle();
 
@@ -120,24 +120,24 @@ public class ReadingExampleFragment extends ExamplePageParent implements View.On
 
         ReadingViewModel viewModel = ViewModelProviders.of(this).get(ReadingViewModel.class);
 
-        getSingle(viewModel).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SingleObserver<List<ReadingParent>>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                        compositeDisposable.add(d);
-                    }
-
-                    @Override
-                    public void onSuccess(List<ReadingParent> listeningParents) {
-                        adapter.submitList(listeningParents);
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-                });
+//        getSingle(viewModel).subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new SingleObserver<List<ReadingParent>>() {
+//                    @Override
+//                    public void onSubscribe(Disposable d) {
+//                        compositeDisposable.add(d);
+//                    }
+//
+//                    @Override
+//                    public void onSuccess(List<ReadingParent> listeningParents) {
+//                        adapter.submitList(listeningParents);
+//                    }
+//
+//                    @Override
+//                    public void onError(Throwable e) {
+//
+//                    }
+//                });
 
         // The text views
 
@@ -266,27 +266,27 @@ public class ReadingExampleFragment extends ExamplePageParent implements View.On
     }
 
 
-    private Single<List<ReadingParent>> getSingle(ReadingViewModel viewModel) {
-
-        return Single.zip(
-
-                viewModel.getMenuMultipleChoice(packageId),
-                viewModel.getMenuGappedText(packageId),
-                viewModel.getMenuMatchingExercise(packageId),
-                ((multipleChoiceQuestion, gappedTextQuestion, matchingExerciseQuestion) -> {
-
-                    List<ReadingParent> arrayList = new ArrayList<>();
-
-                    arrayList.add(matchingExerciseQuestion);
-                    arrayList.add(gappedTextQuestion);
-                    arrayList.add(matchingExerciseQuestion);
-
-                    return arrayList;
-
-                })
-
-        );
-    }
+//    private Single<List<ReadingParent>> getSingle(ReadingViewModel viewModel) {
+//
+//        return Single.zip(
+//
+////                viewModel.getMenuMultipleChoice(packageId),
+////                viewModel.getMenuGappedText(packageId),
+////                viewModel.getMenuMatchingExercise(packageId),
+////                ((multipleChoiceQuestion, gappedTextQuestion, matchingExerciseQuestion) -> {
+////
+////                    List<ReadingParent> arrayList = new ArrayList<>();
+////
+////                    arrayList.add(matchingExerciseQuestion);
+////                    arrayList.add(gappedTextQuestion);
+////                    arrayList.add(matchingExerciseQuestion);
+//
+//                    return arrayList;
+//
+//                })
+//
+//        );
+//    }
 
 }
 

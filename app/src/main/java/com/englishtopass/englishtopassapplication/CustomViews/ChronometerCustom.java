@@ -1,6 +1,7 @@
 package com.englishtopass.englishtopassapplication.CustomViews;
 
 import android.content.Context;
+import android.os.SystemClock;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.widget.Chronometer;
@@ -21,39 +22,59 @@ public class ChronometerCustom extends Chronometer {
     private static final String TAG = "CustomChronometer";
 
     CompositeDisposable compositeDisposable;
-
     public ChronometerCustom(Context context) {
         super(context);
+        init();
     }
 
     public ChronometerCustom(Context context, AttributeSet attrs) {
         super(context, attrs);
+        init();
     }
 
     public ChronometerCustom(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        init();
     }
 
     public ChronometerCustom(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
+        init();
     }
+
+    private void init() {
+    }
+
 
 
     public void showTime() {
-
         if (getAlpha() != 0) return;
-
         animate().alpha(1f).start();
-
         startCompletable();
-
     }
+
 
     @Override
     public void start() {
         super.start();
+//        startCompletable();
 
-        startCompletable();
+    }
+
+    public void setBaseTime(long timePassed) {
+
+        Log.d(TAG, "setBaseTime: time passed" + timePassed);
+
+        this.setBase(SystemClock.elapsedRealtime() - timePassed);
+    }
+
+    public long returnElapsedTime() {
+
+        Log.d(TAG, "returnElapsedTime: here" + (SystemClock.elapsedRealtime() - getBase() / 1000));
+
+
+        return (SystemClock.elapsedRealtime() - getBase());
+
 
     }
 
@@ -70,7 +91,6 @@ public class ChronometerCustom extends Chronometer {
                     @Override
                     public void onComplete() {
                         hideTime();
-                        Log.d(TAG, "onComplete: complete");
                     }
 
                     @Override
@@ -78,7 +98,5 @@ public class ChronometerCustom extends Chronometer {
                         Log.d(TAG, "onError: " + e.getLocalizedMessage());
                     }
                 });
-
     }
-
 }

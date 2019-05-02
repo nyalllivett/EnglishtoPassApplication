@@ -75,41 +75,41 @@ public class WordFormationQuestion extends Fragment {
 
         UoeViewModel viewModel = ViewModelProviders.of(this).get(UoeViewModel.class);
 
-        viewModel.getMenuOpenClozeQuestion(packageId)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SingleObserver<com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question.OpenClozeQuestion>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-
-                        compositeDisposable.add(d);
-
-                    }
-
-                    @Override
-                    public void onSuccess(com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question.OpenClozeQuestion openClozeQuestion) {
-
-                        questionTitle.setText(openClozeQuestion.getTitle());
-
-                        spannableStringBuilder = new SpannableStringBuilder(openClozeQuestion.getBody());
-
-                        questionBody.setText(spannableStringBuilder);
-
-                        Matcher matcher = pattern.matcher(openClozeQuestion.getBody());
-
-                        while (matcher.find()) {
-
-                            Log.d(TAG, "onSuccess: " + matcher.start() + " " + matcher.end());
-
-                        }
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-                });
+//        viewModel.getMenuOpenClozeQuestion(packageId)
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new SingleObserver<com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question.OpenClozeQuestion>() {
+//                    @Override
+//                    public void onSubscribe(Disposable d) {
+//
+//                        compositeDisposable.add(d);
+//
+//                    }
+//
+//                    @Override
+//                    public void onSuccess(com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question.OpenClozeQuestion openClozeQuestion) {
+//
+//                        questionTitle.setText(openClozeQuestion.getTitle());
+//
+//                        spannableStringBuilder = new SpannableStringBuilder(openClozeQuestion.getBody());
+//
+//                        questionBody.setText(spannableStringBuilder);
+//
+//                        Matcher matcher = pattern.matcher(openClozeQuestion.getBody());
+//
+//                        while (matcher.find()) {
+//
+//                            Log.d(TAG, "onSuccess: " + matcher.start() + " " + matcher.end());
+//
+//                        }
+//
+//                    }
+//
+//                    @Override
+//                    public void onError(Throwable e) {
+//
+//                    }
+//                });
 
         return view;
     }
