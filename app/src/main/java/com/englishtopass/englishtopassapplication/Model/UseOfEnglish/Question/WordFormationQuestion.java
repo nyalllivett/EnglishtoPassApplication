@@ -28,8 +28,8 @@ public class WordFormationQuestion extends UoeParent {
     private String body;
 
 
-    public WordFormationQuestion(@NonNull String title, int uoeId, @NonNull String body) {
-        super(title, WORD_FORMATION);
+    public WordFormationQuestion(@NonNull String title, String instructions, int uoeId, @NonNull String body) {
+        super(title, instructions, "Word Formation", new boolean[]{false});
         this.uoeId = uoeId;
         this.body = body;
         this.testTimeElapsed = 0L;

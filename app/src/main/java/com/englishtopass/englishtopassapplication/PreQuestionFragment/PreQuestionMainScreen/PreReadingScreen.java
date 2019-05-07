@@ -8,35 +8,27 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.englishtopass.englishtopassapplication.Adapters.ExampleAdapters.ExampleReadingAdapter;
+import com.englishtopass.englishtopassapplication.Adapters.PreScreenAdapters.ExampleReadingAdapter;
 import com.englishtopass.englishtopassapplication.Enums.TestCompletion;
-import com.englishtopass.englishtopassapplication.PreQuestionFragment.PreQuestionMainScreen.Parent.ExamplePageParent;
+import com.englishtopass.englishtopassapplication.PreQuestionFragment.PreQuestionMainScreen.Parent.PreScreenParent;
 import com.englishtopass.englishtopassapplication.PreQuestionFragment.ExampleQuestions.ListeningQuestion;
-import com.englishtopass.englishtopassapplication.Model.Reading.Questions.Parent.ReadingParent;
 import com.englishtopass.englishtopassapplication.R;
 import com.englishtopass.englishtopassapplication.ViewModels.ReadingViewModel;
 import com.google.android.flexbox.FlexDirection;
 import com.google.android.flexbox.FlexboxLayoutManager;
 import com.google.android.flexbox.JustifyContent;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
-import io.reactivex.Single;
-import io.reactivex.SingleObserver;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 
-public class PreReadingScreen extends ExamplePageParent implements View.OnClickListener {
+public class PreReadingScreen extends PreScreenParent implements View.OnClickListener {
     private static final String TAG = "ListeningExampleFragmen";
 
     private TestCompletion testCompletion;
@@ -94,13 +86,13 @@ public class PreReadingScreen extends ExamplePageParent implements View.OnClickL
                              Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.example_fragment, container, false);
+        View view = inflater.inflate(R.layout.pre_question_screen, container, false);
 
         // Toolbar
 
-        toolbar = view.findViewById(R.id.exampleToolbar);
+        toolbar = view.findViewById(R.id.preScreenToolbar);
 
-        setActionBar();
+        setActionBar(((Toolbar) view.findViewById(R.id.preScreenToolbar)));
 
         // Recycler View -
 
@@ -141,13 +133,13 @@ public class PreReadingScreen extends ExamplePageParent implements View.OnClickL
 
         // The text views
 
-        exampleDescriptionTextView = view.findViewById(R.id.testPartDescription);
+        instructionsTextView = view.findViewById(R.id.testPartDescription);
 
-        exampleDescriptionTextView.setText(descriptionFromResources);
+        instructionsTextView.setText(descriptionFromResources);
 
-        examplePartType = view.findViewById(R.id.testPartName);
+        headerPartType = view.findViewById(R.id.testPartName);
 
-        examplePartType.setText(partFromResources);
+        headerPartType.setText(partFromResources);
 
         // The buttons
 
@@ -220,9 +212,9 @@ public class PreReadingScreen extends ExamplePageParent implements View.OnClickL
 
         }
 
-        exampleDescriptionTextView.setText(descriptionFromResources);
+        instructionsTextView.setText(descriptionFromResources);
 
-        examplePartType.setText(partFromResources);
+        headerPartType.setText(partFromResources);
 
     }
 

@@ -2,7 +2,6 @@ package com.englishtopass.englishtopassapplication.QuestionFragments;
 
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModelProviders;
 import io.reactivex.Completable;
 import io.reactivex.CompletableObserver;
@@ -12,26 +11,23 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
 import io.reactivex.schedulers.Schedulers;
 
-import android.text.Spannable;
 import android.text.SpannableStringBuilder;
-import android.text.Spanned;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.englishtopass.englishtopassapplication.CustomViews.ClickableSpanCustom;
 import com.englishtopass.englishtopassapplication.CustomViews.LinkMovementMethodCustom;
+import com.englishtopass.englishtopassapplication.Enums.QuestionPartUoe;
 import com.englishtopass.englishtopassapplication.Interfaces.SetScrollYListener;
+import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Package.UseOfEnglishPackage;
 import com.englishtopass.englishtopassapplication.R;
 import com.englishtopass.englishtopassapplication.UtilClass;
 import com.englishtopass.englishtopassapplication.ViewModels.UoeViewModel;
 
-import java.util.regex.Matcher;
 
-
-public class MultipleChoiceClozeQuestion extends MultipleChoiceQuestion implements View.OnClickListener, SetScrollYListener {
+public class MultipleChoiceClozeQuestion extends MultipleChoiceQuestion implements View.OnClickListener {
     private static final String TAG = "MultipleChoiceClozeQues";
 
     /** PACKAGE ID
@@ -74,29 +70,20 @@ public class MultipleChoiceClozeQuestion extends MultipleChoiceQuestion implemen
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         if (getArguments() != null) {
-
             packageId = getArguments().getInt("packageId");
-
         }
-
         sqCompileRegexPattern("[.]{8}");
-
         sqSetSpanSelected(-1);
+
+        viewModel = ViewModelProviders.of(this).get(UoeViewModel.class);
 
     }
 
+
+
     /**
      * where the main bulk of the work is done.
-     * @param inflater
-     * /
-     * @param container
-     * /
-     * @param savedInstanceState
-     * /
-     * @return
-     * /
      */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -116,7 +103,6 @@ public class MultipleChoiceClozeQuestion extends MultipleChoiceQuestion implemen
 
         // SET ON CLICK LISTENER FOR THE FINISH BUTTON - UNFINISHED
         view.findViewById(R.id.finishTestButton).setOnClickListener(this);
-        view.findViewById(R.id.showTimer).setOnClickListener(this);
 
         // CREATE LINK MOVEMENT METHOD INSTANCE
         LinkMovementMethodCustom linkMovementMethodCustom = LinkMovementMethodCustom.getInstance();
@@ -136,62 +122,34 @@ public class MultipleChoiceClozeQuestion extends MultipleChoiceQuestion implemen
         // INITIALISE THE FRAME LAYOUT
         actionFrameLayout = view.findViewById(R.id.actionFrameLayout);
 
-        // ACCESS CURRENT QUESTION DATABASE
-        viewModel = ViewModelProviders.of(this).get(UoeViewModel.class);
+        viewModel.getMultipleChoiceClozeLiveData(packageId).observe(getViewLifecycleOwner(), multipleChoiceClozeQuestion -> {
+            multipleChoiceCloze = multipleChoiceClozeQuestion;
 
-        viewModel.getMenuMultipleChoiceQuestion(packageId)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SingleObserver<com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question.MultipleChoiceClozeQuestion>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
+            int partitionNumber = 4;
 
-                        compositeDisposable.add(d);
+            mcaPartition(UtilClass.stringSplitter(multipleChoiceClozeQuestion.getAllAnswers()), partitionNumber);
 
-                    }
+            qSetCorrectAnswers(UtilClass.stringSplitter(multipleChoiceClozeQuestion.getCorrectAnswers()));
 
-                    @Override
-                    public void onSuccess(com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question.MultipleChoiceClozeQuestion multipleChoiceClozeQuestion) {
+            questionTitle.setText(multipleChoiceClozeQuestion.getTitle());
 
-                        multipleChoiceCloze = multipleChoiceClozeQuestion;
+            String retrievedBody = multipleChoiceClozeQuestion.getBody();
 
-                        int partitionNumber = 4;
+            spannableStringBuilder = new SpannableStringBuilder(retrievedBody);
 
-                        mcaPartition(UtilClass.stringSplitter(multipleChoiceClozeQuestion.getAllAnswers()), partitionNumber);
+            findPattern(retrievedBody);
 
-                        qSetCorrectAnswers(UtilClass.stringSplitter(multipleChoiceClozeQuestion.getCorrectAnswers()));
+            if (!viewModel.isQuestionStarted()){
 
-                        questionTitle.setText(multipleChoiceClozeQuestion.getTitle());
+                chronometer.setBaseTime(viewModel.getSavedTimeElapsed() + multipleChoiceCloze.getTestTimeElapsed());
 
-                        String retrievedBody = multipleChoiceClozeQuestion.getBody();
+                chronometer.start();
 
-                        spannableStringBuilder = new SpannableStringBuilder(retrievedBody);
+                viewModel.setQuestionStarted(true);
 
-                        findPattern(retrievedBody);
+            }
+        });
 
-                        if (!viewModel.isQuestionStarted()){
-
-                            chronometer.setBaseTime(viewModel.getSavedTimeElapsed() + multipleChoiceCloze.getTestTimeElapsed());
-
-                            chronometer.start();
-
-                            viewModel.setQuestionStarted(true);
-
-                        }
-
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                        Log.d(TAG, "onError: " + e.getLocalizedMessage());
-
-                    }
-
-                });
-
-        // RETURN VIEW
         return view;
 
     }
@@ -220,62 +178,22 @@ public class MultipleChoiceClozeQuestion extends MultipleChoiceQuestion implemen
         }
     }
 
-    /**
-     * method called by findPattern method to create the spans. also set the
-     * onClick method at the same time.
-     * @param startingIndex
-     * @param endingIndex
-     * @param tag
-     */
-    private void createClickableSpan(int startingIndex, int endingIndex, int tag){
-        spannableStringBuilder.setSpan(new ClickableSpanCustom(tag) {
-            @Override
-            public void onClick(@NonNull View widget) {
-                sqSetSpanSelected(this.getTag());
-                TextView textView = (TextView) widget;
-                Spannable spannable = (Spannable) textView.getText();
-                sqSetCurrentSpanIndices(spannable.getSpanStart(this), spannable.getSpanEnd(this));
-                if (!sqIsActionFrameOpen()) {
-                    sqOpenActionFrame();
-                    mcaInflateMultipleChoiceView();
-                }
-            }
-        }, startingIndex, endingIndex, Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
-    }
 
+    private void finishTest(){
 
-    /**
-     * finds the blanks in the searchable string provided and when found will
-     * a clickable span in the corresponding position in the spannable
-     * string builder
-     * @param body
-     */
-    protected void findPattern(String body){
-        Matcher matcher = pattern.matcher(body);
-        int tagCounter = 0;
-        while (matcher.find()) {
-            createClickableSpan(matcher.start(), matcher.end(), tagCounter);
-            tagCounter++;
-        }
-        questionBody.setText(spannableStringBuilder);
-    }
-
-
-    public void finishTest(){
-
-//        multipleChoiceCloze.finishQuestion(chronometer.getFinishedElapsedTime(), true, sqGetCheckedAnswerBooleans());
-
+        multipleChoiceCloze.finishQuestion(chronometer.returnElapsedTime(), true, sqGetCheckedAnswerBooleans());
         Completable.fromAction(new Action() {
             @Override
             public void run() throws Exception {
                 viewModel.updateMultipleChoice(multipleChoiceCloze);
             }
-        }).subscribeOn(Schedulers.io())
+        }).retry(5)
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new CompletableObserver() {
                     @Override
                     public void onSubscribe(Disposable d) {
-                        Log.d(TAG, "onSubscribe: hello");
+                        compositeDisposable.add(d);
                     }
 
                     @Override
@@ -290,18 +208,14 @@ public class MultipleChoiceClozeQuestion extends MultipleChoiceQuestion implemen
                 });
     }
 
-    /**
-     * this is called when the fragment is created and when a state changes happens,
-     * so on start multipleChoiceCloze hasn't been initialized yet. so we check if its
-     * null, if not that means the state has been changed and the time should have been saved
-     * to the view model.
-     * If yes we start the timer from the view model saved time.
-     */
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
 
+    /**
+     * called after state change, will set the timer to the correct amount which
+     * was saved in the view model in the on pause method previous.
+     * the amount is in the view model is a combination of the database and memory time.
+     * this set base method can only be called AFTER the question has started as the two
+     * are already combined. in the on create view setBaseTime is where they get combined.
+     */
     @Override
     public void onResume() {
         if (viewModel.isQuestionStarted()){
@@ -331,5 +245,6 @@ public class MultipleChoiceClozeQuestion extends MultipleChoiceQuestion implemen
         super.onDestroy();
 
     }
+
 
 }

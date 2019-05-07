@@ -1,18 +1,23 @@
 package com.englishtopass.englishtopassapplication.QuestionFragments;
 
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.Spanned;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.englishtopass.englishtopassapplication.CustomViews.ClickableSpanCustom;
 import com.englishtopass.englishtopassapplication.Interfaces.SetScrollYListener;
 import com.englishtopass.englishtopassapplication.R;
 
 import java.util.Arrays;
+import java.util.regex.Matcher;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 public class MultipleChoiceQuestion extends SpannedQuestion implements SetScrollYListener {
@@ -97,5 +102,49 @@ public class MultipleChoiceQuestion extends SpannedQuestion implements SetScroll
 
 
     }
+
+    /**
+     * method called by findPattern method to create the spans. also set the
+     * onClick method at the same time.
+     * @param startingIndex
+     * @param endingIndex
+     * @param tag
+     */
+    private void createClickableSpan(int startingIndex, int endingIndex, int tag){
+        spannableStringBuilder.setSpan(new ClickableSpanCustom(tag) {
+            @Override
+            public void onClick(@NonNull View widget) {
+                sqSetSpanSelected(this.getTag());
+                TextView textView = (TextView) widget;
+                Spannable spannable = (Spannable) textView.getText();
+                sqSetCurrentSpanIndices(spannable.getSpanStart(this), spannable.getSpanEnd(this));
+
+                if (!sqIsActionFrameOpen()) {
+                    sqOpenActionFrame();
+                    mcaInflateMultipleChoiceView();
+                }
+            }
+        }, startingIndex, endingIndex, Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
+    }
+
+
+    /**
+     * finds the blanks in the searchable string provided and when found will
+     * a clickable span in the corresponding position in the spannable
+     * string builder
+     * @param body
+     */
+    protected void findPattern(String body){
+        Matcher matcher = pattern.matcher(body);
+        int tagCounter = 0;
+        while (matcher.find()) {
+            createClickableSpan(matcher.start(), matcher.end(), tagCounter);
+            tagCounter++;
+        }
+        questionBody.setText(spannableStringBuilder);
+    }
+
+
+
 
 }

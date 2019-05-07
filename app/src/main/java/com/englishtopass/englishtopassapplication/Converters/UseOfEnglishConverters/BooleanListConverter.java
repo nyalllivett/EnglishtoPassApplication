@@ -16,9 +16,11 @@ public class BooleanListConverter {
 
         ArrayList<Boolean> tempData;
 
+        int j = data.split(",").length;
+
         tempData = gson.fromJson(data, new TypeToken<ArrayList<Boolean>>(){}.getType());
 
-        boolean[] booleans = new boolean[8];
+        boolean[] booleans = new boolean[j];
 
         for (int i = 0; i < tempData.size(); i++) {
 
@@ -31,9 +33,9 @@ public class BooleanListConverter {
     }
 
     @TypeConverter
-    public String arrayToString(boolean[] arrayList){
+    public String arrayToString(boolean[] array){
 
-        return (arrayList == null) ? null : gson.toJson(arrayList);
+        return (array == null) ? null : gson.toJson(array);
 
         }
 

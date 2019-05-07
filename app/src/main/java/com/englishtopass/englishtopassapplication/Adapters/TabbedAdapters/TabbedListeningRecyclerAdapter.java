@@ -87,7 +87,7 @@ public class TabbedListeningRecyclerAdapter extends ListAdapter<ListeningPackage
                 FragmentTransaction transaction = appCompatActivity.getSupportFragmentManager()
                         .beginTransaction();
 
-                transaction.add(R.id.questionFragmentHolder, PreListeningScreen.newInstance(listeningPackage.getTestCompletion(), (Integer) v.getTag()), "listeningExampleFragment")
+                transaction.add(R.id.questionFragmentHolder, PreListeningScreen.newInstance((Integer) v.getTag()), "listeningExampleFragment")
                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                         .addToBackStack("listeningExampleFragment")
                         .commit();

@@ -1,4 +1,4 @@
-package com.englishtopass.englishtopassapplication;
+package com.englishtopass.englishtopassapplication.Comparators;
 
 import com.englishtopass.englishtopassapplication.CustomViews.ClickableSpanCustom;
 

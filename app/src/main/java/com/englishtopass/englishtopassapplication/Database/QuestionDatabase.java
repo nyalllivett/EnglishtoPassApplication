@@ -2,7 +2,6 @@ package com.englishtopass.englishtopassapplication.Database;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import com.englishtopass.englishtopassapplication.Converters.ListeningConverters.BlankFillingConverter;
 import com.englishtopass.englishtopassapplication.Converters.ListeningConverters.ListeningMultipleSituationsConverter;
@@ -13,8 +12,8 @@ import com.englishtopass.englishtopassapplication.Converters.UseOfEnglishConvert
 import com.englishtopass.englishtopassapplication.Converters.UseOfEnglishConverters.KeywordTransformationConverter;
 import com.englishtopass.englishtopassapplication.Converters.UseOfEnglishConverters.MultipleChoiceClozeConverter;
 import com.englishtopass.englishtopassapplication.Converters.UseOfEnglishConverters.OpenClozeConverter;
-import com.englishtopass.englishtopassapplication.Converters.UseOfEnglishConverters.PartEnumConverter;
-import com.englishtopass.englishtopassapplication.Converters.UseOfEnglishConverters.TestEnumConverter;
+import com.englishtopass.englishtopassapplication.Converters.UseOfEnglishConverters.QuestionPartConverter;
+import com.englishtopass.englishtopassapplication.Converters.UseOfEnglishConverters.TestCompletionConverter;
 import com.englishtopass.englishtopassapplication.Converters.UseOfEnglishConverters.WordFormationConverter;
 import com.englishtopass.englishtopassapplication.Dao.ListeningDaos.BlankFillingDao;
 import com.englishtopass.englishtopassapplication.Dao.ListeningDaos.ListeningMultipleDao;
@@ -79,10 +78,10 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
         ListeningMultipleSituationsConverter.class,
         ListeningOneSituationConverter.class,
         MatchSpeakersConverter.class,
-        TestEnumConverter.class,
+        TestCompletionConverter.class,
         ArrayListConverter.class,
         BooleanListConverter.class,
-        PartEnumConverter.class
+        QuestionPartConverter.class
 
 })
 
@@ -199,7 +198,7 @@ public abstract class QuestionDatabase extends RoomDatabase {
         @Override
         protected Void doInBackground(final Void... params) {
 
-            mUoeDao.deleteAll();
+//            mUoeDao.deleteAll();
 
             String stringBody = "Charlotte Church looks like a normal teenager, but she is far from average. She has an amazing voice. Her fans stand in (1) ........ for hours to get tickets for her concerts and she is often on television.\n\nCharlotte’s singing (2) ........ began when she performed on a TV show at the age of 11. The head of a record company was so impressed by her voice that he(3) ........ her up on the spot.\n\nHer first album rose to number one in the charts. Charlotte still attends school in her home town when she can. (4) ........ , she is often away on tour for weeks at a time. She doesn’t miss out on lessons, though, because she takes her own tutor with her! She (5) ........ three hours every morning with him. Her exam results in all the (6) ........ she studies are impressive.\n\nBut how does she cope with this unusual way of life? She (7) ........ that she has the same friends as before. That may be true, but she can no longer go into town with them because everybody stops her in the street to ask for her (8) ........ .\n\nIt seems that, like most stars, she must learn to control these restrictions and the lack of privacy. It’s the price of fame!";
 
@@ -212,15 +211,18 @@ public abstract class QuestionDatabase extends RoomDatabase {
             long check = mUoeDao.insert(useOfEnglishPackage);
 
             multipleChoiceClozeDao.insert(new MultipleChoiceClozeQuestion("Who Wants to Be a Millionaire",
+                    "These are test instructions",
                     (int)check,
                     stringBody, "one#two#three#four#five#six#seven#eight#nine#ten#eleven#twelve#thirteen#fourteen#" +
                     "fifteen#sixteen#seventeen#eighteen#ninteen#twenty" +
                     "#twentyone#twentytwo#twentythree#twentyfour#twentyfive#" +
-                    "twentysix#twentyseven#twentyeight#twentynine#thirty#thirtyone#thirtytwo", "one#five#nine#thirteen#seventeen#twentyone#twentyfive#twentynine"
+                    "twentysix#twentyseven#twentyeight#twentynine#thirty#thirtyone#thirtytwo",
+                    "one#five#nine#thirteen#seventeen#twentyone#twentyfive#twentynine"
                     ));
 
             openClozeDao.insert(new OpenClozeQuestion(
                     "The New Year",
+                    "These are test instructions",
                     (int)check,
                     stringBody,
                     "one#five#nine#thirteen#seventeen#twentyone#twentyfive#twentynine"
@@ -228,6 +230,7 @@ public abstract class QuestionDatabase extends RoomDatabase {
 
             keywordTransformationDao.insert(new KeywordTransformationQuestion(
                     "Greenland - The biggest Island in the World",
+                    "These are test instructions",
                     (int)check,
                     stringBody,
                     "one#five#nine#thirteen#seventeen#twentyone#twentyfive#twentynine",
@@ -236,6 +239,7 @@ public abstract class QuestionDatabase extends RoomDatabase {
 
             wordFormationDao.insert(new WordFormationQuestion(
                     "Deep Sleep",
+                    "These are test instructions",
                     (int)check,
                     stringBody));
 
@@ -253,6 +257,7 @@ public abstract class QuestionDatabase extends RoomDatabase {
 
             multipleChoiceClozeDao.insert(new MultipleChoiceClozeQuestion(
                     "The Story of Adidas of Puma",
+                    "These are test instructions",
                     (int) check2,
                     stringBody,
                     "one#two#three#four#five#six#seven#eight#nine#ten#eleven#twelve#thirteen#fourteen#" +
@@ -263,12 +268,14 @@ public abstract class QuestionDatabase extends RoomDatabase {
 
             openClozeDao.insert(new OpenClozeQuestion(
                     "The Bermuda Triangle",
+                    "These are test instructions",
                     (int) check2,
                     stringBody,
                     "one#five#nine#thirteen#seventeen#twentyone#twentyfive#twentynine"));
 
             keywordTransformationDao.insert(new KeywordTransformationQuestion(
                     "Greenland - The biggest Island in the World",
+                    "These are test instructions",
                     (int)check2,
                     stringBody,
                     "one#five#nine#thirteen#seventeen#twentyone#twentyfive#twentynine",
@@ -277,6 +284,7 @@ public abstract class QuestionDatabase extends RoomDatabase {
 
             wordFormationDao.insert(new WordFormationQuestion(
                     "Technology and the Young",
+                    "These are test instructions",
                     (int) check2,
                     stringBody));
 
@@ -291,13 +299,29 @@ public abstract class QuestionDatabase extends RoomDatabase {
 
             long check3 = mListeningDao.insert(listeningPackage);
 
-            listeningMultipleDao.insert(new ListeningMultipleSituationsQuestion("Who Wants to Be a Millionaire", (int)check3, stringBody));
+            listeningMultipleDao.insert(new ListeningMultipleSituationsQuestion(
+                    "Who Wants to Be a Millionaire",
+                    "These are test instructions",
+                    (int)check3,
+                    stringBody));
 
-            listeningOneDao.insert(new ListeningOneSituationQuestion("The New Year", (int)check3, stringBody));
+            listeningOneDao.insert(new ListeningOneSituationQuestion(
+                    "The New Year",
+                    "These are test instructions",
+                    (int)check3,
+                    stringBody));
 
-            blankFillingDao.insert(new BlankFillingQuestion("Greenland - The biggest Island in the World",  (int) check3, stringBody));
+            blankFillingDao.insert(new BlankFillingQuestion(
+                    "Greenland - The biggest Island in the World",
+                    "These are test instructions",
+                    (int) check3,
+                    stringBody));
 
-            matchSpeakersDao.insert(new MatchSpeakersQuestion("Deep Sleep", (int)check3, stringBody));
+            matchSpeakersDao.insert(new MatchSpeakersQuestion(
+                    "Deep Sleep",
+                    "These are test instructions",
+                    (int)check3,
+                    stringBody));
 
 
             ListeningPackage listeningPackage1 = new ListeningPackage(
@@ -311,20 +335,29 @@ public abstract class QuestionDatabase extends RoomDatabase {
 
             long check4 = mListeningDao.insert(listeningPackage1);
 
-            listeningMultipleDao.insert(new ListeningMultipleSituationsQuestion("The Story of Adidas of Puma", (int) check4, stringBody));
+            listeningMultipleDao.insert(new ListeningMultipleSituationsQuestion(
+                    "The Story of Adidas of Puma",
+                    "These are test instructions",
+                    (int) check4,
+                    stringBody));
 
-            listeningOneDao.insert(new ListeningOneSituationQuestion("The Bermuda Triangle",(int) check4, stringBody));
+            listeningOneDao.insert(new ListeningOneSituationQuestion(
+                    "The Bermuda Triangle",
+                    "These are test instructions",
+                    (int) check4,
+                    stringBody));
 
-            blankFillingDao.insert(new BlankFillingQuestion("Walt Disney",(int) check4, stringBody));
+            blankFillingDao.insert(new BlankFillingQuestion(
+                    "Walt Disney",
+                    "These are test instructions",
+                    (int) check4,
+                    stringBody));
 
-            matchSpeakersDao.insert(new MatchSpeakersQuestion("Technology and the Young",(int) check4, stringBody));
-
-
-
-
-
-
-
+            matchSpeakersDao.insert(new MatchSpeakersQuestion(
+                    "Technology and the Young",
+                    "These are test instructions",
+                    (int) check4,
+                    stringBody));
 
 
 
@@ -359,6 +392,7 @@ public abstract class QuestionDatabase extends RoomDatabase {
             matchingExerciseDao.insert(new MatchingExerciseQuestion("Walt Disney",(int) check6, stringBody));
 
             return null;
+
         }
     }
 

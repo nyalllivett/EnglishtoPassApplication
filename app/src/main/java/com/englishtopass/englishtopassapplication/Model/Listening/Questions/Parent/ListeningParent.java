@@ -1,27 +1,25 @@
 package com.englishtopass.englishtopassapplication.Model.Listening.Questions.Parent;
 
-public class ListeningParent {
+import com.englishtopass.englishtopassapplication.Model.ModelParent;
 
-    protected String title;
-    protected int testTimeElapsed;
+import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
-    public ListeningParent(String title) {
-        this.title = title;
+public class ListeningParent extends ModelParent {
+
+    private boolean[] answersAreCorrect;
+
+    public ListeningParent(String title, String instructions, String type, boolean[] answersAreCorrect) {
+        super(title, type, instructions);
+        this.answersAreCorrect = answersAreCorrect;
     }
 
-    public String getTitle() {
-        return title;
+    public boolean[] getAnswersAreCorrect() {
+        return answersAreCorrect;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setAnswersAreCorrect(boolean[] answersAreCorrect) {
+        this.answersAreCorrect = answersAreCorrect;
     }
 
-    public int getTestTimeElapsed() {
-        return testTimeElapsed;
-    }
-
-    public void setTestTimeElapsed(int testTimeElapsed) {
-        this.testTimeElapsed = testTimeElapsed;
-    }
 }

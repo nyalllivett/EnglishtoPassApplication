@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.englishtopass.englishtopassapplication.CustomViews.ClickableSpanCustom;
 import com.englishtopass.englishtopassapplication.Interfaces.SetScrollYListener;
-import com.englishtopass.englishtopassapplication.SpanByTagComparator;
+import com.englishtopass.englishtopassapplication.Comparators.SpanByTagComparator;
 import com.englishtopass.englishtopassapplication.UtilClass;
 
 import java.util.Arrays;
@@ -72,6 +72,7 @@ public class SpannedQuestion extends Question implements SetScrollYListener {
      */
     protected int spanSelected;
 
+    private int scrollAmount;
     /**
      * the two values here are the clicked spans index start and index end. used for
      * inserting the answer into the correct position, set in the on click method
@@ -222,20 +223,18 @@ public class SpannedQuestion extends Question implements SetScrollYListener {
     }
 
     /**
-     * checks to see whether action bar is open, if so scrolls do past the span thats selected
-     * if it needs to else if action bar is not open anymore then it will scroll back to where
-     * it started.
-     * if the scroll amount it 0 no action will be taken.
+     * find the span by tag and returns once found.
+     * @param currentTag
+     * the tag which we search with
+     * @return
+     * span with the correct tag
      */
-    protected void sqScrollQuestionText(){
-        int scrollAmount = (int) (sqGetSpanYPosition() - actionFrameLayout.getY());
-        if (!sqIsActionFrameOpen()) {
-            scrollView.scrollTo(0, -scrollAmount);
-            return;
+    public ClickableSpanCustom findSpanByTag(int currentTag){
+
+        for (ClickableSpanCustom temp : spannableStringBuilder.getSpans(0, spannableStringBuilder.length(), ClickableSpanCustom.class)) {
+            if (temp.getTag() == currentTag) return temp;
         }
-        if (scrollAmount > 0) {
-            scrollView.scrollTo(0, (scrollAmount) + 20);
-        }
+        return null;
     }
 
     /**
@@ -259,19 +258,12 @@ public class SpannedQuestion extends Question implements SetScrollYListener {
         return spanYPosition;
     }
 
-    /**
-     * find the span by tag and returns once found.
-     * @param currentTag
-     * the tag which we search with
-     * @return
-     * span with the correct tag
-     */
-    public ClickableSpanCustom findSpanByTag(int currentTag){
+    public int getScrollAmount() {
+        return scrollAmount;
+    }
 
-        for (ClickableSpanCustom temp : spannableStringBuilder.getSpans(0, spannableStringBuilder.length(), ClickableSpanCustom.class)) {
-            if (temp.getTag() == currentTag) return temp;
-        }
-        return null;
+    public void setScrollAmount(int scrollAmount) {
+        this.scrollAmount = scrollAmount;
     }
 
     /**
@@ -300,6 +292,38 @@ public class SpannedQuestion extends Question implements SetScrollYListener {
                 }
         );
     }
+
+    /**
+     * checks to see whether action bar is open, if so scrolls do past the span thats selected
+     * if it needs to else if action bar is not open anymore then it will scroll back to where
+     * it started.
+     * if the scroll amount it 0 no action will be taken.
+     */
+    protected void sqScrollQuestionText(){
+        // we only want to set the scroll amount when we click a span, not click off a span.
+        if (actionFrameOpen) {
+
+            setScrollAmount((int) (sqGetSpanYPosition() - actionFrameLayout.getY()));
+            Log.d(TAG, "sqScrollQuestionText: " + getScrollAmount());
+
+        }
+
+
+        if (!sqIsActionFrameOpen()) {
+            Log.d(TAG, "sqScrollQuestionText: hello");
+
+            if (getScrollAmount() > 0 ) {
+                scrollView.scrollTo(0, -getScrollAmount() + scrollView.getScrollY());
+            }
+            return;
+        }
+
+
+        if (getScrollAmount() > 0) {
+            scrollView.scrollTo(0, (getScrollAmount()) + 20 + scrollView.getScrollY());
+        }
+    }
+
 
     /**
      * removes all children from the frame layout, scrolls back to original

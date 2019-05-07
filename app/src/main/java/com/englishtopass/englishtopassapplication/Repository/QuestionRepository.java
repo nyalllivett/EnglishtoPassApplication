@@ -17,6 +17,7 @@ import com.englishtopass.englishtopassapplication.Dao.UseOfEnglishDaos.OpenCloze
 import com.englishtopass.englishtopassapplication.Dao.UseOfEnglishDaos.UseOfEnglishDao;
 import com.englishtopass.englishtopassapplication.Dao.UseOfEnglishDaos.WordFormationDao;
 import com.englishtopass.englishtopassapplication.Database.QuestionDatabase;
+import com.englishtopass.englishtopassapplication.Enums.QuestionPartUoe;
 import com.englishtopass.englishtopassapplication.Model.Listening.Package.ListeningPackage;
 import com.englishtopass.englishtopassapplication.Model.Listening.Questions.BlankFillingQuestion;
 import com.englishtopass.englishtopassapplication.Model.Listening.Questions.ListeningMultipleSituationsQuestion;
@@ -32,7 +33,6 @@ import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question.Mu
 import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question.OpenClozeQuestion;
 import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question.WordFormationQuestion;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import androidx.lifecycle.LiveData;
@@ -41,6 +41,7 @@ import io.reactivex.Single;
 public class QuestionRepository {
 
     private static final String TAG = "QuestionRepository";
+
 
     // USE OF ENGLISH DAOS
     private UseOfEnglishDao useOfEnglishDao;
@@ -112,7 +113,6 @@ public class QuestionRepository {
 
         matchingExerciseDao = questionDatabase.matchingExerciseDao();
 
-
         /**
          * setting the live lists from the daos
          */
@@ -124,19 +124,13 @@ public class QuestionRepository {
 
     }
 
-    /**
-     * TESTING THE LIVE DATA FOR A QUESTION
-     */
-
 
     /**
      * Live data's for the questions. new approach
      */
     // Multiple choice cloze
     public LiveData<MultipleChoiceClozeQuestion> getMultipleChoiceClozeLiveData(int id) {
-
         return multipleChoiceClozeDao.getMultipleChoiceClozeLiveData(id);
-
     }
 
     // Open Cloze
@@ -159,6 +153,12 @@ public class QuestionRepository {
         return wordFormationDao.getWordFormation(id);
 
     }
+
+    public  Single<UseOfEnglishPackage> getUseOfEnglishPackage(int id) {
+        return useOfEnglishDao.getSingleUseOfEnglishPackage(id);
+    }
+
+
 
 
     /**
@@ -185,8 +185,9 @@ public class QuestionRepository {
 
 
 
-
-
+    public void updateUseOfEnglishPackage(UseOfEnglishPackage useOfEnglishPackage){
+        useOfEnglishDao.update(useOfEnglishPackage);
+    }
 
 
 

@@ -62,21 +62,14 @@ public class ChronometerCustom extends Chronometer {
     }
 
     public void setBaseTime(long timePassed) {
-
-        Log.d(TAG, "setBaseTime: time passed" + timePassed);
-
         this.setBase(SystemClock.elapsedRealtime() - timePassed);
     }
 
     public long returnElapsedTime() {
-
-        Log.d(TAG, "returnElapsedTime: here" + (SystemClock.elapsedRealtime() - getBase() / 1000));
-
-
         return (SystemClock.elapsedRealtime() - getBase());
-
-
     }
+
+
 
     private void hideTime() {
 

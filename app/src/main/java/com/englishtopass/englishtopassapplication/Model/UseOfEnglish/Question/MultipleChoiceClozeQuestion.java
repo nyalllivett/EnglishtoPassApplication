@@ -27,7 +27,6 @@ public class MultipleChoiceClozeQuestion extends UoeParent {
     private String body;
     private String allAnswers;
     private String correctAnswers;
-    private boolean[] answersAreCorrect;
 
     /**
      * parent handles
@@ -35,14 +34,12 @@ public class MultipleChoiceClozeQuestion extends UoeParent {
      * question type
      * time elapsed
      */
-    public MultipleChoiceClozeQuestion(@NonNull String title, int uoeId, @NonNull String body,@NonNull String allAnswers, @NonNull String correctAnswers) {
-        super(title, MULTIPLE_CHOICE_CLOZE);
+    public MultipleChoiceClozeQuestion(@NonNull String title, String instructions, int uoeId, @NonNull String body,@NonNull String allAnswers, @NonNull String correctAnswers) {
+        super(title, instructions, "Multiple Choice Cloze", new boolean[]{false, false, false, false, false, false, false, false});
         this.uoeId = uoeId;
         this.body = body;
         this.allAnswers = allAnswers;
         this.correctAnswers = correctAnswers;
-        this.answersAreCorrect = new boolean[]{false, false, false, false, false, false, false, false};
-
     }
 
     public String getBody() {
@@ -81,20 +78,15 @@ public class MultipleChoiceClozeQuestion extends UoeParent {
         this.correctAnswers = correctAnswers;
     }
 
-    public boolean[] getAnswersAreCorrect() {
-        return answersAreCorrect;
-    }
 
-    public void setAnswersAreCorrect(boolean[] answersAreCorrect) {
-        this.answersAreCorrect = answersAreCorrect;
-    }
-
+    /**
+     * PARENT METHOD, SETTING IT UP FIRST
+     */
     public void finishQuestion(long timeElapsed, boolean completed, boolean[] markedAnswers) {
 
         this.setTestTimeElapsed(timeElapsed);
-        this.setComplete(complete);
+        this.setComplete(completed);
         this.setAnswersAreCorrect(markedAnswers);
-
 
     }
 

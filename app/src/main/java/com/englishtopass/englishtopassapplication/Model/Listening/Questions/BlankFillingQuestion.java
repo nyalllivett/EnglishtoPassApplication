@@ -23,17 +23,11 @@ public class BlankFillingQuestion extends ListeningParent {
     @NonNull
     private String questionBody;
 
-    private long partTimeElapsed;
-
-    @NonNull
-    private boolean complete;
-
-    public BlankFillingQuestion(String title, int listeningId, @NonNull String questionBody) {
-        super(title);
+    public BlankFillingQuestion(String title, String instructions, int listeningId, String questionBody) {
+        super(title, instructions, "Blank Filling", new boolean[]{false, false, false, false, false, false, false, false});
         this.listeningId = listeningId;
         this.questionBody = questionBody;
         this.complete = false;
-        this.partTimeElapsed = 0L;
     }
 
     public int getId() {
@@ -52,14 +46,6 @@ public class BlankFillingQuestion extends ListeningParent {
         this.listeningId = listeningId;
     }
 
-    public long getPartTimeElapsed() {
-        return partTimeElapsed;
-    }
-
-    public void setPartTimeElapsed(long partTimeElapsed) {
-        this.partTimeElapsed = partTimeElapsed;
-    }
-
     @NonNull
     public String getQuestionBody() {
         return questionBody;
@@ -69,12 +55,4 @@ public class BlankFillingQuestion extends ListeningParent {
         this.questionBody = questionBody;
     }
 
-    @NonNull
-    public boolean isComplete() {
-        return complete;
-    }
-
-    public void setComplete(@NonNull boolean complete) {
-        this.complete = complete;
-    }
 }

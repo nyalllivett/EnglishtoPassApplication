@@ -28,7 +28,6 @@ public class KeywordTransformationQuestion extends UoeParent {
 
     private String correctAnswers;
     private String keywords;
-    private boolean[] answersAreCorrect;
 
     /**
      * parent handles
@@ -36,12 +35,11 @@ public class KeywordTransformationQuestion extends UoeParent {
      * question type
      * time elapsed
      */
-    public KeywordTransformationQuestion(String title, int uoeId, @NonNull String body, String correctAnswers, String keywords) {
-        super(title, KEYWORD_TRANSFORMATION);
+    public KeywordTransformationQuestion(String title, String instructions, int uoeId, @NonNull String body, String correctAnswers, String keywords) {
+        super(title, instructions, "Keyword Transformation", new boolean[]{ false, false, false, false, false, false, false, false});
         this.uoeId = uoeId;
         this.body = body;
         this.correctAnswers = correctAnswers;
-        this.answersAreCorrect = new boolean[]{ false, false, false, false, false, false, false, false};
         this.keywords = keywords;
     }
 
@@ -82,11 +80,4 @@ public class KeywordTransformationQuestion extends UoeParent {
         this.keywords = keywords;
     }
 
-    public boolean[] getAnswersAreCorrect() {
-        return answersAreCorrect;
-    }
-
-    public void setAnswersAreCorrect(boolean[] answersAreCorrect) {
-        this.answersAreCorrect = answersAreCorrect;
-    }
 }

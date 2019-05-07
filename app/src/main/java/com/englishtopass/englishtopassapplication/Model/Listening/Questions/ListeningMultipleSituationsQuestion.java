@@ -22,16 +22,10 @@ public class ListeningMultipleSituationsQuestion extends ListeningParent {
     @NonNull
     private String questionBody;
 
-    private long partTimeElapsed;
-
-    @NonNull
-    private boolean complete;
-
-    public ListeningMultipleSituationsQuestion(@NonNull String title, int listeningId, @NonNull String questionBody) {
-        super(title);
+    public ListeningMultipleSituationsQuestion(@NonNull String title, String instructions, int listeningId, @NonNull String questionBody) {
+        super(title, instructions, "Multiple Situations", new boolean[]{false, false, false, false, false, false, false, false, false, false});
         this.questionBody = questionBody;
         this.listeningId = listeningId;
-        this.partTimeElapsed = 0L;
         this.complete = false;
     }
 
@@ -42,15 +36,6 @@ public class ListeningMultipleSituationsQuestion extends ListeningParent {
 
     public void setQuestionBody(@NonNull String questionBody) {
         this.questionBody = questionBody;
-    }
-
-    @NonNull
-    public boolean isComplete() {
-        return complete;
-    }
-
-    public void setComplete(@NonNull boolean complete) {
-        this.complete = complete;
     }
 
     public int getListeningId() {
@@ -69,11 +54,4 @@ public class ListeningMultipleSituationsQuestion extends ListeningParent {
         this.id = id;
     }
 
-    public long getPartTimeElapsed() {
-        return partTimeElapsed;
-    }
-
-    public void setPartTimeElapsed(long partTimeElapsed) {
-        this.partTimeElapsed = partTimeElapsed;
-    }
 }

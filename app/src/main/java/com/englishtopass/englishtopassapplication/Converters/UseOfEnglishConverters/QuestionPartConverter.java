@@ -7,7 +7,7 @@ import com.google.gson.Gson;
 
 import androidx.room.TypeConverter;
 
-public class PartEnumConverter {
+public class QuestionPartConverter {
 
     @TypeConverter
     public static QuestionPartUoe stringToQuestion(String data){

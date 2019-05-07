@@ -26,7 +26,6 @@ public class OpenClozeQuestion extends UoeParent {
     @NonNull
     private String body;
     private String correctAnswers;
-    private boolean[] answersAreCorrect;
 
     /**
      * parent handles
@@ -34,12 +33,11 @@ public class OpenClozeQuestion extends UoeParent {
      * question type
      * time elapsed
      */
-    public OpenClozeQuestion(@NonNull String title, int uoeId, @NonNull String body, String correctAnswers) {
-        super(title, OPEN_CLOZE);
+    public OpenClozeQuestion(@NonNull String title, String instructions, int uoeId, @NonNull String body, String correctAnswers) {
+        super(title, instructions, "Open Cloze", new boolean[]{false, false, false, false, false, false, false, false});
         this.uoeId = uoeId;
         this.body = body;
         this.correctAnswers = correctAnswers;
-        this.answersAreCorrect = new boolean[]{false, false, false, false, false, false, false, false};
 
     }
 
@@ -68,13 +66,5 @@ public class OpenClozeQuestion extends UoeParent {
         this.correctAnswers = correctAnswers;
     }
 
-
-    public boolean[] getAnswersAreCorrect() {
-        return answersAreCorrect;
-    }
-
-    public void setAnswersAreCorrect(boolean[] answersAreCorrect) {
-        this.answersAreCorrect = answersAreCorrect;
-    }
 
 }

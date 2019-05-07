@@ -1,5 +1,6 @@
 package com.englishtopass.englishtopassapplication.QuestionFragments;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 
 import com.englishtopass.englishtopassapplication.CustomViews.ClickableSpanCustom;
 import com.englishtopass.englishtopassapplication.CustomViews.LinkMovementMethodCustom;
+import com.englishtopass.englishtopassapplication.CustomViews.RoundedColorSpan;
 import com.englishtopass.englishtopassapplication.R;
 import com.englishtopass.englishtopassapplication.UtilClass;
 import com.englishtopass.englishtopassapplication.ViewModels.UoeViewModel;
@@ -47,7 +49,7 @@ public class KeywordTransformationQuestion extends WrittenAnswer implements View
      * current object to work with, we save it in memory so we can update
      * the scores and time then save it back in the database
      */
-    private com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question.OpenClozeQuestion openClozeQuestion;
+    private com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question.KeywordTransformationQuestion keywordTransformationQuestion;
 
     public KeywordTransformationQuestion() {
         // Required empty public constructor
@@ -68,6 +70,7 @@ public class KeywordTransformationQuestion extends WrittenAnswer implements View
         fragment.setArguments(args);
         return fragment;
     }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -100,6 +103,9 @@ public class KeywordTransformationQuestion extends WrittenAnswer implements View
         // INITIALISE THE QUESTION BODY TEXT VIEW FROM THE LAYOUT
         questionBody = view.findViewById(R.id.questionBody);
 
+        Log.d(TAG, "onCreateView: " + questionBody.getLineHeight());
+        Log.d(TAG, "onCreateView: " + questionBody.getLineSpacingExtra());
+
         // SET ON CLICK LISTENING FOR THE QUESTION BODY
         questionBody.setOnClickListener(this);
 
@@ -130,24 +136,24 @@ public class KeywordTransformationQuestion extends WrittenAnswer implements View
         // ACCESS CURRENT QUESTION DATABASE
         viewModel = ViewModelProviders.of(this).get(UoeViewModel.class);
 
-//        viewModel.getOpenClozeQuestionLiveData(packageId).observe(getViewLifecycleOwner(), new Observer<com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question.OpenClozeQuestion>() {
-//            @Override
-//            public void onChanged(com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question.OpenClozeQuestion openCloze) {
-//
-//                openClozeQuestion = openCloze;
-//
-//                qSetCorrectAnswers(UtilClass.stringSplitter(openCloze.getCorrectAnswers()));
-//
-//                questionTitle.setText(openCloze.getTitle());
-//
-//                String retrievedBody = openCloze.getBody();
-//
-//                spannableStringBuilder = new SpannableStringBuilder(retrievedBody);
-//
-//                findPattern(retrievedBody);
-//
-//            }
-//        });
+        viewModel.getKeywordTransformationLiveData(packageId).observe(getViewLifecycleOwner(), new Observer<com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question.KeywordTransformationQuestion>() {
+            @Override
+            public void onChanged(com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question.KeywordTransformationQuestion keywordTransformation) {
+
+                keywordTransformationQuestion = keywordTransformation;
+
+                qSetCorrectAnswers(UtilClass.stringSplitter(keywordTransformation.getCorrectAnswers()));
+
+                questionTitle.setText(keywordTransformation.getTitle());
+
+                String retrievedBody = keywordTransformation.getBody();
+
+                spannableStringBuilder = new SpannableStringBuilder(retrievedBody);
+
+                findPattern(retrievedBody);
+
+            }
+        });
 
         return view;
     }
@@ -175,6 +181,8 @@ public class KeywordTransformationQuestion extends WrittenAnswer implements View
                 }
             }
         }, startingIndex, endingIndex, Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
+
+        spannableStringBuilder.setSpan(new RoundedColorSpan(), startingIndex, endingIndex, Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
     }
 
     /**

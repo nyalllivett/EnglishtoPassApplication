@@ -1,12 +1,9 @@
 package com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Package;
 
 import com.englishtopass.englishtopassapplication.Enums.QuestionPartUoe;
-import com.englishtopass.englishtopassapplication.Enums.TestCompletion;
 
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
-
-import static com.englishtopass.englishtopassapplication.Enums.TestCompletion.*;
 
 
 @Entity(tableName = "use_of_english_questions_table")
@@ -22,7 +19,7 @@ public class UseOfEnglishPackage {
 
     private long testTimeElapsed;
 
-    private QuestionPartUoe testCompletion;
+    private QuestionPartUoe questionPartUoe;
 
     public UseOfEnglishPackage(String multipleChoiceClozeTitle, String openClozeTitle,
                                String keywordTransformationTitle, String wordFormationTitle) {
@@ -32,7 +29,7 @@ public class UseOfEnglishPackage {
         this.keywordTransformationTitle = keywordTransformationTitle;
         this.wordFormationTitle = wordFormationTitle;
         this.testTimeElapsed = 0L;
-        this.testCompletion = QuestionPartUoe.MULTIPLE_CHOICE_CLOZE;
+        this.questionPartUoe = QuestionPartUoe.MULTIPLE_CHOICE_CLOZE;
 
     }
 
@@ -44,12 +41,12 @@ public class UseOfEnglishPackage {
         this.id = id;
     }
 
-    public QuestionPartUoe getTestCompletion() {
-        return testCompletion;
+    public QuestionPartUoe getQuestionPartUoe() {
+        return questionPartUoe;
     }
 
-    public void setTestCompletion(QuestionPartUoe testCompletion) {
-        this.testCompletion = testCompletion;
+    public void setQuestionPartUoe(QuestionPartUoe questionPartUoe) {
+        this.questionPartUoe = questionPartUoe;
     }
 
     public String getMultipleChoiceClozeTitle() {

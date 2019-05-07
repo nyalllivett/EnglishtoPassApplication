@@ -40,8 +40,7 @@ public class TabbedUoeRecyclerAdapter extends ListAdapter<UseOfEnglishPackage, T
 
         @Override
         public boolean areContentsTheSame(@NonNull UseOfEnglishPackage oldItem, @NonNull UseOfEnglishPackage newItem) {
-            return oldItem.getTestCompletion() == newItem.getTestCompletion() ||
-                    oldItem.getTestTimeElapsed() == newItem.getTestTimeElapsed();
+            return oldItem.getTestTimeElapsed() == newItem.getTestTimeElapsed();
         }
     };
 
@@ -86,7 +85,7 @@ public class TabbedUoeRecyclerAdapter extends ListAdapter<UseOfEnglishPackage, T
                 .beginTransaction();
 
         transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                .add(R.id.questionFragmentHolder, PreUoeScreen.newInstance(useOfEnglishPackage.getTestCompletion(), (Integer) v.getTag()), "uoeExampleFragment")
+                .add(R.id.questionFragmentHolder, PreUoeScreen.newInstance((Integer) v.getTag()), "uoeExampleFragment")
                 .addToBackStack("uoeExampleFragment")
                 .commit();
 
