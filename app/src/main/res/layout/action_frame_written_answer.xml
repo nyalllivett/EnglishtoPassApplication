@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/questionNumber"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="Question 0 "
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="@+id/hideActionFrame"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/hideActionFrame" />
+
+        <Button
+            android:id="@+id/resetSpanText"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:layout_margin="0dp"
+            android:layout_marginEnd="16dp"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:text="reset"
+            android:textSize="8sp"
+            app:layout_constraintBottom_toBottomOf="@+id/hideActionFrame"
+            app:layout_constraintEnd_toStartOf="@+id/hideActionFrame"
+            app:layout_constraintTop_toTopOf="@+id/hideActionFrame" />
+
+
+        <ImageButton
+            android:id="@+id/hideActionFrame"
+            android:layout_width="35dp"
+            android:layout_height="36dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="8dp"
+            android:src="@drawable/hide_24dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/openClozeAnswerEditText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:ems="10"
+            android:hint="Your answer..."
+            android:inputType="textPersonName"
+            app:layout_constraintEnd_toStartOf="@+id/insertAnswerButton"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/questionNumber" />
+
+        <Button
+            android:id="@+id/insertAnswerButton"
+            android:layout_width="wrap_content"
+            android:layout_height="47dp"
+            android:layout_marginEnd="4dp"
+            android:text="insert"
+            app:layout_constraintBottom_toBottomOf="@+id/openClozeAnswerEditText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/openClozeAnswerEditText" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

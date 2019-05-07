@@ -3,8 +3,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.englishtopass.englishtopassapplication.MainActivity">
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/information"
         android:orderInCategory="100"
-        android:title="@string/action_settings"
-        app:showAsAction="never" />
+        android:title="Reset"
+        android:icon="@drawable/video_game_24dp"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/games"
+        android:orderInCategory="100"
+        android:title="Reset"
+        android:icon="@drawable/info_icon_24dp"
+        app:showAsAction="ifRoom" />
+
 </menu>

@@ -1,8 +1,7 @@
 package com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Package;
 
-import com.englishtopass.englishtopassapplication.Enums.TestCompletion;
+import com.englishtopass.englishtopassapplication.Enums.QuestionPartUoe;
 
-import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
@@ -18,9 +17,9 @@ public class UseOfEnglishPackage {
     private String keywordTransformationTitle;
     private String wordFormationTitle;
 
-    private long uoeTimeElapsed;
+    private long testTimeElapsed;
 
-    private TestCompletion testCompletion;
+    private QuestionPartUoe questionPartUoe;
 
     public UseOfEnglishPackage(String multipleChoiceClozeTitle, String openClozeTitle,
                                String keywordTransformationTitle, String wordFormationTitle) {
@@ -29,8 +28,8 @@ public class UseOfEnglishPackage {
         this.openClozeTitle = openClozeTitle;
         this.keywordTransformationTitle = keywordTransformationTitle;
         this.wordFormationTitle = wordFormationTitle;
-        this.uoeTimeElapsed = 0L;
-        this.testCompletion = TestCompletion.NOT_STARTED;
+        this.testTimeElapsed = 0L;
+        this.questionPartUoe = QuestionPartUoe.MULTIPLE_CHOICE_CLOZE;
 
     }
 
@@ -42,12 +41,12 @@ public class UseOfEnglishPackage {
         this.id = id;
     }
 
-    public TestCompletion getTestCompletion() {
-        return testCompletion;
+    public QuestionPartUoe getQuestionPartUoe() {
+        return questionPartUoe;
     }
 
-    public void setTestCompletion(TestCompletion testCompletion) {
-        this.testCompletion = testCompletion;
+    public void setQuestionPartUoe(QuestionPartUoe questionPartUoe) {
+        this.questionPartUoe = questionPartUoe;
     }
 
     public String getMultipleChoiceClozeTitle() {
@@ -82,11 +81,11 @@ public class UseOfEnglishPackage {
         this.wordFormationTitle = wordFormationTitle;
     }
 
-    public long getUoeTimeElapsed() {
-        return uoeTimeElapsed;
+    public long getTestTimeElapsed() {
+        return testTimeElapsed;
     }
 
-    public void setUoeTimeElapsed(long uoeTimeElapsed) {
-        this.uoeTimeElapsed = uoeTimeElapsed;
+    public void setTestTimeElapsed(long testTimeElapsed) {
+        this.testTimeElapsed = testTimeElapsed;
     }
 }

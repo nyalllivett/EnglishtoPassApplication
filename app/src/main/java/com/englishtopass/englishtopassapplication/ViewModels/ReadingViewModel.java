@@ -37,18 +37,18 @@ public class ReadingViewModel extends AndroidViewModel {
         return readingPackageLiveData;
     }
 
-    // RETRIEVE SINGLE READING QUESTION DATA -
-    public Single<MultipleChoiceQuestion> getMenuMultipleChoice(int id) {
-        return questionRepository.getMenuMulipleChoice(id);
-    }
-
-    public Single<GappedTextQuestion> getMenuGappedText(int id) {
-        return questionRepository.getMenuGappedText(id);
-
-    }
-
-    public Single<MatchingExerciseQuestion> getMenuMatchingExercise(int id) {
-        return questionRepository.getMenuMatchingExercise(id);
-    }
+//    // RETRIEVE SINGLE READING QUESTION DATA -
+//    public Single<MultipleChoiceQuestion> getMenuMultipleChoice(int id) {
+//        return questionRepository.getMenuMulipleChoice(id);
+//    }
+//
+//    public Single<GappedTextQuestion> getMenuGappedText(int id) {
+//        return questionRepository.getMenuGappedText(id);
+//
+//    }
+//
+//    public Single<MatchingExerciseQuestion> getMenuMatchingExercise(int id) {
+//        return questionRepository.getMenuMatchingExercise(id);
+//    }
 
 }

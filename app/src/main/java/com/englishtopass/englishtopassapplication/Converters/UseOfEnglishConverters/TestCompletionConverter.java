@@ -7,7 +7,7 @@ import com.google.gson.Gson;
 
 import androidx.room.TypeConverter;
 
-public class TestEnumConverter {
+public class TestCompletionConverter {
 
     @TypeConverter
     public static TestCompletion stringToQuestion(String data){

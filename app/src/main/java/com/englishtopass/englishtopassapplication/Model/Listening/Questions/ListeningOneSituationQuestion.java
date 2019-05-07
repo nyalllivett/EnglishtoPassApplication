@@ -23,17 +23,11 @@ public class ListeningOneSituationQuestion extends ListeningParent {
     @NonNull
     private String questionBody;
 
-    private long partTimeElapsed;
-
-    @NonNull
-    private boolean complete;
-
-    public ListeningOneSituationQuestion(String title, int listeningId, @NonNull String questionBody) {
-        super(title);
+    public ListeningOneSituationQuestion(String title, String instructions, int listeningId, @NonNull String questionBody) {
+        super(title, instructions, "One Situation", new boolean[]{false, false, false, false, false});
         this.listeningId = listeningId;
         this.questionBody = questionBody;
         this.complete = false;
-        this.partTimeElapsed = 0L;
     }
 
     public int getId() {
@@ -61,19 +55,4 @@ public class ListeningOneSituationQuestion extends ListeningParent {
         this.questionBody = questionBody;
     }
 
-    public long getPartTimeElapsed() {
-        return partTimeElapsed;
-    }
-
-    public void setPartTimeElapsed(long partTimeElapsed) {
-        this.partTimeElapsed = partTimeElapsed;
-    }
-
-    public boolean isComplete() {
-        return complete;
-    }
-
-    public void setComplete(boolean complete) {
-        this.complete = complete;
-    }
 }

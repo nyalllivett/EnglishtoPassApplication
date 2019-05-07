@@ -11,6 +11,20 @@
     android:isScrollContainer="true"
     android:scrollbars="vertical">
 
+    <ProgressBar
+        android:id="@+id/preScreenProgressCycle"
+        style="@android:style/Widget.Holo.Light.ProgressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/textView12"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/testPartName" />
+
     <TextView
         android:id="@+id/textView12"
         android:layout_width="0dp"
@@ -37,7 +51,7 @@
         tools:layout_editor_absoluteX="42dp">
 
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/exampleToolbar"
+            android:id="@+id/preScreenToolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:layout_weight="1"
@@ -179,9 +193,14 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        >
+        app:layout_constraintTop_toTopOf="parent" />
 
-    </FrameLayout>
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/group2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        app:constraint_referenced_ids="recyclerView, descriptionCardView" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

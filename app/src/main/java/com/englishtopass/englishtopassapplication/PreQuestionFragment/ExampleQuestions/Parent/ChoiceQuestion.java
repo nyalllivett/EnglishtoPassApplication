@@ -1,10 +1,10 @@
-package com.englishtopass.englishtopassapplication.ExampleFragment.ExampleQuestions.Parent;
+package com.englishtopass.englishtopassapplication.PreQuestionFragment.ExampleQuestions.Parent;
 
 
 import android.os.Bundle;
 import android.view.View;
 
-import com.englishtopass.englishtopassapplication.ExampleFragment.ExampleQuestions.GrandParent.BaseQuestion;
+import com.englishtopass.englishtopassapplication.PreQuestionFragment.ExampleQuestions.GrandParent.BaseQuestion;
 
 public class ChoiceQuestion extends BaseQuestion implements View.OnClickListener {
 

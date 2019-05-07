@@ -1,4 +1,4 @@
-package com.englishtopass.englishtopassapplication.Adapters.ExampleAdapters;
+package com.englishtopass.englishtopassapplication.Adapters.PreScreenAdapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.englishtopass.englishtopassapplication.Model.Listening.Questions.Parent.ListeningParent;
+import com.englishtopass.englishtopassapplication.Model.Reading.Questions.Parent.ReadingParent;
 import com.englishtopass.englishtopassapplication.R;
 
 import androidx.annotation.NonNull;
@@ -15,24 +15,24 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class ExampleListeningAdapter extends ListAdapter<ListeningParent, ExampleListeningAdapter.ExampleItemViewHolder> {
+public class ExampleReadingAdapter extends ListAdapter<ReadingParent, ExampleReadingAdapter.ExampleItemViewHolder> {
     private static final String TAG = "ExamplePageRecyclerView";
     private LayoutInflater layoutInflater;
 
-    public ExampleListeningAdapter(Context context) {
+    public ExampleReadingAdapter(Context context) {
         super(diffUtil);
         this.layoutInflater = LayoutInflater.from(context);
 
     }
 
-    private static final DiffUtil.ItemCallback<ListeningParent> diffUtil = new DiffUtil.ItemCallback<ListeningParent>() {
+    private static final DiffUtil.ItemCallback<ReadingParent> diffUtil = new DiffUtil.ItemCallback<ReadingParent>() {
         @Override
-        public boolean areItemsTheSame(@NonNull ListeningParent oldItem, @NonNull ListeningParent newItem) {
+        public boolean areItemsTheSame(@NonNull ReadingParent oldItem, @NonNull ReadingParent newItem) {
             return false;
         }
 
         @Override
-        public boolean areContentsTheSame(@NonNull ListeningParent oldItem, @NonNull ListeningParent newItem) {
+        public boolean areContentsTheSame(@NonNull ReadingParent oldItem, @NonNull ReadingParent newItem) {
             return oldItem.getTestTimeElapsed() == (newItem.getTestTimeElapsed());
         }
 

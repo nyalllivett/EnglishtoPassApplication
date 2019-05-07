@@ -23,17 +23,11 @@ public class MatchSpeakersQuestion extends ListeningParent {
     @NonNull
     private String questionBody;
 
-    private long partTimeElapsed;
-
-    @NonNull
-    private boolean complete;
-
-    public MatchSpeakersQuestion(String title, int listeningId, @NonNull String questionBody) {
-        super(title);
+    public MatchSpeakersQuestion(String title, String instructions, int listeningId, @NonNull String questionBody) {
+        super(title, instructions, "Match Speakers", new boolean[]{ false, false, false, false, false, false, false});
         this.listeningId = listeningId;
         this.questionBody = questionBody;
         this.complete = false;
-        this.partTimeElapsed = 0L;
     }
 
     @NonNull
@@ -43,15 +37,6 @@ public class MatchSpeakersQuestion extends ListeningParent {
 
     public void setQuestionBody(@NonNull String questionBody) {
         this.questionBody = questionBody;
-    }
-
-    @NonNull
-    public boolean isComplete() {
-        return complete;
-    }
-
-    public void setComplete(@NonNull boolean complete) {
-        this.complete = complete;
     }
 
     public int getId() {
@@ -68,13 +53,5 @@ public class MatchSpeakersQuestion extends ListeningParent {
 
     public void setListeningId(int listeningId) {
         this.listeningId = listeningId;
-    }
-
-    public long getPartTimeElapsed() {
-        return partTimeElapsed;
-    }
-
-    public void setPartTimeElapsed(long partTimeElapsed) {
-        this.partTimeElapsed = partTimeElapsed;
     }
 }

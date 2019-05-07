@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.englishtopass.englishtopassapplication.ExampleFragment.ExampleMainScreen.UoeExampleFragment;
+import com.englishtopass.englishtopassapplication.PreQuestionFragment.PreQuestionMainScreen.PreUoeScreen;
 import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Package.UseOfEnglishPackage;
 import com.englishtopass.englishtopassapplication.R;
 
@@ -26,14 +26,13 @@ public class TabbedUoeRecyclerAdapter extends ListAdapter<UseOfEnglishPackage, T
     private AppCompatActivity activity;
     private UseOfEnglishPackage useOfEnglishPackage;
 
-
     public TabbedUoeRecyclerAdapter(Context context, Activity activity) {
         super(diffUtil);
         this.mInflater = LayoutInflater.from(context);
         this.activity = (AppCompatActivity) activity;
     }
 
-    public static final DiffUtil.ItemCallback<UseOfEnglishPackage> diffUtil = new DiffUtil.ItemCallback<UseOfEnglishPackage>() {
+    private static final DiffUtil.ItemCallback<UseOfEnglishPackage> diffUtil = new DiffUtil.ItemCallback<UseOfEnglishPackage>() {
         @Override
         public boolean areItemsTheSame(@NonNull UseOfEnglishPackage oldItem, @NonNull UseOfEnglishPackage newItem) {
             return oldItem.getId() == newItem.getId();
@@ -41,7 +40,7 @@ public class TabbedUoeRecyclerAdapter extends ListAdapter<UseOfEnglishPackage, T
 
         @Override
         public boolean areContentsTheSame(@NonNull UseOfEnglishPackage oldItem, @NonNull UseOfEnglishPackage newItem) {
-            return oldItem.getTestCompletion() == newItem.getTestCompletion();
+            return oldItem.getTestTimeElapsed() == newItem.getTestTimeElapsed();
         }
     };
 
@@ -86,7 +85,7 @@ public class TabbedUoeRecyclerAdapter extends ListAdapter<UseOfEnglishPackage, T
                 .beginTransaction();
 
         transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                .add(R.id.questionFragmentHolder, UoeExampleFragment.newInstance(useOfEnglishPackage.getTestCompletion(), (Integer) v.getTag()), "uoeExampleFragment")
+                .add(R.id.questionFragmentHolder, PreUoeScreen.newInstance((Integer) v.getTag()), "uoeExampleFragment")
                 .addToBackStack("uoeExampleFragment")
                 .commit();
 

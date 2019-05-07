@@ -2,96 +2,63 @@ package com.englishtopass.englishtopassapplication.QuestionFragments;
 
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProviders;
 import io.reactivex.Completable;
 import io.reactivex.CompletableObserver;
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
 import io.reactivex.schedulers.Schedulers;
 
-import android.os.Handler;
-import android.os.SystemClock;
-import android.text.Spannable;
 import android.text.SpannableStringBuilder;
-import android.text.Spanned;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
-import android.widget.Button;
-import android.widget.FrameLayout;
-import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.englishtopass.englishtopassapplication.CustomViews.ChronometerCustom;
 import com.englishtopass.englishtopassapplication.CustomViews.LinkMovementMethodCustom;
-import com.englishtopass.englishtopassapplication.CustomViews.ClickableSpanCustom;
+import com.englishtopass.englishtopassapplication.Enums.QuestionPartUoe;
 import com.englishtopass.englishtopassapplication.Interfaces.SetScrollYListener;
+import com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Package.UseOfEnglishPackage;
 import com.englishtopass.englishtopassapplication.R;
 import com.englishtopass.englishtopassapplication.UtilClass;
 import com.englishtopass.englishtopassapplication.ViewModels.UoeViewModel;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-
-public class MultipleChoiceClozeQuestion extends MultipleChoiceAnswer implements View.OnClickListener, SetScrollYListener {
+public class MultipleChoiceClozeQuestion extends MultipleChoiceQuestion implements View.OnClickListener {
     private static final String TAG = "MultipleChoiceClozeQues";
 
-    // identify package
+    /** PACKAGE ID
+     * this is used to identify which package the question should be
+     * taken from. Used in retrieving package vid Rxjava
+     */
     private int packageId;
 
-    // ViewModel
+    /** VIEW MODEL
+     * used to store and retrieve data and survive configuration changes.
+     */
     private UoeViewModel viewModel;
 
-    //
+    /** CURRENT QUESTION OBJECT
+     * current object to work with, we save it in memory so we can update
+     * the scores and time then save it back in the database
+     */
     private com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question.MultipleChoiceClozeQuestion multipleChoiceCloze;
-
-    // regex for identifying the blank spaces
-//    private Pattern pattern;
-
-    // builder to build spans
-//    private SpannableStringBuilder spannableStringBuilder;
-
-    // Dispose of unused rx's
-    private CompositeDisposable compositeDisposable;
-
-    // Timer
-    private ChronometerCustom chronometer;
-
-    // Views
-//    private TextView questionBody;
-    private FrameLayout actionFrameLayout;
-    private ScrollView scrollView;
-
-    // identifier for which span is selected
-//    private int spanSelected;
-
-    // Touch coords
-    private float actionFrameY;
-    private int spanYPosition;
-    private float scrollAmount;
-
-    // boolean for touch coords
-    private boolean actionBarOpen;
-    private boolean bufferTimeElapsed;
-
-    // arrays to store answers in memory
-//    private String[][] partitionedAnswers = new String[8][4]; // MOVED TO MULTIPLE CHOICE ANSWER PARENT
-    private String[] correctAnswers;
-//    private int[] spanIndices = new int[2];
 
     public MultipleChoiceClozeQuestion() {
         // Required empty public constructor
     }
 
+    /**
+     * creating a new instance, called from parent fragment, will have
+     * packageId as a param so we know which package is current
+     * @param packageId
+     * current package in scope
+     * @return
+     * returns fragment to fragment manager in the parent fragment
+     */
     public static MultipleChoiceClozeQuestion newInstance(int packageId) {
         MultipleChoiceClozeQuestion fragment = new MultipleChoiceClozeQuestion();
         Bundle args = new Bundle();
@@ -103,413 +70,130 @@ public class MultipleChoiceClozeQuestion extends MultipleChoiceAnswer implements
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         if (getArguments() != null) {
-
             packageId = getArguments().getInt("packageId");
-
         }
-
-        compositeDisposable = new CompositeDisposable();
-
         sqCompileRegexPattern("[.]{8}");
-
         sqSetSpanSelected(-1);
 
-        actionBarOpen = false;
-
+        viewModel = ViewModelProviders.of(this).get(UoeViewModel.class);
 
     }
 
+
+
+    /**
+     * where the main bulk of the work is done.
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        // Inflate the layout for this fragment
+        // INFLATE THE CORRECT VIEW FOR THE QUESTION
         View view = inflater.inflate(R.layout.fragment_multiple_choice_cloze_question, container, false);
 
+        // INITIALISE THE TITLE TEXT VIEW FROM THE LAYOUT
         TextView questionTitle = view.findViewById(R.id.questionTitle);
 
-        // Constraint layout/set
-
+        // INITIALISE THE QUESTION BODY TEXT VIEW FROM THE LAYOUT
         questionBody = view.findViewById(R.id.questionBody);
 
+        // SET ON CLICK LISTENING FOR THE QUESTION BODY
         questionBody.setOnClickListener(this);
 
+        // SET ON CLICK LISTENER FOR THE FINISH BUTTON - UNFINISHED
         view.findViewById(R.id.finishTestButton).setOnClickListener(this);
 
+        // CREATE LINK MOVEMENT METHOD INSTANCE
         LinkMovementMethodCustom linkMovementMethodCustom = LinkMovementMethodCustom.getInstance();
 
+        // SET THE SCROLL LISTENER FOR THE LLM
         linkMovementMethodCustom.setSetScrollYListener(this);
 
+        // SET THE QUESTION BODY LLM TO THIS
         questionBody.setMovementMethod(linkMovementMethodCustom);
 
+        // INITIALISE THE SCROLL VIEW
         scrollView = view.findViewById(R.id.scrollView);
 
-        // Timer
-
+        // INITIALISE THE CHRONOMETER
         chronometer = view.findViewById(R.id.timer);
 
-        startTimer();
-
-        // Regex
-
-//        pattern = Pattern.compile("[.]{8}");
-
-        // Frame for actions
-
+        // INITIALISE THE FRAME LAYOUT
         actionFrameLayout = view.findViewById(R.id.actionFrameLayout);
 
-        // View model
+        viewModel.getMultipleChoiceClozeLiveData(packageId).observe(getViewLifecycleOwner(), multipleChoiceClozeQuestion -> {
+            multipleChoiceCloze = multipleChoiceClozeQuestion;
 
-        viewModel = ViewModelProviders.of(this).get(UoeViewModel.class);
+            int partitionNumber = 4;
 
-        viewModel.getMenuMultipleChoiceQuestion(packageId)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SingleObserver<com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question.MultipleChoiceClozeQuestion>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
+            mcaPartition(UtilClass.stringSplitter(multipleChoiceClozeQuestion.getAllAnswers()), partitionNumber);
 
-                        compositeDisposable.add(d);
+            qSetCorrectAnswers(UtilClass.stringSplitter(multipleChoiceClozeQuestion.getCorrectAnswers()));
 
-                    }
+            questionTitle.setText(multipleChoiceClozeQuestion.getTitle());
 
-                    @Override
-                    public void onSuccess(com.englishtopass.englishtopassapplication.Model.UseOfEnglish.Question.MultipleChoiceClozeQuestion multipleChoiceClozeQuestion) {
+            String retrievedBody = multipleChoiceClozeQuestion.getBody();
 
-                        multipleChoiceCloze = multipleChoiceClozeQuestion;
+            spannableStringBuilder = new SpannableStringBuilder(retrievedBody);
 
-                        /*
-                            mcaPartition is parent method called from MultipleChoiceAnswer to
-                            mcaPartition the answers in the groups of four in this case.
-                            params:
-                            2D array of all answers, size of 3D array/mcaPartition
-                         */
-                        mcaPartition(UtilClass.stringSplitter(multipleChoiceClozeQuestion.getAllAnswers()), 4);
+            findPattern(retrievedBody);
 
-                        /*
-                         */
-                        setCorrectAnswers(UtilClass.stringSplitter(multipleChoiceClozeQuestion.getCorrectAnswers()));
+            if (!viewModel.isQuestionStarted()){
 
-                        questionTitle.setText(multipleChoiceClozeQuestion.getTitle());
+                chronometer.setBaseTime(viewModel.getSavedTimeElapsed() + multipleChoiceCloze.getTestTimeElapsed());
 
-                        String retrievedBody = multipleChoiceClozeQuestion.getBody();
+                chronometer.start();
 
-                        spannableStringBuilder = new SpannableStringBuilder(retrievedBody);
+                viewModel.setQuestionStarted(true);
 
-                        findPattern(retrievedBody);
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                        Log.d(TAG, "onError: " + e.getLocalizedMessage());
-
-                    }
-
-                });
+            }
+        });
 
         return view;
 
     }
 
-    private void findPattern(String body){
 
-        Matcher matcher = pattern.matcher(body);
-
-        int tagCounter = 0;
-
-        while (matcher.find()) {
-
-            createClickableSpan(matcher.start(), matcher.end(), tagCounter);
-
-            tagCounter++;
-
-        }
-
-        questionBody.setText(spannableStringBuilder);
-
-    }
-
-    private void createClickableSpan(int startingIndex, int endingIndex, int tag){
-
-        spannableStringBuilder.setSpan(new ClickableSpanCustom(tag) {
-
-            @Override
-            public void onClick(@NonNull View widget) {
-
-                sqSetSpanSelected(this.getTag());
-
-                TextView textView = (TextView) widget;
-
-                Spannable spannable = (Spannable) textView.getText();
-
-                sqSetCurrentSpanIndices(spannable.getSpanStart(this), spannable.getSpanEnd(this));
-
-                if (!actionBarOpen)
-                    openActionBar();
-            }
-
-        }, startingIndex, endingIndex, Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
-
-    }
-
-
-
-    private void openActionBar(){
-
-        actionFrameLayout.getViewTreeObserver().addOnGlobalLayoutListener(
-                new ViewTreeObserver.OnGlobalLayoutListener() {
-                    public void onGlobalLayout() {
-
-                        actionFrameLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-
-                        // This is open,
-                        actionBarOpen = true;
-
-                        bufferTimeElapsed = false;
-
-                        new Handler().postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                               bufferTimeElapsed = true;
-                            }
-                        }, 100);
-
-                        actionFrameY = actionFrameLayout.getY();
-
-                        scrollQuestionText(null);
-
-                    }
-
-                }
-        );
-
-        View.OnClickListener onClickListenerAnswer = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                switch (v.getId()) {
-
-                    case R.id.multipleChoiceOne:
-                    case R.id.multipleChoiceTwo:
-                    case R.id.multipleChoiceThree:
-                    case R.id.multipleChoiceFour:
-
-                        if (sqGetCurrentSpanIndices()[0] != -1 && sqGetCurrentSpanIndices()[1] != -1) {
-
-                            sqReplaceAndSetBuilderText(((Button) v).getText().toString());
-
-                            for (ClickableSpanCustom clickableSpanCustom : sqReturnOrderedSpanList()) {
-
-                                if (clickableSpanCustom.getTag() == sqGetSpanSelected()) {
-
-                                    clickableSpanCustom.setAnswerTag(((Button) v).getText().toString());
-
-                                    hideActionFrame();
-
-                                    return;
-
-                                }
-
-                            }
-
-                            return;
-
-                        } else {
-
-                            throw new IllegalStateException("Span indices incorrect");
-
-                        }
-
-                    case R.id.resetSpanText:
-
-                        sqReplaceAndSetBuilderText("........");
-
-                        break;
-
-                }
-
-            }
-        };
-
-        View view = LayoutInflater.from(getContext()).inflate(R.layout.multiple_choice_questions, actionFrameLayout, true);
-
-        view.findViewById(R.id.hideActionFrameNumber).setOnClickListener(this);
-
-        view.findViewById(R.id.resetSpanText).setOnClickListener(onClickListenerAnswer);
-
-        LinearLayout linearLayout = view.findViewById(R.id.linearQuestions);
-
-
-        for (int i = 0; i < linearLayout.getChildCount(); i++) {
-
-            Button button = (Button) linearLayout.getChildAt(i);
-
-            button.setText(partitionedAnswers[sqGetSpanSelected()][i]);
-
-            button.setOnClickListener(onClickListenerAnswer);
-
-        }
-
-    }
-
-
-
+    /**
+     * handling the hiding of the action frame if its open, will return
+     * early if so, then will also handle any buttons at high level like
+     * view timer or finish test
+     * @param v
+     * v thats in scope
+     */
     @Override
     public void onClick(View v) {
-
-        if (actionBarOpen && bufferTimeElapsed) {
-
-            hideActionFrame();
-
+        if (sqIsActionFrameOpen() && bufferTimeElapsed) {
+            sqHideActionFrame();
             return;
-
         }
-
         switch (v.getId()) {
-
-//            case R.id.questionBody:
-//
-////                if (sqGetSpanSelected() >= 0 && questionBody.getSelectionStart() == -1 && questionBody.getSelectionEnd() == -1) {
-////
-////                    Log.d(TAG, "onClick: " + questionBody.getSelectionStart());
-////                    sqSetSpanSelected(-1);
-////                    sqSetCurrentSpanIndices(-1, -1);
-////
-////                }
-//
-//                break;
-
-            case R.id.hideActionFrameNumber:
-
-                hideActionFrame();
-
-                break;
-
             case R.id.finishTestButton:
-
                 finishTest();
-
                 break;
-
+            case R.id.showTimer:
+                chronometer.showTime();
+                break;
         }
-
-
-
-    }
-
-    // SPAN METHODS
-    // Called from CustomLinkMovementMethod -
-    @Override
-    public void setSpanYPosition(int yCoord) {
-        this.spanYPosition = yCoord;
-    }
-
-    // Called from scrollQuestionText()
-    private int getSpanYPosition() {
-        return spanYPosition;
-    }
-
-    // Called from openActionBar() & hideActionBar()
-    private void scrollQuestionText(@Nullable Integer scrollAmountBack){
-
-        if (null != scrollAmountBack) {
-
-            scrollView.scrollTo(0, -scrollAmountBack);
-
-            return;
-
-        }
-
-        scrollAmount = (getSpanYPosition() - actionFrameY);
-
-        if (scrollAmount > 0) {
-
-            scrollView.scrollTo(0, (int) (scrollAmount) + 10);
-
-        }
-
     }
 
 
+    private void finishTest(){
 
-    public String[] getCorrectAnswers() {
-        return correctAnswers;
-    }
-
-    public void setCorrectAnswers(String[] correctAnswers) {
-        this.correctAnswers = correctAnswers;
-    }
-
-    // Called from sqSetClickableText() & main onClick
-//    private List<ClickableSpanCustom> sqReturnOrderedSpanList() {
-//
-//        List<ClickableSpanCustom> clickableSpans = Arrays.asList(spannableStringBuilder.getSpans(0, spannableStringBuilder.length(), ClickableSpanCustom.class));
-//
-//        Collections.sort(clickableSpans, new SpanByTagComparator());
-//
-//        return clickableSpans;
-//
-//    }
-
-    // QUESTION METHODS
-    // CHRONO METHODS
-    private void startTimer() {
-
-        chronometer.setBase(SystemClock.elapsedRealtime());
-
-        chronometer.start();
-
-    }
-
-    // QUESTION METHOD
-    private void endTimer() {
-
-        chronometer.stop();
-
-    }
-
-    // QUESTION METHOD
-    // hide action frame view
-    private void hideActionFrame() {
-
-        actionFrameLayout.removeAllViews();
-
-        actionBarOpen = false;
-
-        scrollQuestionText((int) scrollAmount);
-
-        sqSetSpanSelected(-1);
-
-        sqSetCurrentSpanIndices(-1, -1);
-
-    }
-
-    // QUESTION METHOD for any question where we compare answers.
-    // Creating the set of answers
-
-
-
-    public void finishTest(){
-
-        multipleChoiceCloze.setAnswersAreCorrect(getCheckedAnswerBooleans());
-        multipleChoiceCloze.setComplete(true);
-        multipleChoiceCloze.setTestTimeElapsed(836736);
-
+        multipleChoiceCloze.finishQuestion(chronometer.returnElapsedTime(), true, sqGetCheckedAnswerBooleans());
         Completable.fromAction(new Action() {
             @Override
             public void run() throws Exception {
                 viewModel.updateMultipleChoice(multipleChoiceCloze);
             }
-        }).subscribeOn(Schedulers.io())
+        }).retry(5)
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new CompletableObserver() {
                     @Override
                     public void onSubscribe(Disposable d) {
-                        Log.d(TAG, "onSubscribe: hello");
+                        compositeDisposable.add(d);
                     }
 
                     @Override
@@ -522,37 +206,42 @@ public class MultipleChoiceClozeQuestion extends MultipleChoiceAnswer implements
                         Log.d(TAG, "onError: " + e.getLocalizedMessage());
                     }
                 });
-
-
-
-
     }
 
-    private boolean[] getCheckedAnswerBooleans() {
 
-        int i = 0;
-
-        boolean[] answers = new boolean[8];
-
-        for (ClickableSpanCustom span : sqReturnOrderedSpanList()) {
-
-            answers[i] = span.getAnswerTag().equals(getCorrectAnswers()[i]);
-
-            i++;
-
+    /**
+     * called after state change, will set the timer to the correct amount which
+     * was saved in the view model in the on pause method previous.
+     * the amount is in the view model is a combination of the database and memory time.
+     * this set base method can only be called AFTER the question has started as the two
+     * are already combined. in the on create view setBaseTime is where they get combined.
+     */
+    @Override
+    public void onResume() {
+        if (viewModel.isQuestionStarted()){
+            chronometer.setBaseTime(viewModel.getSavedTimeElapsed());
+            startTimer();
         }
-
-        return answers;
-
+            super.onResume();
     }
 
+    /**
+     * saving the time already elapsed in view model as there is a state change
+     * coming up. this is called on rotation and when interrupted.
+     * the time saved is from the elapsed time which is got from
+     * System.timeElapsed - getBase()
+     * getBase() is set from the time from the database originally.
+     */
+    @Override
+    public void onPause() {
+        viewModel.setSavedTimeElapsed(chronometer.returnElapsedTime());
+        super.onPause();
+    }
+
+    // TODO: 02/05/2019 must end timer to stop memory leak
     @Override
     public void onDestroy() {
-
         endTimer();
-
-        compositeDisposable.dispose();
-
         super.onDestroy();
 
     }

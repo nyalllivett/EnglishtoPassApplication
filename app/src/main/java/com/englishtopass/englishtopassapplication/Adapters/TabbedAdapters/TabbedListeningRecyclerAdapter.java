@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.englishtopass.englishtopassapplication.ExampleFragment.ExampleMainScreen.ListeningExampleFragment;
+import com.englishtopass.englishtopassapplication.PreQuestionFragment.PreQuestionMainScreen.PreListeningScreen;
 import com.englishtopass.englishtopassapplication.Model.Listening.Package.ListeningPackage;
 import com.englishtopass.englishtopassapplication.R;
 
@@ -29,7 +29,6 @@ public class TabbedListeningRecyclerAdapter extends ListAdapter<ListeningPackage
         super(diffUtil);
         layoutInflater = LayoutInflater.from(context);
         this.appCompatActivity = appCompatActivity;
-
     }
 
     private static final DiffUtil.ItemCallback<ListeningPackage> diffUtil = new DiffUtil.ItemCallback<ListeningPackage>() {
@@ -88,7 +87,7 @@ public class TabbedListeningRecyclerAdapter extends ListAdapter<ListeningPackage
                 FragmentTransaction transaction = appCompatActivity.getSupportFragmentManager()
                         .beginTransaction();
 
-                transaction.add(R.id.questionFragmentHolder, ListeningExampleFragment.newInstance(listeningPackage.getTestCompletion(), (Integer) v.getTag()), "listeningExampleFragment")
+                transaction.add(R.id.questionFragmentHolder, PreListeningScreen.newInstance((Integer) v.getTag()), "listeningExampleFragment")
                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                         .addToBackStack("listeningExampleFragment")
                         .commit();
